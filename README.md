@@ -61,8 +61,6 @@ O Guia da Cidade (Site Principal)
 
 - Guia: Lista funcional das Radios e Jornais da cidade.
 
-- Conexão Uberaba: Um hub simulando frequências de rádio e jornais locais.
-
 - Hino Oficial: Modal cinematográfico com vídeo e letra sincronizada.
 
 - E muito mais...
