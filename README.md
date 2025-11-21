@@ -74,5 +74,13 @@ O Guia da Cidade (Site Principal)
 
 <img width="1920" height="985" alt="Entrada" src="https://github.com/user-attachments/assets/41dc6cd5-ca43-4c9c-a727-eedfe176990f" />
 
+<img width="1899" height="965" alt="Time" src="https://github.com/user-attachments/assets/5f870552-ab6b-480d-bf15-99b605b6676f" />
+
+<img width="1903" height="983" alt="Footer" src="https://github.com/user-attachments/assets/8ae613ac-fa14-4bf0-aa0d-ba4bddea386c" />
+
+<img width="1899" height="973" alt="Museu" src="https://github.com/user-attachments/assets/3edc31d7-d0c0-49d9-b2c2-7122da6910bb" />
+
+
+
 
 
