@@ -8,7 +8,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600;800&family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600;700;800&family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,8 +24,6 @@
             --wallpaper-desk: url('Windows10.png');
             
             /* --- USER AVATAR --- */
-            /* Coloque o caminho da sua foto aqui. Ex: url('./assets/perfil.jpg') */
-            /* Se deixar vazio ou inválido, mostrará o ícone padrão */
             --user-avatar: url('Pedro.jpg'); 
 
             /* --- COLORS --- */
@@ -35,7 +33,10 @@
             --vscode-bg: #1e1e1e;
             --vscode-sidebar: #252526;
             --vscode-statusbar: #007acc;
-            --alura-blue: #1056bf;
+            
+            /* --- PREVIEW VARIABLES --- */
+            --preview-bg: #050505;
+            --preview-gold: #D4AF37;
             --gemini-grad-start: #4b90ff;
             --gemini-grad-end: #ff5546;
         }
@@ -256,7 +257,7 @@
             box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
             display: none;
             flex-direction: column;
-            z-index: 800; /* Above desktop icons */
+            z-index: 800;
             font-family: 'Segoe UI', sans-serif;
         }
         .win-err-header {
@@ -275,7 +276,7 @@
             padding: 20px; background: #f0f0f0; display: flex; gap: 15px; align-items: center;
         }
         .win-err-icon {
-            font-size: 32px; color: #d92027; /* Red X circle style */
+            font-size: 32px; color: #d92027;
         }
         .win-err-msg { font-size: 13px; color: #333; flex: 1; }
         
@@ -468,15 +469,20 @@
             white-space: pre;
         }
         
-        /* Preview Panel (Right) */
+        /* Preview Panel (Right) - Adapted for the new request */
         .vs-preview-panel { 
-            width: 40%; background: #000; 
-            position: relative; overflow: hidden;
+            width: 40%; 
+            background-color: var(--preview-bg); /* Uses new CSS var */
+            position: relative; 
+            overflow: hidden;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
             opacity: 0; /* Starts Hidden */
             transition: opacity 1.5s ease-in;
         }
         
-        /* Syntax Highlighting */
+        /* Syntax Highlighting for Code Editor */
         .k-import { color: #c586c0; } 
         .k-var { color: #569cd6; }   
         .k-func { color: #dcdcaa; }  
@@ -485,6 +491,8 @@
         .k-str { color: #ce9178; }    
         .k-comment { color: #6a9955; }
         .k-bracket { color: #ffd700; }
+        .k-def { color: #9cdcfe; }
+        .k-obj { color: #4ec9b0; }
         
         .typing-cursor {
             display: inline-block; width: 2px; height: 16px; background: white;
@@ -516,53 +524,128 @@
             100% { transform: translate(-50%, -50%) scale(1); }
         }
 
-        /* Preview UI Elements */
-        .preview-ui {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            z-index: 10;
+        /* --- PREVIEW UI ELEMENTS (New Request) --- */
+        #scene-container {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
         }
-        #canvas-preview { position: absolute; inset: 0; }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            outline: none;
+        }
+
+        .interface-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .brand-container {
+            text-align: center;
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
         .brand-title {
-            font-size: 2.5rem; font-weight: 800; color: white;
-            text-align: center; opacity: 1;
-            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+            font-size: 2.5rem; /* Scaled down for preview panel */
+            font-weight: 800;
+            color: white;
+            text-align: center;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
             line-height: 1.1;
+            margin-bottom: 10px;
+            font-family: 'Inter', sans-serif;
         }
-        .brand-subtitle {
-            font-size: 0.9rem; font-family: 'Inter', sans-serif; letter-spacing: 3px;
-            margin-top: 10px; color: #aaa; text-transform: uppercase;
-            opacity: 0; transition: opacity 1s;
+
+        .cursor {
+            display: inline-block;
+            width: 4px;
+            height: 1em;
+            background-color: #fff;
+            vertical-align: bottom;
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
         }
+
+        .brand-meta {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
         .alura-gemini-text {
-            font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.8rem;
-            margin-top: 5px; letter-spacing: 1px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
             background: linear-gradient(to right, #ffffff, #4b90ff);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             opacity: 0;
+            transform: translateY(20px);
+            font-family: 'Inter', sans-serif;
         }
 
-        .title-cursor { border-right: 3px solid #fff; animation: blink 1s step-end infinite; }
+        .project-subtitle {
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            color: #888;
+            text-transform: uppercase;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateY(20px);
+            font-family: 'Inter', sans-serif;
+        }
 
-        .cta-btn {
-            margin-top: 40px; padding: 12px 35px;
-            background: transparent; border: 1px solid rgba(255,255,255,0.3);
-            color: white; border-radius: 50px; font-size: 0.9rem;
-            cursor: pointer; opacity: 0; transition: 0.3s;
-            font-weight: 600; letter-spacing: 1px;
+        .primary-action {
+            margin-top: 30px;
+            padding: 10px 30px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-weight: 600;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(20px);
+            font-family: 'Inter', sans-serif;
             pointer-events: auto;
         }
-        .cta-btn:hover { background: white; color: black; box-shadow: 0 0 20px white; }
-        .cta-btn.locked { opacity: 0.5; cursor: not-allowed; }
+
+        .primary-action:hover {
+            background: white;
+            color: black;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            transform: translateY(20px) scale(1.05);
+        }
+
+        .primary-action:active {
+            transform: translateY(20px) scale(0.95);
+        }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #1e1e1e; }
         ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
         
         @keyframes pulse { 0%,100% {opacity: 0.5} 50% {opacity: 1} }
-        @keyframes blink { 50% {border-color: transparent} }
+        @keyframes blink { 50% {opacity: 0} }
 
     </style>
 </head>
@@ -655,7 +738,6 @@
         </div>
 
         <div id="login-form">
-            <!-- Se a variável CSS --user-avatar não estiver definida, aparece o ícone -->
             <div class="user-avatar">
                 <i class="fa-solid fa-user" style="opacity: 0.5;"></i>
             </div>
@@ -668,7 +750,6 @@
     <!-- 4. DESKTOP SCENE -->
     <div id="scene-desktop">
         <div class="desktop-grid">
-            <!-- ATUALIZADO: Ícone Lixeira agora é funcional -->
             <div class="desktop-icon" onclick="openTrash()">
                 <i class="fa-solid fa-trash-can icon-img" style="color: #ddd"></i>
                 <div class="icon-label">Lixeira</div>
@@ -677,13 +758,10 @@
                 <i class="fa-solid fa-desktop icon-img" style="color: #fff"></i>
                 <div class="icon-label">Meu Computador</div>
             </div>
-            
-            <!-- FOTOS: FUNCIONAL -->
             <div class="desktop-icon" onclick="openPhotos()">
                 <i class="fa-solid fa-images icon-img" style="color: #00bcd4"></i>
                 <div class="icon-label">Fotos</div>
             </div>
-
             <div class="desktop-icon" onclick="wrongIcon('Spotify')">
                 <i class="fa-brands fa-spotify icon-img" style="color: #1db954"></i>
                 <div class="icon-label">Spotify</div>
@@ -722,37 +800,31 @@
             </div>
             <div class="os-body">
                 <div class="photo-grid">
-                    <!-- 5 Placeholder Photos: Replace src with local images -->
                     <div class="photo-item">
                         <div class="photo-frame"><img src="Museu.png" alt="Print 1"></div>
-                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print1.jpg" -->
                         <div class="photo-name">PrintSiteMuseu</div>
                     </div>
                     <div class="photo-item">
                         <div class="photo-frame"><img src="Time.png" alt="Print 2"></div>
-                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print2.jpg" -->
                         <div class="photo-name">PrintSiteTme</div>
                     </div>
                     <div class="photo-item">
                         <div class="photo-frame"><img src="CIA.png" alt="Print 3"></div>
-                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print3.jpg" -->
                         <div class="photo-name">PrintSiteCia</div>
                     </div>
                     <div class="photo-item">
                         <div class="photo-frame"><img src="Gnetica de ouro.png" alt="Print 4"></div>
-                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print4.jpg" -->
                         <div class="photo-name">PrintSiteGenetica</div>
                     </div>
                     <div class="photo-item">
                         <div class="photo-frame"><img src="Inicio.png" alt="Print 5"></div>
-                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print5.jpg" -->
                         <div class="photo-name">PrintSiteInicio</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- NOVO: JANELA DA LIXEIRA -->
+        <!-- WINDOW TRASH -->
         <div id="window-trash" class="os-window">
             <div class="os-header">
                 <div class="os-titlebar">
@@ -773,15 +845,11 @@
             </div>
             <div class="os-body">
                 <div class="photo-grid">
-                    <!-- Placeholder Lixeira 1 -->
                     <div class="photo-item">
-                        <!-- Substitua 'lixeira1.jpg' pelo caminho da sua imagem local -->
                         <div class="photo-frame"><img src="Lixo1.webp" alt="Arquivo Deletado 1"></div>
                         <div class="photo-name">Lixo infectado</div>
                     </div>
-                    <!-- Placeholder Lixeira 2 -->
                     <div class="photo-item">
-                        <!-- Substitua 'lixeira2.jpg' pelo caminho da sua imagem local -->
                         <div class="photo-frame"><img src="Lixo2.png" alt="Arquivo Deletado 2"></div>
                         <div class="photo-name">Lixo infectado</div>
                     </div>
@@ -794,7 +862,7 @@
     <!-- 5. VS CODE SCENE -->
     <div id="scene-vscode">
         <div class="vs-titlebar">
-            <span>script.js - Visual Studio Code</span>
+            <span id="vs-window-title">index.html - Visual Studio Code</span>
             <div class="vs-controls">
                 <div class="vs-control"><i class="fa-solid fa-minus"></i></div>
                 <div class="vs-control"><i class="fa-regular fa-square"></i></div>
@@ -814,10 +882,9 @@
                 <div>EXPLORER</div>
                 <div class="vs-file-tree">
                     <div style="font-weight: bold; margin-bottom: 5px;"><i class="fa-solid fa-angle-down"></i> PROJETO-UBERABA</div>
-                    <div class="vs-file active"><i class="fa-brands fa-js" style="color: #fdd835"></i> main.js</div>
-                    <div class="vs-file"><i class="fa-brands fa-css3" style="color: #42a5f5"></i> styles.css</div>
-                    <div class="vs-file"><i class="fa-brands fa-js" style="color: #fdd835"></i> script.js</div>
-                    <div class="vs-file"><i class="fa-brands fa-html5" style="color: #e65100"></i> index.html</div>
+                    <div id="file-html" class="vs-file active"><i class="fa-brands fa-html5" style="color: #e65100"></i> index.html</div>
+                    <div id="file-css" class="vs-file"><i class="fa-brands fa-css3" style="color: #42a5f5"></i> styles.css</div>
+                    <div id="file-js" class="vs-file"><i class="fa-brands fa-js" style="color: #fdd835"></i> main.js</div>
                     <div class="vs-file"><i class="fa-solid fa-gear" style="color: #aaa"></i> config.json</div>
                     
                     <!-- Gemini File -->
@@ -832,8 +899,8 @@
             <div class="vs-editor-area">
                 <div class="vs-code-panel">
                     <div class="vs-tabs">
-                        <div class="vs-tab">
-                            <i class="fa-brands fa-js" style="color: #fdd835"></i> main.js 
+                        <div class="vs-tab" id="active-tab">
+                            <i class="fa-brands fa-html5" style="color: #e65100"></i> index.html 
                         </div>
                     </div>
                     <div class="vs-code-content" id="code-container">
@@ -844,16 +911,31 @@
 
                 <!-- Preview -->
                 <div class="vs-preview-panel" id="preview-container">
-                    <canvas id="canvas-preview"></canvas>
-                    <div class="preview-ui">
-                        <div class="brand-title">
-                            <span id="typewriter-text"></span><span class="title-cursor"></span>
-                        </div>
-                        <div class="alura-gemini-text" id="sub-brand">DA ALURA + GEMINI</div>
-                        <div class="brand-subtitle" id="sub-proj">PROJETO UBERABA</div>
-                        
-                        <button class="cta-btn" id="prev-btn">ACESSAR SITE</button>
+                    <!-- 3D Canvas Layer -->
+                    <div id="scene-container">
+                        <canvas id="canvas-preview"></canvas>
                     </div>
+
+                    <!-- UI Overlay Layer -->
+                    <main class="interface-layer">
+                        <div class="brand-container">
+                            <!-- Título com efeito de digitação -->
+                            <h1 class="brand-title">
+                                <span id="typewriter-text"></span><span class="cursor"></span>
+                            </h1>
+                            
+                            <!-- Subtítulos -->
+                            <div class="brand-meta">
+                                <p id="sub-brand" class="alura-gemini-text">DA ALURA + GEMINI</p>
+                                <p id="sub-proj" class="project-subtitle">PROJETO UBERABA</p>
+                            </div>
+
+                            <!-- Botão de Ação -->
+                            <button id="cta-btn" class="primary-action">
+                                ACESSAR SITE
+                            </button>
+                        </div>
+                    </main>
                 </div>
             </div>
         </div>
@@ -938,15 +1020,13 @@
                 loginForm.style.display = 'flex';
                 gsap.from(loginForm, { y: 50, opacity: 0, duration: 1 });
                 
-                // Check if custom avatar image is loaded via CSS var, if so remove icon
                 const avatarDiv = document.querySelector('.user-avatar');
                 const style = getComputedStyle(document.body);
                 const bgImg = style.getPropertyValue('--user-avatar');
                 if(bgImg && bgImg.includes('url') && bgImg.length > 10) {
-                    avatarDiv.innerHTML = ''; // Remove default icon
+                    avatarDiv.innerHTML = ''; 
                 }
 
-                // Auto Type Password slowly
                 setTimeout(() => {
                     const passInput = document.getElementById('pass-input');
                     const pass = "********";
@@ -969,9 +1049,6 @@
             }, 2500);
         }
 
-        // ==========================================
-        // DESKTOP SCENE
-        // ==========================================
         function loadDesktop() {
             document.getElementById('scene-login').style.display = 'none';
             document.getElementById('scene-desktop').style.display = 'block';
@@ -985,7 +1062,6 @@
             }, 1000);
         }
         
-        // New Windows-Style Error
         function wrongIcon(name) {
             const box = document.getElementById('win-error-box');
             const msg = document.getElementById('win-error-msg-text');
@@ -997,7 +1073,6 @@
             document.getElementById('win-error-box').style.display = 'none';
         }
 
-        // PHOTOS WINDOW LOGIC
         function openPhotos() {
             const win = document.getElementById('window-photos');
             win.style.display = 'flex';
@@ -1009,7 +1084,6 @@
             gsap.to(win, {scale: 0.9, opacity: 0, duration: 0.15, onComplete: () => win.style.display = 'none'});
         }
 
-        // TRASH WINDOW LOGIC (NEW)
         function openTrash() {
             const win = document.getElementById('window-trash');
             win.style.display = 'flex';
@@ -1035,7 +1109,7 @@
                 ease: "expo.out",
                 onComplete: () => {
                     state.isCoding = true;
-                    initParticles(); 
+                    initGeminiPreview(); 
                 }
             });
         }
@@ -1046,157 +1120,379 @@
         const state = { isCoding: false, index: 0, errorStage: false, fixed: false, accessGranted: false, previewVisible: false };
         const container = document.getElementById('code-container');
 
-        const fullCode = `
-<span class="k-import">import</span> * <span class="k-import">as</span> <span class="k-var">THREE</span> <span class="k-import">from</span> <span class="k-str">'three'</span>;
-<span class="k-import">import</span> { <span class="k-var">OrbitControls</span> } <span class="k-import">from</span> <span class="k-str">'three/addons/controls/OrbitControls.js'</span>;
-<span class="k-import">import</span> { <span class="k-var">GLTFLoader</span> } <span class="k-import">from</span> <span class="k-str">'three/addons/loaders/GLTFLoader.js'</span>;
-<span class="k-import">import</span> { <span class="k-var">EffectComposer</span> } <span class="k-import">from</span> <span class="k-str">'three/addons/postprocessing/EffectComposer.js'</span>;
-<span class="k-import">import</span> { <span class="k-var">RenderPass</span> } <span class="k-import">from</span> <span class="k-str">'three/addons/postprocessing/RenderPass.js'</span>;
-<span class="k-import">import</span> { <span class="k-var">gsap</span> } <span class="k-import">from</span> <span class="k-str">'gsap'</span>;
-
-<span class="k-comment">/**
- * UBERABA EXPERIENCE ENGINE v2.0
- * Core rendering loop, physics simulation and post-processing.
- */</span>
-
-<span class="k-comment">// --- Global Configuration ---</span>
-<span class="k-import">const</span> <span class="k-var">CONFIG</span> = {
-  <span class="k-attr">fidelity</span>: <span class="k-str">'ultra'</span>,
-  <span class="k-attr">shadows</span>: <span class="k-import">true</span>,
-  <span class="k-attr">physicsStep</span>: 1 / 60,
-  <span class="k-attr">particleCount</span>: 15000,
-  <span class="k-attr">theme</span>: <span class="k-str">'dark_neon'</span>
-};
-
-<span class="k-comment">// --- Main Class Definition ---</span>
-<span class="k-import">class</span> <span class="k-var">UberabaEngine</span> {
-  <span class="k-func">constructor</span>() {
-    <span class="k-import">this</span>.<span class="k-attr">scene</span> = <span class="k-import">new</span> <span class="k-var">THREE.Scene</span>();
-    <span class="k-import">this</span>.<span class="k-attr">clock</span> = <span class="k-import">new</span> <span class="k-var">THREE.Clock</span>();
-    <span class="k-import">this</span>.<span class="k-attr">container</span> = <span class="k-var">document</span>.<span class="k-func">getElementById</span>(<span class="k-str">'canvas-container'</span>);
+        // UPDATED CODE SNIPPETS (ESCAPED FOR JS STRINGS)
+        const htmlCode = `
+<span class="k-tag">&lt;!DOCTYPE html&gt;</span>
+<span class="k-tag">&lt;html</span> <span class="k-attr">lang</span>=<span class="k-str">"pt-br"</span><span class="k-tag">&gt;</span>
+<span class="k-tag">&lt;head&gt;</span>
+    <span class="k-tag">&lt;meta</span> <span class="k-attr">charset</span>=<span class="k-str">"UTF-8"</span><span class="k-tag">&gt;</span>
+    <span class="k-tag">&lt;meta</span> <span class="k-attr">name</span>=<span class="k-str">"viewport"</span> <span class="k-attr">content</span>=<span class="k-str">"width=device-width, initial-scale=1.0"</span><span class="k-tag">&gt;</span>
+    <span class="k-tag">&lt;title&gt;</span>Uberaba Experience | Immersive Core<span class="k-tag">&lt;/title&gt;</span>
     
-    <span class="k-comment">// Initialize Core Systems</span>
-    <span class="k-import">this</span>.<span class="k-func">initRenderer</span>();
-    <span class="k-import">this</span>.<span class="k-func">initCamera</span>();
-    <span class="k-import">this</span>.<span class="k-func">initLights</span>();
-    <span class="k-import">this</span>.<span class="k-func">initPostProcessing</span>();
+    <span class="k-comment">&lt;!-- Fonts --&gt;</span>
+    <span class="k-tag">&lt;link</span> <span class="k-attr">rel</span>=<span class="k-str">"preconnect"</span> <span class="k-attr">href</span>=<span class="k-str">"https://fonts.googleapis.com"</span><span class="k-tag">&gt;</span>
+    <span class="k-tag">&lt;link</span> <span class="k-attr">rel</span>=<span class="k-str">"preconnect"</span> <span class="k-attr">href</span>=<span class="k-str">"https://fonts.gstatic.com"</span> <span class="k-attr">crossorigin</span><span class="k-tag">&gt;</span>
+    <span class="k-tag">&lt;link</span> <span class="k-attr">href</span>=<span class="k-str">"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"</span> <span class="k-attr">rel</span>=<span class="k-str">"stylesheet"</span><span class="k-tag">&gt;</span>
     
-    <span class="k-comment">// Start the Experience</span>
-    <span class="k-import">this</span>.<span class="k-func">bootSystem</span>();
-  }
+    <span class="k-comment">&lt;!-- Styles --&gt;</span>
+    <span class="k-tag">&lt;link</span> <span class="k-attr">rel</span>=<span class="k-str">"stylesheet"</span> <span class="k-attr">href</span>=<span class="k-str">"style.css"</span><span class="k-tag">&gt;</span>
 
-  <span class="k-func">initRenderer</span>() {
-    <span class="k-import">this</span>.<span class="k-attr">renderer</span> = <span class="k-import">new</span> <span class="k-var">THREE.WebGLRenderer</span>({ 
-      <span class="k-attr">antialias</span>: <span class="k-import">true</span>, 
-      <span class="k-attr">alpha</span>: <span class="k-import">true</span>,
-      <span class="k-attr">powerPreference</span>: <span class="k-str">"high-performance"</span>
-    });
-    <span class="k-import">this</span>.<span class="k-attr">renderer</span>.<span class="k-func">setSize</span>(<span class="k-var">window</span>.<span class="k-attr">innerWidth</span>, <span class="k-var">window</span>.<span class="k-attr">innerHeight</span>);
-    <span class="k-import">this</span>.<span class="k-attr">renderer</span>.<span class="k-attr">outputEncoding</span> = <span class="k-var">THREE.sRGBEncoding</span>;
-    <span class="k-import">this</span>.<span class="k-attr">renderer</span>.<span class="k-attr">toneMapping</span> = <span class="k-var">THREE.ACESFilmicToneMapping</span>;
-    <span class="k-var">document</span>.<span class="k-attr">body</span>.<span class="k-func">appendChild</span>(<span class="k-import">this</span>.<span class="k-attr">renderer</span>.<span class="k-attr">domElement</span>);
-  }
+    <span class="k-comment">&lt;!-- Libraries --&gt;</span>
+    <span class="k-tag">&lt;script</span> <span class="k-attr">src</span>=<span class="k-str">"https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"</span><span class="k-tag">&gt;</span><span class="k-tag">&lt;/script&gt;</span>
+    <span class="k-tag">&lt;script</span> <span class="k-attr">src</span>=<span class="k-str">"https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"</span><span class="k-tag">&gt;</span><span class="k-tag">&lt;/script&gt;</span>
+<span class="k-tag">&lt;/head&gt;</span>
+<span class="k-tag">&lt;body&gt;</span>
 
-  <span class="k-func">initCamera</span>() {
-    <span class="k-import">this</span>.<span class="k-attr">camera</span> = <span class="k-import">new</span> <span class="k-var">THREE.PerspectiveCamera</span>(75, <span class="k-var">window</span>.<span class="k-attr">innerWidth</span> / <span class="k-var">window</span>.<span class="k-attr">innerHeight</span>, 0.1, 1000);
-    <span class="k-import">this</span>.<span class="k-attr">camera</span>.<span class="k-attr">position</span>.<span class="k-func">set</span>(0, 5, 10);
-    <span class="k-import">this</span>.<span class="k-attr">controls</span> = <span class="k-import">new</span> <span class="k-var">OrbitControls</span>(<span class="k-import">this</span>.<span class="k-attr">camera</span>, <span class="k-import">this</span>.<span class="k-attr">renderer</span>.<span class="k-attr">domElement</span>);
-  }
+    <span class="k-comment">&lt;!-- 3D Canvas Layer --&gt;</span>
+    <span class="k-tag">&lt;div</span> <span class="k-attr">id</span>=<span class="k-str">"scene-container"</span><span class="k-tag">&gt;</span>
+        <span class="k-tag">&lt;canvas</span> <span class="k-attr">id</span>=<span class="k-str">"canvas-preview"</span><span class="k-tag">&gt;</span><span class="k-tag">&lt;/canvas&gt;</span>
+    <span class="k-tag">&lt;/div&gt;</span>
 
-  <span class="k-func">createStarField</span>() {
-    <span class="k-import">const</span> <span class="k-var">geometry</span> = <span class="k-import">new</span> <span class="k-var">THREE.BufferGeometry</span>();
-    <span class="k-import">const</span> <span class="k-var">count</span> = <span class="k-var">CONFIG.particleCount</span>;
-    <span class="k-import">const</span> <span class="k-var">positions</span> = <span class="k-import">new</span> <span class="k-var">Float32Array</span>(<span class="k-var">count</span> * 3);
+    <span class="k-comment">&lt;!-- UI Overlay Layer --&gt;</span>
+    <span class="k-tag">&lt;main</span> <span class="k-attr">class</span>=<span class="k-str">"interface-layer"</span><span class="k-tag">&gt;</span>
+        <span class="k-tag">&lt;div</span> <span class="k-attr">class</span>=<span class="k-str">"brand-container"</span><span class="k-tag">&gt;</span>
+            <span class="k-comment">&lt;!-- Título com efeito de digitação --&gt;</span>
+            <span class="k-tag">&lt;h1</span> <span class="k-attr">class</span>=<span class="k-str">"brand-title"</span><span class="k-tag">&gt;</span>
+                <span class="k-tag">&lt;span</span> <span class="k-attr">id</span>=<span class="k-str">"typewriter-text"</span><span class="k-tag">&gt;</span><span class="k-tag">&lt;/span&gt;</span><span class="k-tag">&lt;span</span> <span class="k-attr">class</span>=<span class="k-str">"cursor"</span><span class="k-tag">&gt;</span><span class="k-tag">&lt;/span&gt;</span>
+            <span class="k-tag">&lt;/h1&gt;</span>
+            
+            <span class="k-comment">&lt;!-- Subtítulos --&gt;</span>
+            <span class="k-tag">&lt;div</span> <span class="k-attr">class</span>=<span class="k-str">"brand-meta"</span><span class="k-tag">&gt;</span>
+                <span class="k-tag">&lt;p</span> <span class="k-attr">id</span>=<span class="k-str">"sub-brand"</span> <span class="k-attr">class</span>=<span class="k-str">"alura-gemini-text"</span><span class="k-tag">&gt;</span>DA ALURA + GEMINI<span class="k-tag">&lt;/p&gt;</span>
+                <span class="k-tag">&lt;p</span> <span class="k-attr">id</span>=<span class="k-str">"sub-proj"</span> <span class="k-attr">class</span>=<span class="k-str">"project-subtitle"</span><span class="k-tag">&gt;</span>PROJETO UBERABA<span class="k-tag">&lt;/p&gt;</span>
+            <span class="k-tag">&lt;/div&gt;</span>
 
-    <span class="k-import">for</span>(<span class="k-import">let</span> <span class="k-var">i</span> = 0; <span class="k-var">i</span> < <span class="k-var">count</span> * 3; <span class="k-var">i</span>++) {
-      <span class="k-var">positions</span>[<span class="k-var">i</span>] = (<span class="k-var">Math</span>.<span class="k-func">random</span>() - 0.5) * 100;
-    }
+            <span class="k-comment">&lt;!-- Botão de Ação --&gt;</span>
+            <span class="k-tag">&lt;button</span> <span class="k-attr">id</span>=<span class="k-str">"cta-btn"</span> <span class="k-attr">class</span>=<span class="k-str">"primary-action"</span><span class="k-tag">&gt;</span>
+                ACESSAR SITE
+            <span class="k-tag">&lt;/button&gt;</span>
+        <span class="k-tag">&lt;/div&gt;</span>
+    <span class="k-tag">&lt;/main&gt;</span>
 
-    <span class="k-var">geometry</span>.<span class="k-func">setAttribute</span>(<span class="k-str">'position'</span>, <span class="k-import">new</span> <span class="k-var">THREE.BufferAttribute</span>(<span class="k-var">positions</span>, 3));
-    <span class="k-import">const</span> <span class="k-var">material</span> = <span class="k-import">new</span> <span class="k-var">THREE.PointsMaterial</span>({
-      <span class="k-attr">size</span>: 0.05,
-      <span class="k-attr">color</span>: 0x00f3ff,
-      <span class="k-attr">transparent</span>: <span class="k-import">true</span>,
-      <span class="k-attr">opacity</span>: 0.8
-    });
+    <span class="k-comment">&lt;!-- Logic --&gt;</span>
+    <span class="k-tag">&lt;script</span> <span class="k-attr">src</span>=<span class="k-str">"script.js"</span><span class="k-tag">&gt;</span><span class="k-tag">&lt;/script&gt;</span>
+<span class="k-tag">&lt;/body&gt;</span>
+<span class="k-tag">&lt;/html&gt;</span>`;
 
-    <span class="k-import">this</span>.<span class="k-attr">stars</span> = <span class="k-import">new</span> <span class="k-var">THREE.Points</span>(<span class="k-var">geometry</span>, <span class="k-var">material</span>);
-    <span class="k-import">this</span>.<span class="k-attr">scene</span>.<span class="k-func">add</span>(<span class="k-import">this</span>.<span class="k-attr">stars</span>);
-  }
-
-  <span class="k-func">bootSystem</span>() {
-    <span class="k-import">this</span>.<span class="k-func">createStarField</span>();
-    <span class="k-import">this</span>.<span class="k-func">animate</span>();
-    <span class="k-var">console</span>.<span class="k-func">log</span>(<span class="k-str">"System Ready: Uberaba Environment Loaded"</span>);
-  }
-
-  <span class="k-func">animate</span>() {
-    <span class="k-func">requestAnimationFrame</span>(<span class="k-import">this</span>.<span class="k-attr">animate</span>.<span class="k-func">bind</span>(<span class="k-import">this</span>));
-    
-    <span class="k-import">const</span> <span class="k-var">delta</span> = <span class="k-import">this</span>.<span class="k-attr">clock</span>.<span class="k-func">getDelta</span>();
-    
-    <span class="k-import">if</span> (<span class="k-import">this</span>.<span class="k-attr">stars</span>) {
-      <span class="k-import">this</span>.<span class="k-attr">stars</span>.<span class="k-attr">rotation</span>.<span class="k-attr">y</span> += <span class="k-var">delta</span> * 0.05;
-    }
-
-    <span class="k-import">this</span>.<span class="k-attr">renderer</span>.<span class="k-func">render</span>(<span class="k-import">this</span>.<span class="k-attr">scene</span>, <span class="k-import">this</span>.<span class="k-attr">camera</span>);
-  }
+        const cssCode = `
+<span class="k-tag">:root</span> {
+    <span class="k-var">--bg-space</span>: <span class="k-str">#050505</span>;
+    <span class="k-var">--accent-gold</span>: <span class="k-str">#D4AF37</span>;
+    <span class="k-var">--text-primary</span>: <span class="k-str">#ffffff</span>;
+    <span class="k-var">--gemini-grad-start</span>: <span class="k-str">#4b90ff</span>;
+    <span class="k-var">--gemini-grad-end</span>: <span class="k-str">#ff5546</span>;
+    <span class="k-var">--font-display</span>: <span class="k-str">'Inter', sans-serif</span>;
 }
 
-<span class="k-comment">// --- Initialize Application ---</span>
-<span class="k-import">const</span> <span class="k-var">app</span> = <span class="k-import">new</span> <span class="k-var">UberabaEngine</span>();
-
-<span class="k-comment">// --- User Interaction Listener ---</span>
-<span class="k-func">function</span> <span class="k-func">handleAccess</span>() {
-   <span class="k-var">gsap</span>.<span class="k-func">to</span>(<span class="k-str">"#overlay"</span>, {
-      <span class="k-attr">opacity</span>: 0,
-      <span class="k-attr">duration</span>: 1.5,
-      <span class="k-attr">ease</span>: <span class="k-str">"power2.inOut"</span>,
-      <span class="k-attr">onComplete</span>: () => {
-         <span class="k-var">window</span>.<span class="k-attr">location</span>.<span class="k-attr">href</span> = <span class="k-str">'/home'</span>;
-      }
-   });
+<span class="k-tag">*</span> {
+    <span class="k-attr">margin</span>: <span class="k-str">0</span>;
+    <span class="k-attr">padding</span>: <span class="k-str">0</span>;
+    <span class="k-attr">box-sizing</span>: <span class="k-str">border-box</span>;
 }
-`;
 
-        const codeChunks = fullCode.split(/(?=<span)|(?<=<\/span>)/g);
-        
+<span class="k-tag">body</span> {
+    <span class="k-attr">background-color</span>: <span class="k-var">var(--bg-space)</span>;
+    <span class="k-attr">color</span>: <span class="k-var">var(--text-primary)</span>;
+    <span class="k-attr">font-family</span>: <span class="k-var">var(--font-display)</span>;
+    <span class="k-attr">overflow</span>: <span class="k-str">hidden</span>;
+    <span class="k-attr">height</span>: <span class="k-str">100vh</span>;
+    <span class="k-attr">width</span>: <span class="k-str">100vw</span>;
+    <span class="k-attr">display</span>: <span class="k-str">flex</span>;
+    <span class="k-attr">justify-content</span>: <span class="k-str">center</span>;
+    <span class="k-attr">align-items</span>: <span class="k-str">center</span>;
+}
+
+<span class="k-comment">/* --- 3D Scene Container --- */</span>
+<span class="k-tag">#scene-container</span> {
+    <span class="k-attr">position</span>: <span class="k-str">absolute</span>;
+    <span class="k-attr">inset</span>: <span class="k-str">0</span>;
+    <span class="k-attr">z-index</span>: <span class="k-str">1</span>;
+    <span class="k-attr">background</span>: <span class="k-func">radial-gradient</span>(<span class="k-str">circle at center</span>, <span class="k-str">#111 0%</span>, <span class="k-str">#000 100%</span>);
+}
+
+<span class="k-tag">canvas</span> {
+    <span class="k-attr">display</span>: <span class="k-str">block</span>;
+    <span class="k-attr">width</span>: <span class="k-str">100%</span>;
+    <span class="k-attr">height</span>: <span class="k-str">100%</span>;
+    <span class="k-attr">outline</span>: <span class="k-str">none</span>;
+}
+
+<span class="k-comment">/* --- Interface Overlay --- */</span>
+<span class="k-tag">.interface-layer</span> {
+    <span class="k-attr">position</span>: <span class="k-str">absolute</span>;
+    <span class="k-attr">inset</span>: <span class="k-str">0</span>;
+    <span class="k-attr">z-index</span>: <span class="k-str">10</span>;
+    <span class="k-attr">display</span>: <span class="k-str">flex</span>;
+    <span class="k-attr">flex-direction</span>: <span class="k-str">column</span>;
+    <span class="k-attr">justify-content</span>: <span class="k-str">center</span>;
+    <span class="k-attr">align-items</span>: <span class="k-str">center</span>;
+    <span class="k-attr">pointer-events</span>: <span class="k-str">none</span>;
+}
+
+<span class="k-tag">.brand-container</span> {
+    <span class="k-attr">text-align</span>: <span class="k-str">center</span>;
+    <span class="k-attr">pointer-events</span>: <span class="k-str">auto</span>;
+    <span class="k-attr">display</span>: <span class="k-str">flex</span>;
+    <span class="k-attr">flex-direction</span>: <span class="k-str">column</span>;
+    <span class="k-attr">align-items</span>: <span class="k-str">center</span>;
+}
+
+<span class="k-comment">/* --- Typography --- */</span>
+<span class="k-tag">.brand-title</span> {
+    <span class="k-attr">font-size</span>: <span class="k-str">3.5rem</span>;
+    <span class="k-attr">font-weight</span>: <span class="k-str">800</span>;
+    <span class="k-attr">color</span>: <span class="k-str">white</span>;
+    <span class="k-attr">text-align</span>: <span class="k-str">center</span>;
+    <span class="k-attr">text-shadow</span>: <span class="k-str">0 0 30px rgba(255, 255, 255, 0.3)</span>;
+    <span class="k-attr">line-height</span>: <span class="k-str">1.1</span>;
+    <span class="k-attr">margin-bottom</span>: <span class="k-str">10px</span>;
+}
+
+<span class="k-tag">.cursor</span> {
+    <span class="k-attr">display</span>: <span class="k-str">inline-block</span>;
+    <span class="k-attr">width</span>: <span class="k-str">4px</span>;
+    <span class="k-attr">height</span>: <span class="k-str">1em</span>;
+    <span class="k-attr">background-color</span>: <span class="k-str">#fff</span>;
+    <span class="k-attr">vertical-align</span>: <span class="k-str">bottom</span>;
+    <span class="k-attr">animation</span>: <span class="k-str">blink 1s step-end infinite</span>;
+    <span class="k-attr">margin-left</span>: <span class="k-str">5px</span>;
+}
+
+<span class="k-tag">.brand-meta</span> {
+    <span class="k-attr">margin-top</span>: <span class="k-str">15px</span>;
+    <span class="k-attr">display</span>: <span class="k-str">flex</span>;
+    <span class="k-attr">flex-direction</span>: <span class="k-str">column</span>;
+    <span class="k-attr">align-items</span>: <span class="k-str">center</span>;
+    <span class="k-attr">gap</span>: <span class="k-str">5px</span>;
+}
+
+<span class="k-tag">.alura-gemini-text</span> {
+    <span class="k-attr">font-weight</span>: <span class="k-str">700</span>;
+    <span class="k-attr">font-size</span>: <span class="k-str">0.9rem</span>;
+    <span class="k-attr">letter-spacing</span>: <span class="k-str">2px</span>;
+    <span class="k-attr">background</span>: <span class="k-func">linear-gradient</span>(<span class="k-str">to right</span>, <span class="k-str">#ffffff</span>, <span class="k-str">#4b90ff</span>);
+    <span class="k-attr">-webkit-background-clip</span>: <span class="k-str">text</span>;
+    <span class="k-attr">background-clip</span>: <span class="k-str">text</span>;
+    <span class="k-attr">color</span>: <span class="k-str">transparent</span>;
+    <span class="k-attr">opacity</span>: <span class="k-str">0</span>;
+    <span class="k-attr">transform</span>: <span class="k-func">translateY</span>(<span class="k-str">20px</span>);
+}
+
+<span class="k-tag">.project-subtitle</span> {
+    <span class="k-attr">font-size</span>: <span class="k-str">1rem</span>;
+    <span class="k-attr">letter-spacing</span>: <span class="k-str">4px</span>;
+    <span class="k-attr">color</span>: <span class="k-str">#888</span>;
+    <span class="k-attr">text-transform</span>: <span class="k-str">uppercase</span>;
+    <span class="k-attr">font-weight</span>: <span class="k-str">300</span>;
+    <span class="k-attr">opacity</span>: <span class="k-str">0</span>;
+    <span class="k-attr">transform</span>: <span class="k-func">translateY</span>(<span class="k-str">20px</span>);
+}
+
+<span class="k-comment">/* --- Button --- */</span>
+<span class="k-tag">.primary-action</span> {
+    <span class="k-attr">margin-top</span>: <span class="k-str">50px</span>;
+    <span class="k-attr">padding</span>: <span class="k-str">15px 40px</span>;
+    <span class="k-attr">background</span>: <span class="k-str">transparent</span>;
+    <span class="k-attr">border</span>: <span class="k-str">1px solid rgba(255, 255, 255, 0.3)</span>;
+    <span class="k-attr">color</span>: <span class="k-str">white</span>;
+    <span class="k-attr">border-radius</span>: <span class="k-str">50px</span>;
+    <span class="k-attr">font-size</span>: <span class="k-str">0.9rem</span>;
+    <span class="k-attr">cursor</span>: <span class="k-str">pointer</span>;
+    <span class="k-attr">transition</span>: <span class="k-str">all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)</span>;
+    <span class="k-attr">font-weight</span>: <span class="k-str">600</span>;
+    <span class="k-attr">letter-spacing</span>: <span class="k-str">2px</span>;
+    <span class="k-attr">opacity</span>: <span class="k-str">0</span>;
+    <span class="k-attr">transform</span>: <span class="k-func">translateY</span>(<span class="k-str">20px</span>);
+    <span class="k-attr">font-family</span>: <span class="k-var">var(--font-display)</span>;
+}
+
+<span class="k-tag">.primary-action:hover</span> {
+    <span class="k-attr">background</span>: <span class="k-str">white</span>;
+    <span class="k-attr">color</span>: <span class="k-str">black</span>;
+    <span class="k-attr">box-shadow</span>: <span class="k-str">0 0 30px rgba(255, 255, 255, 0.5)</span>;
+    <span class="k-attr">transform</span>: <span class="k-func">translateY</span>(<span class="k-str">20px</span>) <span class="k-func">scale</span>(<span class="k-str">1.05</span>);
+}
+
+<span class="k-tag">.primary-action:active</span> {
+    <span class="k-attr">transform</span>: <span class="k-func">translateY</span>(<span class="k-str">20px</span>) <span class="k-func">scale</span>(<span class="k-str">0.95</span>);
+}
+
+<span class="k-comment">/* --- Animations --- */</span>
+<span class="k-tag">@keyframes</span> <span class="k-def">blink</span> {
+    <span class="k-str">0%, 100%</span> { <span class="k-attr">opacity</span>: <span class="k-str">1</span>; }
+    <span class="k-str">50%</span> { <span class="k-attr">opacity</span>: <span class="k-str">0</span>; }
+}
+
+<span class="k-comment">/* Responsividade */</span>
+<span class="k-tag">@media</span> (<span class="k-attr">max-width</span>: <span class="k-str">768px</span>) {
+    <span class="k-tag">.brand-title</span> { <span class="k-attr">font-size</span>: <span class="k-str">2rem</span>; }
+    <span class="k-tag">.alura-gemini-text</span> { <span class="k-attr">font-size</span>: <span class="k-str">0.7rem</span>; }
+    <span class="k-tag">.project-subtitle</span> { <span class="k-attr">font-size</span>: <span class="k-str">0.8rem</span>; }
+}`;
+
+        const jsCode = `
+<span class="k-comment">// ==========================================</span>
+<span class="k-comment">// 1. THREE.JS SCENE SETUP</span>
+<span class="k-comment">// ==========================================</span>
+<span class="k-var">const</span> <span class="k-def">canvas</span> = <span class="k-obj">document</span>.<span class="k-func">getElementById</span>(<span class="k-str">'canvas-preview'</span>);
+<span class="k-var">const</span> <span class="k-def">container</span> = <span class="k-obj">document</span>.<span class="k-func">getElementById</span>(<span class="k-str">'scene-container'</span>);
+
+<span class="k-comment">// Cena</span>
+<span class="k-var">const</span> <span class="k-def">scene</span> = <span class="k-import">new</span> <span class="k-obj">THREE</span>.<span class="k-obj">Scene</span>();
+
+<span class="k-comment">// Câmera</span>
+<span class="k-var">const</span> <span class="k-def">camera</span> = <span class="k-import">new</span> <span class="k-obj">THREE</span>.<span class="k-obj">PerspectiveCamera</span>(<span class="k-str">75</span>, <span class="k-obj">window</span>.<span class="k-obj">innerWidth</span> / <span class="k-obj">window</span>.<span class="k-obj">innerHeight</span>, <span class="k-str">0.1</span>, <span class="k-str">1000</span>);
+<span class="k-def">camera</span>.<span class="k-obj">position</span>.<span class="k-obj">z</span> = <span class="k-str">3</span>;
+
+<span class="k-comment">// Renderizador</span>
+<span class="k-var">const</span> <span class="k-def">renderer</span> = <span class="k-import">new</span> <span class="k-obj">THREE</span>.<span class="k-obj">WebGLRenderer</span>({ 
+    <span class="k-attr">canvas</span>: <span class="k-def">canvas</span>, 
+    <span class="k-attr">alpha</span>: <span class="k-var">true</span>, 
+    <span class="k-attr">antialias</span>: <span class="k-var">true</span> 
+});
+<span class="k-def">renderer</span>.<span class="k-func">setSize</span>(<span class="k-obj">window</span>.<span class="k-obj">innerWidth</span>, <span class="k-obj">window</span>.<span class="k-obj">innerHeight</span>);
+<span class="k-def">renderer</span>.<span class="k-func">setPixelRatio</span>(<span class="k-obj">Math</span>.<span class="k-func">min</span>(<span class="k-obj">window</span>.<span class="k-obj">devicePixelRatio</span>, <span class="k-str">2</span>));
+
+<span class="k-comment">// ==========================================</span>
+<span class="k-comment">// 2. PARTICLE SYSTEM</span>
+<span class="k-comment">// ==========================================</span>
+<span class="k-var">const</span> <span class="k-def">geometry</span> = <span class="k-import">new</span> <span class="k-obj">THREE</span>.<span class="k-obj">BufferGeometry</span>();
+<span class="k-var">const</span> <span class="k-def">particlesCount</span> = <span class="k-str">3000</span>;
+<span class="k-var">const</span> <span class="k-def">posArray</span> = <span class="k-import">new</span> <span class="k-obj">Float32Array</span>(<span class="k-def">particlesCount</span> * <span class="k-str">3</span>);
+
+<span class="k-comment">// Distribuição aleatória de partículas</span>
+<span class="k-import">for</span>(<span class="k-var">let</span> <span class="k-def">i</span> = <span class="k-str">0</span>; <span class="k-def">i</span> < <span class="k-def">particlesCount</span> * <span class="k-str">3</span>; <span class="k-def">i</span>++) {
+    <span class="k-def">posArray</span>[<span class="k-def">i</span>] = (<span class="k-obj">Math</span>.<span class="k-func">random</span>() - <span class="k-str">0.5</span>) * <span class="k-str">15</span>; 
+}
+
+<span class="k-def">geometry</span>.<span class="k-func">setAttribute</span>(<span class="k-str">'position'</span>, <span class="k-import">new</span> <span class="k-obj">THREE</span>.<span class="k-obj">BufferAttribute</span>(<span class="k-def">posArray</span>, <span class="k-str">3</span>));
+
+<span class="k-comment">// Material das partículas</span>
+<span class="k-var">const</span> <span class="k-def">material</span> = <span class="k-import">new</span> <span class="k-obj">THREE</span>.<span class="k-obj">PointsMaterial</span>({
+    <span class="k-attr">size</span>: <span class="k-str">0.02</span>,
+    <span class="k-attr">color</span>: <span class="k-str">0x0078d7</span>, <span class="k-comment">// Azul Azure</span>
+    <span class="k-attr">transparent</span>: <span class="k-var">true</span>,
+    <span class="k-attr">opacity</span>: <span class="k-str">0.8</span>,
+    <span class="k-attr">blending</span>: <span class="k-obj">THREE</span>.<span class="k-obj">AdditiveBlending</span>,
+    <span class="k-attr">sizeAttenuation</span>: <span class="k-var">true</span>
+});
+
+<span class="k-comment">// Mesh</span>
+<span class="k-var">const</span> <span class="k-def">particlesMesh</span> = <span class="k-import">new</span> <span class="k-obj">THREE</span>.<span class="k-obj">Points</span>(<span class="k-def">geometry</span>, <span class="k-def">material</span>);
+<span class="k-def">scene</span>.<span class="k-func">add</span>(<span class="k-def">particlesMesh</span>);
+
+<span class="k-comment">// ==========================================</span>
+<span class="k-comment">// 3. INTERACTION & ANIMATION</span>
+<span class="k-comment">// ==========================================</span>
+
+<span class="k-comment">// Mouse Interaction (Parallax Suave)</span>
+<span class="k-var">let</span> <span class="k-def">mouseX</span> = <span class="k-str">0</span>;
+<span class="k-var">let</span> <span class="k-def">mouseY</span> = <span class="k-str">0</span>;
+<span class="k-var">let</span> <span class="k-def">targetX</span> = <span class="k-str">0</span>;
+<span class="k-var">let</span> <span class="k-def">targetY</span> = <span class="k-str">0</span>;
+
+<span class="k-var">const</span> <span class="k-def">windowHalfX</span> = <span class="k-obj">window</span>.<span class="k-obj">innerWidth</span> / <span class="k-str">2</span>;
+<span class="k-var">const</span> <span class="k-def">windowHalfY</span> = <span class="k-obj">window</span>.<span class="k-obj">innerHeight</span> / <span class="k-str">2</span>;
+
+<span class="k-obj">document</span>.<span class="k-func">addEventListener</span>(<span class="k-str">'mousemove'</span>, (<span class="k-def">event</span>) => {
+    <span class="k-def">mouseX</span> = (<span class="k-def">event</span>.<span class="k-def">clientX</span> - <span class="k-def">windowHalfX</span>);
+    <span class="k-def">mouseY</span> = (<span class="k-def">event</span>.<span class="k-def">clientY</span> - <span class="k-def">windowHalfY</span>);
+});
+
+<span class="k-var">const</span> <span class="k-def">clock</span> = <span class="k-import">new</span> <span class="k-obj">THREE</span>.<span class="k-obj">Clock</span>();
+
+<span class="k-func">function</span> <span class="k-func">animate</span>() {
+    <span class="k-var">const</span> <span class="k-def">elapsedTime</span> = <span class="k-def">clock</span>.<span class="k-func">getElapsedTime</span>();
+
+    <span class="k-comment">// Rotação automática constante</span>
+    <span class="k-def">particlesMesh</span>.<span class="k-obj">rotation</span>.<span class="k-obj">y</span> = <span class="k-def">elapsedTime</span> * <span class="k-str">0.05</span>;
+    <span class="k-def">particlesMesh</span>.<span class="k-obj">rotation</span>.<span class="k-obj">x</span> = <span class="k-def">elapsedTime</span> * <span class="k-str">0.02</span>;
+
+    <span class="k-comment">// Efeito Parallax com Mouse (Suavizado)</span>
+    <span class="k-def">targetX</span> = <span class="k-def">mouseX</span> * <span class="k-str">0.001</span>;
+    <span class="k-def">targetY</span> = <span class="k-def">mouseY</span> * <span class="k-str">0.001</span>;
+
+    <span class="k-def">particlesMesh</span>.<span class="k-obj">rotation</span>.<span class="k-obj">y</span> += <span class="k-str">0.05</span> * (<span class="k-def">targetX</span> - <span class="k-def">particlesMesh</span>.<span class="k-obj">rotation</span>.<span class="k-obj">y</span>);
+    <span class="k-def">particlesMesh</span>.<span class="k-obj">rotation</span>.<span class="k-obj">x</span> += <span class="k-str">0.05</span> * (<span class="k-def">targetY</span> - <span class="k-def">particlesMesh</span>.<span class="k-obj">rotation</span>.<span class="k-obj">x</span>);
+
+    <span class="k-def">renderer</span>.<span class="k-func">render</span>(<span class="k-def">scene</span>, <span class="k-def">camera</span>);
+    <span class="k-func">requestAnimationFrame</span>(<span class="k-func">animate</span>);
+}
+
+<span class="k-func">animate</span>();`;
+
+        const fileSequence = [
+            { id: 'html', type: 'html', code: htmlCode, name: 'index.html', icon: 'fa-html5', color: '#e65100' },
+            { id: 'css', type: 'css', code: cssCode, name: 'styles.css', icon: 'fa-css3', color: '#42a5f5' },
+            { id: 'js', type: 'js', code: jsCode, name: 'main.js', icon: 'fa-js', color: '#fdd835' }
+        ];
+
+        let currentFileIndex = 0;
+        let currentCodeChunks = [];
+
+        function updateUIForFile(fileData) {
+            document.querySelectorAll('.vs-file').forEach(el => el.classList.remove('active'));
+            document.getElementById(`file-${fileData.id}`).classList.add('active');
+
+            const tab = document.getElementById('active-tab');
+            tab.innerHTML = `<i class="fa-brands ${fileData.icon}" style="color: ${fileData.color}"></i> ${fileData.name}`;
+            
+            document.getElementById('vs-window-title').innerText = `${fileData.name} - Visual Studio Code`;
+
+            container.innerHTML = '<span class="typing-cursor"></span>';
+            state.index = 0;
+            currentCodeChunks = fileData.code.split(/(?=<span)|(?<=<\/span>)/g);
+        }
+
+        updateUIForFile(fileSequence[0]);
+
         document.addEventListener('keydown', (e) => {
             if(!state.isCoding || state.errorStage) return;
 
-            // REVEAL PREVIEW ON FIRST KEY STROKE
             if(!state.previewVisible) {
                 state.previewVisible = true;
                 const prevPanel = document.getElementById('preview-container');
                 prevPanel.style.opacity = 1;
             }
 
-            if(state.index >= codeChunks.length) return;
+            if (state.index >= currentCodeChunks.length) {
+                if (currentFileIndex < fileSequence.length - 1) {
+                    currentFileIndex++;
+                    updateUIForFile(fileSequence[currentFileIndex]);
+                } else {
+                    checkCodeProgress(container.innerText);
+                }
+                return;
+            }
             
-            const chunk = codeChunks[state.index];
+            const chunk = currentCodeChunks[state.index];
             const cursor = document.querySelector('.typing-cursor');
             cursor.insertAdjacentHTML('beforebegin', chunk);
             state.index++;
             
             container.scrollTop = container.scrollHeight;
 
-            checkCodeProgress(container.innerText);
+            if (fileSequence[currentFileIndex].id === 'js') {
+                checkCodeProgress(container.innerText);
+            }
         });
 
         let typeWriterStarted = false;
         function checkCodeProgress(text) {
-            if(text.includes('class UberabaEngine') && !typeWriterStarted) {
+            // Check logic against the NEW JS code provided
+            
+            if(text.includes('const scene') && !typeWriterStarted) {
                 typeWriterStarted = true;
                 typeWriter("IMERSÃO DEV", document.getElementById('typewriter-text'));
             }
 
-            if(text.includes('createStarField')) {
-                gsap.to('#sub-brand', { opacity: 1, duration: 0.5 });
-                gsap.to('#sub-proj', { opacity: 1, duration: 0.5, delay: 0.2 });
+            if(text.includes('particlesMesh = new THREE.Points')) {
+                gsap.to('#sub-brand', { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" });
+                gsap.to('#sub-proj', { opacity: 1, y: 0, duration: 0.8, ease: "power2.out", delay: 0.2 });
             }
 
-            if(text.includes('new UberabaEngine')) {
-                gsap.to('#prev-btn', { opacity: 1, y: 0, duration: 0.5 });
+            if(text.includes('animate();')) {
+                gsap.to('#cta-btn', { opacity: 1, y: 0, duration: 0.8, ease: "back.out(1.7)" });
                 document.getElementById('typing-hint').innerHTML = "CÓDIGO FINALIZADO. CLIQUE EM 'ACESSAR SITE'.";
                 document.getElementById('status-bar-text').innerText = "COMPILATION SUCCESS";
             }
@@ -1214,7 +1510,7 @@
         // ==========================================
         // ERROR & GEMINI FIX SEQUENCE
         // ==========================================
-        const prevBtn = document.getElementById('prev-btn');
+        const prevBtn = document.getElementById('cta-btn'); // Reusing CTA as prevBtn logically
         const modal = document.getElementById('error-modal');
         const closeModal = document.getElementById('btn-close-modal');
         const ackModal = document.getElementById('btn-ack-error');
@@ -1222,17 +1518,20 @@
         const successModal = document.getElementById('gemini-success-modal');
         const closeSuccess = document.getElementById('btn-close-success');
 
-        prevBtn.addEventListener('click', () => {
-            if(!state.accessGranted) {
-                triggerError();
-            } else {
-                window.location.href = 'main.html';
-            }
-        });
+        // NOTE: This logic is now partly controlled by the "ACESSAR SITE" button inside the preview logic
+        // BUT we still need the VS Code error simulation logic
+        // Let's hook the logic into the button created in the preview.
 
         function triggerError() {
             state.errorStage = true;
             
+            if (currentFileIndex !== 2) {
+                currentFileIndex = 2;
+                updateUIForFile(fileSequence[2]);
+                const cursor = document.querySelector('.typing-cursor');
+                currentCodeChunks.forEach(c => cursor.insertAdjacentHTML('beforebegin', c));
+            }
+
             document.getElementById('scene-vscode').classList.add('glitch-error');
             document.getElementById('code-container').style.color = 'red';
             document.getElementById('status-bar-text').innerText = "CRITICAL ERROR DETECTED";
@@ -1256,9 +1555,10 @@
             if(!state.errorStage || state.fixed) return;
             
             geminiTool.classList.remove('pulse');
-            
+            currentFileIndex = 2; 
+            updateUIForFile(fileSequence[2]); 
+
             const container = document.getElementById('code-container');
-            container.innerHTML = '<span class="typing-cursor"></span>';
             container.style.color = '#d4d4d4'; 
             document.getElementById('scene-vscode').classList.remove('glitch-error');
             document.getElementById('status-bar-text').innerText = "GEMINI AI REWRITING...";
@@ -1268,7 +1568,7 @@
         });
 
         function triggerGeminiRewrite() {
-            const chunks = fullCode.split(/(?=<span)|(?<=<\/span>)/g);
+            const chunks = jsCode.split(/(?=<span)|(?<=<\/span>)/g);
             let i = 0;
 
             const slowType = setInterval(() => {
@@ -1303,22 +1603,37 @@
                 document.getElementById('typing-hint').innerText = "CORREÇÃO COMPLETA. ACESSO LIBERADO.";
                 document.getElementById('status-bar-text').innerText = "READY";
                 document.getElementById('status-bar-text').style.background = "#007acc";
-                document.getElementById('prev-btn').style.border = "1px solid #00ff00";
-                document.getElementById('prev-btn').style.color = "#00ff00";
+                
+                // Reset button style in preview
+                const btn = document.getElementById('cta-btn');
+                if(btn) {
+                    btn.style.border = "1px solid #00ff00";
+                    btn.style.color = "#00ff00";
+                }
             }});
         });
 
         // ==========================================
-        // THREE.JS STARFIELD
+        // THREE.JS STARFIELD (PREVIEW LOGIC)
         // ==========================================
-        function initParticles() {
+        let particlesMesh, camera, material; 
+
+        function initGeminiPreview() {
             const canvas = document.getElementById('canvas-preview');
-            const parent = canvas.parentElement;
+            const container = document.getElementById('preview-container'); // Use preview container for sizing
 
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, parent.clientWidth / parent.clientHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-            renderer.setSize(parent.clientWidth, parent.clientHeight);
+            
+            // Correct Sizing based on container
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            camera.position.z = 3;
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
             const geometry = new THREE.BufferGeometry();
             const count = 3000;
@@ -1329,19 +1644,51 @@
             }
 
             geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            const material = new THREE.PointsMaterial({ size: 0.02, color: 0x0078d7, transparent: true, opacity: 0.8 });
-            const mesh = new THREE.Points(geometry, material);
-            scene.add(mesh);
-            camera.position.z = 3;
+            
+            material = new THREE.PointsMaterial({ 
+                size: 0.02, 
+                color: 0x0078d7, 
+                transparent: true, 
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: true
+            });
+            
+            particlesMesh = new THREE.Points(geometry, material);
+            scene.add(particlesMesh);
+
+            // Mouse Interaction Logic
+            let mouseX = 0;
+            let mouseY = 0;
+            const windowHalfX = width / 2;
+            const windowHalfY = height / 2;
+
+            container.addEventListener('mousemove', (event) => {
+                const rect = container.getBoundingClientRect();
+                mouseX = (event.clientX - rect.left) - windowHalfX;
+                mouseY = (event.clientY - rect.top) - windowHalfY;
+            });
+
+            const clock = new THREE.Clock();
 
             const animate = () => {
                 requestAnimationFrame(animate);
-                mesh.rotation.y += 0.001;
-                mesh.rotation.x += 0.0005;
                 
+                const elapsedTime = clock.getElapsedTime();
+
+                particlesMesh.rotation.y = elapsedTime * 0.05;
+                particlesMesh.rotation.x = elapsedTime * 0.02;
+
+                const targetX = mouseX * 0.001;
+                const targetY = mouseY * 0.001;
+
+                particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
+                particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
+                
+                // Error state visual feedback
                 if(state.errorStage && !state.fixed) {
-                    mesh.rotation.z += 0.05;
                     material.color.setHex(0xff0000);
+                    particlesMesh.rotation.z += 0.05;
                 } else if(state.fixed) {
                     material.color.setHex(0x00ff00);
                 } else {
@@ -1351,6 +1698,32 @@
                 renderer.render(scene, camera);
             };
             animate();
+
+            // Button Interaction inside Preview
+            const ctaBtn = document.getElementById('cta-btn');
+            if(ctaBtn) {
+                ctaBtn.addEventListener('click', (e) => {
+                    if(!state.accessGranted) {
+                        triggerError();
+                        return;
+                    }
+
+                    const btn = e.target;
+                    btn.innerHTML = "CARREGANDO...";
+                    material.color.setHex(0x00ff00);
+                    
+                    gsap.to(particlesMesh.rotation, {
+                        z: 5, duration: 2, ease: "expo.in"
+                    });
+
+                    gsap.to(camera.position, {
+                        z: 0.5, duration: 2, ease: "expo.in",
+                        onComplete: () => {
+                            window.location.href = "main.html"; 
+                        }
+                    });
+                });
+            }
         }
 
     </script>
