@@ -204,6 +204,47 @@
         .icon-img { font-size: 2.2rem; margin-bottom: 8px; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5)); }
         .icon-label { font-size: 0.8rem; line-height: 1.2; }
 
+        /* --- PHOTOS FOLDER WINDOW --- */
+        .os-window {
+            position: absolute; top: 10%; left: 15%; width: 70%; height: 70%;
+            background: #f0f0f0; color: #000;
+            border: 1px solid #666;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+            display: none; flex-direction: column;
+            z-index: 150; font-family: 'Segoe UI', sans-serif;
+            border-radius: 6px; overflow: hidden;
+        }
+        .os-header { background: #fff; padding: 0; border-bottom: 1px solid #ddd; display: flex; flex-direction: column; }
+        .os-titlebar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; }
+        .os-title { font-size: 12px; display: flex; align-items: center; gap: 10px; color: #333; }
+        .os-controls { display: flex; gap: 5px; }
+        .os-btn { width: 40px; height: 30px; display: flex; justify-content: center; align-items: center; font-size: 14px; cursor: pointer; transition: 0.2s; border: none; background: transparent; }
+        .os-btn:hover { background: #e5e5e5; }
+        .os-btn.close:hover { background: #e81123; color: white; }
+        
+        .os-toolbar { padding: 8px 12px; background: #f9f9f9; border-bottom: 1px solid #ddd; display: flex; gap: 15px; font-size: 13px; color: #555; align-items: center; }
+        .os-toolbar span { cursor: pointer; }
+        .os-toolbar span:hover { color: #000; }
+
+        .os-body { flex: 1; padding: 20px; overflow-y: auto; background: #fff; }
+        
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+        .photo-item {
+            display: flex; flex-direction: column; align-items: center;
+            padding: 10px; cursor: pointer; border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .photo-item:hover { background: #e5f3ff; border-color: #cce8ff; }
+        .photo-frame {
+            width: 100%; height: 110px; background: #eee;
+            margin-bottom: 8px; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid #ddd;
+        }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .photo-item:hover img { transform: scale(1.05); }
+        .photo-name { font-size: 12px; text-align: center; color: #333; word-break: break-all;}
+
+
         /* Windows Generic Error Dialog (Fake) */
         #win-error-box {
             position: absolute; top: 50%; left: 50%;
@@ -627,7 +668,8 @@
     <!-- 4. DESKTOP SCENE -->
     <div id="scene-desktop">
         <div class="desktop-grid">
-            <div class="desktop-icon" onclick="wrongIcon('Lixeira')">
+            <!-- ATUALIZADO: Ícone Lixeira agora é funcional -->
+            <div class="desktop-icon" onclick="openTrash()">
                 <i class="fa-solid fa-trash-can icon-img" style="color: #ddd"></i>
                 <div class="icon-label">Lixeira</div>
             </div>
@@ -635,10 +677,13 @@
                 <i class="fa-solid fa-desktop icon-img" style="color: #fff"></i>
                 <div class="icon-label">Meu Computador</div>
             </div>
-            <div class="desktop-icon" onclick="wrongIcon('Fotos')">
+            
+            <!-- FOTOS: FUNCIONAL -->
+            <div class="desktop-icon" onclick="openPhotos()">
                 <i class="fa-solid fa-images icon-img" style="color: #00bcd4"></i>
                 <div class="icon-label">Fotos</div>
             </div>
+
             <div class="desktop-icon" onclick="wrongIcon('Spotify')">
                 <i class="fa-brands fa-spotify icon-img" style="color: #1db954"></i>
                 <div class="icon-label">Spotify</div>
@@ -656,6 +701,94 @@
                 <div class="icon-label">Google Chrome</div>
             </div>
         </div>
+
+        <!-- PHOTOS FOLDER WINDOW -->
+        <div id="window-photos" class="os-window">
+            <div class="os-header">
+                <div class="os-titlebar">
+                    <div class="os-title"><i class="fa-solid fa-folder-open" style="color:#ffce44;"></i> Fotos - Uberaba Site</div>
+                    <div class="os-controls">
+                        <button class="os-btn"><i class="fa-solid fa-minus"></i></button>
+                        <button class="os-btn"><i class="fa-regular fa-square"></i></button>
+                        <button class="os-btn close" onclick="closePhotos()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <div class="os-toolbar">
+                    <span>Arquivo</span>
+                    <span>Início</span>
+                    <span>Compartilhar</span>
+                    <span>Exibir</span>
+                </div>
+            </div>
+            <div class="os-body">
+                <div class="photo-grid">
+                    <!-- 5 Placeholder Photos: Replace src with local images -->
+                    <div class="photo-item">
+                        <div class="photo-frame"><img src="Museu.png" alt="Print 1"></div>
+                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print1.jpg" -->
+                        <div class="photo-name">PrintSiteMuseu</div>
+                    </div>
+                    <div class="photo-item">
+                        <div class="photo-frame"><img src="Time.png" alt="Print 2"></div>
+                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print2.jpg" -->
+                        <div class="photo-name">PrintSiteTme</div>
+                    </div>
+                    <div class="photo-item">
+                        <div class="photo-frame"><img src="CIA.png" alt="Print 3"></div>
+                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print3.jpg" -->
+                        <div class="photo-name">PrintSiteCia</div>
+                    </div>
+                    <div class="photo-item">
+                        <div class="photo-frame"><img src="Gnetica de ouro.png" alt="Print 4"></div>
+                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print4.jpg" -->
+                        <div class="photo-name">PrintSiteGenetica</div>
+                    </div>
+                    <div class="photo-item">
+                        <div class="photo-frame"><img src="Inicio.png" alt="Print 5"></div>
+                        <!-- COLOCAR FOTO LOCAL AQUI: src="img/print5.jpg" -->
+                        <div class="photo-name">PrintSiteInicio</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOVO: JANELA DA LIXEIRA -->
+        <div id="window-trash" class="os-window">
+            <div class="os-header">
+                <div class="os-titlebar">
+                    <div class="os-title"><i class="fa-solid fa-trash-can" style="color:#888;"></i> Lixeira</div>
+                    <div class="os-controls">
+                        <button class="os-btn"><i class="fa-solid fa-minus"></i></button>
+                        <button class="os-btn"><i class="fa-regular fa-square"></i></button>
+                        <button class="os-btn close" onclick="closeTrash()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <div class="os-toolbar">
+                    <span>Arquivo</span>
+                    <span>Início</span>
+                    <span>Compartilhar</span>
+                    <span>Exibir</span>
+                    <span style="color: red; margin-left: auto; font-size: 11px; font-weight: 600;">Ferramentas de Lixeira</span>
+                </div>
+            </div>
+            <div class="os-body">
+                <div class="photo-grid">
+                    <!-- Placeholder Lixeira 1 -->
+                    <div class="photo-item">
+                        <!-- Substitua 'lixeira1.jpg' pelo caminho da sua imagem local -->
+                        <div class="photo-frame"><img src="Lixo1.webp" alt="Arquivo Deletado 1"></div>
+                        <div class="photo-name">Lixo infectado</div>
+                    </div>
+                    <!-- Placeholder Lixeira 2 -->
+                    <div class="photo-item">
+                        <!-- Substitua 'lixeira2.jpg' pelo caminho da sua imagem local -->
+                        <div class="photo-frame"><img src="Lixo2.png" alt="Arquivo Deletado 2"></div>
+                        <div class="photo-name">Lixo infectado</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- 5. VS CODE SCENE -->
@@ -862,6 +995,30 @@
 
         function closeWinError() {
             document.getElementById('win-error-box').style.display = 'none';
+        }
+
+        // PHOTOS WINDOW LOGIC
+        function openPhotos() {
+            const win = document.getElementById('window-photos');
+            win.style.display = 'flex';
+            gsap.fromTo(win, {scale: 0.9, opacity: 0}, {scale: 1, opacity: 1, duration: 0.2, ease: "power2.out"});
+        }
+
+        function closePhotos() {
+            const win = document.getElementById('window-photos');
+            gsap.to(win, {scale: 0.9, opacity: 0, duration: 0.15, onComplete: () => win.style.display = 'none'});
+        }
+
+        // TRASH WINDOW LOGIC (NEW)
+        function openTrash() {
+            const win = document.getElementById('window-trash');
+            win.style.display = 'flex';
+            gsap.fromTo(win, {scale: 0.9, opacity: 0}, {scale: 1, opacity: 1, duration: 0.2, ease: "power2.out"});
+        }
+
+        function closeTrash() {
+            const win = document.getElementById('window-trash');
+            gsap.to(win, {scale: 0.9, opacity: 0, duration: 0.15, onComplete: () => win.style.display = 'none'});
         }
 
         document.getElementById('icon-vscode').addEventListener('dblclick', openVSCode);
