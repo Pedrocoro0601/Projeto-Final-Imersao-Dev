@@ -1,77 +1,54 @@
-Uberaba Experience | Imersão Dev Alura + Google Gemini
+# 🏛️ Uberaba Experience | Imersão
 
-"Mais que um site, uma imersao."
+> "Não é apenas um site. É uma simulação de sistema operacional que abre as portas para a história da terra dos Dinossauros e do Zebu."
 
-Este projeto foi desenvolvido como desafio final da Imersão Dev da Alura em parceria com o Google Gemini. O objetivo não foi apenas criar um guia turístico, mas sim uma experiência interativa que coloca o usuário no papel de um desenvolvedor, simulando um sistema operacional completo antes de revelar o conteúdo da cidade.
+## 🏆 Sobre o Projeto
+Desenvolvido durante a **Imersão Dev com Alura e Google**, o **Uberaba Experience** é uma homenagem tecnológica à cidade de Uberaba-MG.
 
----
+Diferente de páginas de turismo convencionais, este projeto aposta na **narrativa e gamificação**. A experiência começa simulando um computador sendo ligado, passa por um ambiente de desenvolvimento onde a IA "conserta" o código, e culmina em um portal rico em história, cultura e utilidade pública.
 
-Sobre o Projeto
+🔗 **Acesse o projeto online:** https://pedrocoro0601.github.io/Projeto-Final-Imersao-Dev/
 
-O Uberaba Experience é uma homenagem à cidade de Uberaba-MG, conhecida mundialmente como a capital do Zebu e terra dos Dinossauros.
+## 🎬 A Narrativa (O Diferencial)
+A jornada do usuário foi desenhada em quatro atos:
 
-- O diferencial deste projeto é a narrativa (Storytelling):
+1.  **🔌 O Boot:** O usuário interage fisicamente clicando no botão Power para iniciar o "computador virtual".
+2.  **🖥️ A Simulação:** Uma recriação fiel de hardware, passando pelo check da BIOS, tela de bloqueio com data/hora reais e área de trabalho interativa.
+3.  **🤖 O Código & Gemini:** O ápice da metalinguagem. O sistema abre um editor (VS Code simulado) onde a **IA do Google Gemini** analisa, corrige e "compila" o código do site em tempo real.
+4.  **✨ A Revelação:** Somente após a "compilação", o site principal é carregado, repleto de animações, scrollytelling e efeitos visuais.
 
-- O Boot: O usuário liga o "computador" virtual.
+## 🚀 Tecnologias Utilizadas
+Para garantir a performance e respeitar as regras da competição, **não foram utilizados frameworks complexos** (como React ou Next.js). Toda a lógica é construída sobre os fundamentos da web.
 
-- A Simulação: Passa pela BIOS e tela de Login do Windows.
+### Core (Fundamentos)
+* **HTML5 Semântico**: Estrutura sólida e acessível.
+* **CSS3 Moderno**: Uso avançado de Flexbox, Grid e variáveis CSS.
+* **JavaScript (Vanilla ES6+)**: 100% da lógica de simulação do SO, manipulação do DOM e controle de estados foi feita "na unha", sem dependências pesadas.
 
-- O Código: Abre o VS Code e usa uma simulação da IA Google Gemini para corrigir o código e "compilar" o site.
+### Estilização & Animação
+* **TailwindCSS**: Para agilidade e consistência na estilização.
+* **GSAP (GreenSock) + ScrollTrigger**: Para as animações de alta performance e *Scrollytelling*.
+* **Three.js**: Para a renderização de partículas 3D e efeitos atmosféricos.
+* **Lenis**: Para o "smooth scroll" (rolagem suave) que confere o aspecto premium.
 
-- A Revelação: Só então o site principal é carregado, repleto de animações, história e utilidade pública.
+## 💎 Funcionalidades Detalhadas
 
-  ---
+### 1. A Simulação (Intro)
+* **Botão Power:** Inicia a sequência de boot com feedback visual.
+* **BIOS Check:** Simulação de hardware (memória, CPU) rolando na tela.
+* **Tela de Bloqueio:** Relógio em tempo real e animação de digitação de senha automática.
+* **Área de Trabalho:** Ícones interativos, janelas de erro estilo Windows e sons de sistema.
 
-Tecnologias Utilizadas
-O projeto foi construído utilizando tecnologias modernas de Front-end, focando em performance e animação: HTML5, CSS (Tailwind) e JavaScript Puro
+### 2. O Guia da Cidade (Site Principal)
+* **Scrollytelling:** A história de Uberaba contada de forma fluida através da rolagem.
+* **Livro 3D Interativo:** Um modal imersivo que simula um livro antigo com a história detalhada da cidade.
+* **Terra de Gigantes:** Seção dedicada aos dinossauros de Peirópolis com efeitos de paralaxe.
+* **Capital do Zebu:** Destaque para a ABCZ e a genética bovina utilizando cards com **efeitos holográficos**.
+* **Hino Oficial:** Modal cinematográfico com vídeo e letra sincronizada para karaokê/acompanhamento.
 
-- Estrutura Semântica
-
-- Estilização Moderna
-
-- Lógica e Simulação do S.O.
-
-- Elementos 3D e Partículas
-
-- Animações de Scroll (ScrollTrigger) e Texto
-
-- Bibliotecas Adicionais: Lenis (Smooth Scroll), FontAwesome (Ícones).
-
-  ---
-
-Funcionalidades
-
-A Simulação (Intro)
-
-- Botão Power: Inicia a sequência de boot.
-
-- BIOS Check: Simulação real de carregamento de hardware.
-
-- Tela de Bloqueio: Com data/hora reais e digitação automática de senha.
-
-- Área de Trabalho: Ícones interativos e janelas de erro estilo Windows.
-
-- VS Code + Gemini: Um editor de código simulado onde a IA "reescreve" o projeto em tempo real.
-
-  ---
-
-O Guia da Cidade (Site Principal)
-
-- Scrollytelling: A história de Uberaba contada através do scroll.
-
-- Livro 3D Interativo: Um modal que simula um livro antigo contando a história detalhada da cidade.
-
-- Terra de Gigantes: Seção dedicada aos dinossauros de Peirópolis.
-
-- Capital do Zebu: Destaque para a ABCZ e a genética bovina com efeitos holográficos.
-
-- Guia: Lista funcional de Hotéis e Restaurantes.
-
-- Guia: Lista funcional das Radios e Jornais da cidade.
-
-- Hino Oficial: Modal cinematográfico com vídeo e letra sincronizada.
-
-- E muito mais...
+### 3. Utilidade Pública (Guias)
+* **Conexão Uberaba:** Um hub estilo "rádio antiga" listando as estações e jornais locais.
+* **Concierge Digital:** Lista funcional e filtrável de Hotéis e Gastronomia para turistas.
 
 ---
 
