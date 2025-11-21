@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uberaba Experience | O Guia Definitivo</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Config Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#D4AF37',
+                        deepblack: '#050505',
+                        offwhite: '#e0e0e0',
+                        glass: 'rgba(255, 255, 255, 0.03)',
+                        glassBorder: 'rgba(255, 255, 255, 0.08)'
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                    },
+                    backgroundImage: {
+                        'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Scrollbar & Global */
+        body { background-color: #050505; color: #e0e0e0; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+
+        /* Cards */
+        .place-card {
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.3s, box-shadow 0.3s;
+        }
+        .place-card:hover { 
+            transform: translateY(-5px); 
+            border-color: #D4AF37; 
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.05);
+        }
+        
+        /* Custom Filter Tabs */
+        .filter-tab {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .filter-tab.active {
+            color: #000;
+            background-color: #D4AF37;
+            border-color: #D4AF37;
+        }
+        .filter-tab.active .count-badge {
+            background-color: #000;
+            color: #D4AF37;
+        }
+        
+        /* Loader */
+        .loader-screen {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
+        }
+    </style>
+</head>
+<body class="font-montserrat selection:bg-gold selection:text-black">
+
+    <!-- LOADING SCREEN -->
+    <div id="loader" class="loader-screen">
+        <div class="text-center">
+            <div class="font-cinzel text-gold text-3xl tracking-widest animate-pulse">UBERABA</div>
+            <div class="text-xs text-gray-500 mt-2 tracking-[0.5em] uppercase">Concierge Digital</div>
+        </div>
+    </div>
+
+    <!-- BACKGROUND NOISE & GRADIENTS -->
+    <div class="fixed inset-0 bg-noise pointer-events-none z-50 opacity-30 mix-blend-overlay"></div>
+    <div class="fixed top-0 left-0 w-[500px] h-[500px] bg-purple-900/20 blur-[120px] rounded-full pointer-events-none z-0"></div>
+    <div class="fixed bottom-0 right-0 w-[600px] h-[600px] bg-gold/5 blur-[100px] rounded-full pointer-events-none z-0"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-40 px-6 py-6 flex justify-between items-center backdrop-blur-md border-b border-white/5 transition-all duration-300 bg-black/50" id="main-nav">
+        <a href="index.html" class="group flex items-center gap-3 text-xs uppercase tracking-widest text-gray-400 hover:text-gold transition">
+            <span class="w-8 h-[1px] bg-gray-600 group-hover:bg-gold transition"></span>
+            Voltar
+        </a>
+        <div class="hidden md:flex gap-8">
+            <button onclick="scrollToSection('gastronomy-act')" class="nav-btn text-sm uppercase tracking-widest text-gray-400 hover:text-white transition pb-1">Gastronomia</button>
+            <button onclick="scrollToSection('hospitality-act')" class="nav-btn text-sm uppercase tracking-widest text-gray-400 hover:text-white transition pb-1">Hospedagem</button>
+        </div>
+        <div class="font-cinzel font-bold text-gold text-xl">U.E.</div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-30 scale-110" id="hero-bg"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-deepblack via-transparent to-deepblack"></div>
+        
+        <div class="relative z-10 text-center px-4">
+            <p class="text-gold text-xs md:text-sm tracking-[0.5em] uppercase mb-6 reveal-hero">Curadoria Exclusiva</p>
+            <h1 class="font-cinzel text-5xl md:text-8xl text-white mb-2 reveal-hero">
+                A Arte de <br><span class="italic font-playfair text-gold">Bem Viver</span>
+            </h1>
+            <div class="w-24 h-[1px] bg-white/20 mx-auto my-8 reveal-hero"></div>
+            <p class="max-w-xl mx-auto text-gray-400 font-light leading-relaxed reveal-hero">
+                Descubra os sabores que definem a cidade e os refúgios onde o conforto encontra a sofisticação. Um guia para quem exige excelência.
+            </p>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce">
+            <span class="text-[10px] uppercase tracking-widest">Explore</span>
+            <div class="w-[1px] h-12 bg-gradient-to-b from-white to-transparent"></div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="relative z-10">
+
+        <!-- ATO I: GASTRONOMIA (INTERATIVO) -->
+        <section id="gastronomy-act" class="py-32 border-t border-white/5">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+                    <div>
+                        <span class="text-gold text-6xl md:text-9xl font-playfair opacity-20 absolute -translate-y-1/2 -translate-x-10 pointer-events-none">I</span>
+                        <h2 class="font-cinzel text-4xl md:text-6xl text-white relative z-10">Paladar <br> Uberabense</h2>
+                    </div>
+                    <p class="text-gray-500 max-w-sm text-sm leading-loose text-right md:text-right">
+                        Explore nossa seleção curada. Utilize os filtros abaixo para navegar entre as categorias gastronômicas da cidade.
+                    </p>
+                </div>
+
+                <!-- MENU INTERATIVO (FILTROS) -->
+                <div class="sticky top-[80px] z-30 py-4 mb-10 backdrop-blur-md bg-black/60 border-b border-white/5 -mx-6 px-6 md:mx-0 md:px-0 md:bg-transparent md:backdrop-blur-none md:relative md:top-0 md:border-none overflow-x-auto">
+                    <div class="flex flex-row md:flex-wrap gap-3 w-max md:w-full" id="gastronomy-filters">
+                        <!-- Botão 'Todos' -->
+                        <button class="filter-tab active flex items-center gap-2 px-6 py-2 rounded-full border border-white/10 text-sm text-gray-300 hover:border-gold transition-all whitespace-nowrap" onclick="filterGastronomy('all', this)">
+                            Todos <span class="count-badge bg-white/10 text-white px-2 py-0.5 rounded-full text-[10px] font-bold" id="count-all">0</span>
+                        </button>
+                        <!-- Outros botões gerados via JS -->
+                    </div>
+                </div>
+
+                <!-- GRID DE GASTRONOMIA UNIFICADA -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="grid-gastronomy">
+                    <!-- Cards inseridos via JS -->
+                </div>
+                
+                <!-- Mensagem caso não encontre -->
+                <div id="no-results" class="hidden text-center py-20">
+                    <p class="font-cinzel text-gray-600 text-xl">Nenhum local encontrado nesta categoria.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIVIDER PARALLAX -->
+        <div class="relative h-[50vh] overflow-hidden flex items-center justify-center">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-fixed opacity-40 grayscale"></div>
+            <h2 class="relative z-10 font-cinzel text-5xl md:text-7xl text-white text-center mix-blend-overlay tracking-tighter">
+                HOSPITALIDADE
+            </h2>
+        </div>
+
+        <!-- ATO II: HOSPEDAGEM -->
+        <section id="hospitality-act" class="py-32 bg-black relative">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row items-start justify-between mb-24 gap-6">
+                     <div>
+                        <span class="text-gold text-6xl md:text-9xl font-playfair opacity-20 absolute -translate-y-1/2 -translate-x-10 pointer-events-none">II</span>
+                        <h2 class="font-cinzel text-4xl md:text-6xl text-white relative z-10">Estadia & <br> Conforto</h2>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 w-full md:w-auto">
+                        <button class="filter-tab-hotel active px-6 py-2 border border-white/10 rounded-full text-xs hover:bg-white hover:text-black transition uppercase whitespace-nowrap text-gray-300" onclick="filterHotels('all', this)">Todos</button>
+                        <button class="filter-tab-hotel px-6 py-2 border border-white/10 rounded-full text-xs hover:bg-white hover:text-black transition uppercase whitespace-nowrap text-gray-300" onclick="filterHotels('Hotel', this)">Hotéis</button>
+                        <button class="filter-tab-hotel px-6 py-2 border border-white/10 rounded-full text-xs hover:bg-white hover:text-black transition uppercase whitespace-nowrap text-gray-300" onclick="filterHotels('Flat', this)">Flats</button>
+                        <button class="filter-tab-hotel px-6 py-2 border border-white/10 rounded-full text-xs hover:bg-white hover:text-black transition uppercase whitespace-nowrap text-gray-300" onclick="filterHotels('Hotel Fazenda', this)">Fazenda</button>
+                    </div>
+                </div>
+
+                <!-- Grid Hoteis -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="grid-hoteis">
+                    <!-- Inserido via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 bg-[#020202] py-12">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="font-cinzel text-gold font-bold text-2xl">U.E.</div>
+            <div class="text-gray-600 text-xs uppercase tracking-widest text-center md:text-right">
+                <p>&copy; 2025 Uberaba Experience.</p>
+                <p class="mt-1"></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS: GSAP + LENIS + DATA -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <script>
+        // ==========================================
+        // 1. DATABASE ATUALIZADA (LISTA COMPLETA)
+        // ==========================================
+        const rawDataGastronomia = [
+            // RESTAURANTES
+            { name: "Aroma Restaurante", phone: "(34) 3322-2080", address: "Rua Tristão de Castro, 79 - São Benedito", category: "Restaurante" },
+            { name: "Cantina da Uniube", phone: "(34) 3314-7008", address: "Av Nenê Sabino, 1901 - Olinda", category: "Restaurante" },
+            { name: "Deville Restaurante", phone: "(34) 3312-4478", address: "Av Leopoldino de Oliveira, 0 - Mercês", category: "Restaurante" },
+            { name: "Guri Restaurante", phone: "(34) 3322-7755", address: "Praça Rui Barbosa, 172 - Centro", category: "Restaurante" },
+            { name: "Pizzaria Pizzas Edagrd", phone: "(34) 3313-0064", address: "Av Leopoldina de Oliveira, 447", category: "Restaurante" },
+            { name: "Rafa Restaurante", phone: "(34) 3332-0280", address: "Av Doutor Fidelis Reis, 208 - Centro", category: "Restaurante" },
+            { name: "Cia dos Sabores", phone: "(34) 3322-2901", address: "Av Doutor Fidelis Reis, 739 - Centro", category: "Restaurante" },
+            { name: "Irmaos Paiva", phone: "(34) 3315-5144", address: "Rua Vital de Negreiros, 811 - Fabrício", category: "Restaurante" },
+            { name: "Point Comestiveis", phone: "(34) 3316-2112", address: "Av Santos Dumont, 10 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Mônica", phone: "(34) 3336-3571", address: "Rua Coronel Bruno da Silva Oliveira, 394", category: "Restaurante" },
+            { name: "Restaurante Rogerio Diniz", phone: "(34) 3333-6435", address: "Av Nenê Sabino, 215 - Olinda", category: "Restaurante" },
+            { name: "Restaurante Alfa Peixes", phone: "(34) 3312-2678", address: "Rua Prudente de Morais, 765 - Jardim América", category: "Restaurante" },
+            { name: "Restaurante Alkimin", phone: "(34) 3333-6269", address: "Av Getúlio Guarita, 45 - Nossa Senhora da Abadia", category: "Restaurante" },
+            { name: "Restaurante Almanara", phone: "(34) 3312-4554", address: "Av Leopoldino de Oliveira, 447 - Mercês", category: "Restaurante" },
+            { name: "Restaurante Anderson Amancio", phone: "(34) 3311-2089", address: "Rua Veríssimo, 734 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Balao", phone: "(34) 3322-7755", address: "Praça Rui Barbosa, 1 - Centro", category: "Restaurante" },
+            { name: "Restaurante Batata Suiça", phone: "(34) 8861-0563", address: "Av Nenê Sabino, 1035 - Olinda", category: "Restaurante" },
+            { name: "Restaurante Bucattini", phone: "(34) 3311-0444", address: "Av. Santos Dumont, 1656 - Centro", category: "Restaurante" },
+            { name: "Restaurante Bucattini Avenida", phone: "(34) 3311-0444", address: "Av Santos Dumont, 1.656 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Buffet e Bar Solar 17", phone: "(34) 3332-8760", address: "Rua São Sebastião, 91 - São Sebastião", category: "Restaurante" },
+            { name: "Restaurante Casa do Macarrão", phone: "(34) 3321-5001", address: "Rua Ludovice Fernandes, 0 - Vila Frei Eugênio", category: "Restaurante" },
+            { name: "Restaurante Cebola", phone: "(34) 3333 9093", address: "Av. Leopoldino de Oliveira, 1920 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante Chef Tuca Antonio", phone: "(34) 3338-4507", address: "Rua Dr. Hildebrando Pontes, 379 - Centro", category: "Restaurante" },
+            { name: "Restaurante Cheiro Verde", phone: "(34) 3312-3854", address: "Av. Santos Dumont, 374 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante China e Pasta", phone: "(34) 3321-9740", address: "Av Doutor Fidelis Reis, 289 - Centro", category: "Restaurante" },
+            { name: "Restaurante China In Box", phone: "(34) 3333-8554", address: "Av Santos Dumont, 751 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Cidade e Sabores", phone: "(34) 9978-7113", address: "Av Vereador Mário de Assis Guimarães, 506 - Jardim do Lago", category: "Restaurante" },
+            { name: "Restaurante Cinquentao", phone: "(34) 3312-0555", address: "Rodovia Br-050, km 118 - Zona Rural", category: "Restaurante" },
+            { name: "Restaurante Cleodyr Luz Borges Abdallah", phone: "(34) 3314-7312", address: "Avenida Pará, 104 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Comida Caseira", phone: "(34) 3314-8568", address: "Rua Coronel Manoel Borges, 150 - Mercês", category: "Restaurante" },
+            { name: "Restaurante Djanira Macedo Mendes", phone: "(34) 3315-4440", address: "Alameda Cobre, 285 - Grande Horizonte", category: "Restaurante" },
+            { name: "Restaurante do Japao", phone: "(34) 3338-6664", address: "Praça Fr Eugênio, 162 - Centro", category: "Restaurante" },
+            { name: "Restaurante e Bar Costelao", phone: "(34) 3332-0726", address: "Rua Capitão Batista Machado, 554 - Boa Vista", category: "Restaurante" },
+            { name: "Restaurante e Bar S & C", phone: "(34) 3321-7897", address: "Rua Coronel Manoel Borges, 38 - Mercês", category: "Restaurante" },
+            { name: "Restaurante e Bar Sindicato", phone: "(34) 3322-9699", address: "Av. Leopoldino de Oliveira, 4113 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante e Choperia Helinho", phone: "(34) 3316-9899", address: "Rua Jz. de Fora, 534 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante e Choperia Quibe do Zé", phone: "(34) 3314-8533", address: "Av Doutor Odilon Fernandes, 651 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante e Pizzaria Skinão", phone: "(34) 3336-3301", address: "Rua Arlindo Melo, 1621 - Vila São Cristóvão", category: "Restaurante" },
+            { name: "Restaurante Edna", phone: "(34) 3315-1451", address: "Rua Licínio Terra, 144 - Alfredo Freire", category: "Restaurante" },
+            { name: "Restaurante Empório das Empadas", phone: "(34) 9220-4447", address: "Rua Maj. Eustáquio, 21 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Filhos de Minas", phone: "(34) 3332-4006", address: "Rua Jaime Bilharinho, 735 - Mercês", category: "Restaurante" },
+            { name: "Restaurante Fogo Vivo Grelhados", phone: "(34) 3316-9500", address: "Av Santa Beatriz da Silva, 1501 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Frango Frito Uberaba", phone: "(34) 3336-0204", address: "Av Santa Beatriz da Silva, 1501 - Sta Maria", category: "Restaurante" },
+            { name: "Restaurante Gaudi Hamburgueria", phone: "(34) 3332-1172", address: "Rua João Pinheiro, 214 - Centro", category: "Restaurante" },
+            { name: "Restaurante Habib's", phone: "(34) 3316-2112", address: "Av. Santos Dumont, 10 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante Iolanda Maria Rosa Martins", phone: "(34) 3333-8706", address: "Av Nenê Sabino, 1329 - Olinda", category: "Restaurante" },
+            { name: "Restaurante Ionice Rosa do Prado", phone: "(34) 3312-3854", address: "Av Santos Dumont, 374 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Janete Rocha Barbosa Pivaro", phone: "(34) 3312-5225", address: "Rua Luiz Medina Coeli, 77 - Nossa Senhora da Abadia", category: "Restaurante" },
+            { name: "Restaurante Joao Gomes de Oliveira", phone: "(34) 3312-4106", address: "Rua Conceição das Alagoas, 243 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Jvm Comercial", phone: "(34) 3312-0312", address: "Av Doutor Odilon Fernandes, 870 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante La Pasta", phone: "(34) 3338-2491", address: "Av. Santa Beatriz da Silva, 989 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Lanchonete e Bar Sergio Tencati", phone: "(34) 3336-1324", address: "Av Nenê Sabino, 1801 - Olinda", category: "Restaurante" },
+            { name: "Restaurante Le Bistrot", phone: "(34) 3075-8526", address: "Praça Prof. Eugênio, 231 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante le Buffet", phone: "(34) 3312-2642", address: "Rua Cel. Manoel Borges, 150 - Centro", category: "Restaurante" },
+            { name: "Restaurante Macarrão e Cia", phone: "(34) 3313-8950", address: "Rua Jonas Carvalho, 55 - Olinda", category: "Restaurante" },
+            { name: "Restaurante Maison Blanche Buffet", phone: "(34) 3316-6619", address: "Av. Leopoldino de Oliveira, S/N - Centro", category: "Restaurante" },
+            { name: "Restaurante Makis Place Temakeria", phone: "(34) 3326-3938", address: "Av Sta. Beatriz da Silva, 1501 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Mario Baptista", phone: "(34) 3316-3620", address: "Rua Amapá, 810 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Marra S Pamonharia", phone: "(34) 3332-0813", address: "Rua Artur Machado, 678 - Boa Vista", category: "Restaurante" },
+            { name: "Restaurante Massas Botelho", phone: "(34) 3312-3220", address: "Rua Niza Guaritá, 75 - Parque Hiléia", category: "Restaurante" },
+            { name: "Restaurante Neire Gorete Costa", phone: "(34) 3316-1472", address: "Rua Padre Zeferino, 835 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante Nilda Maria Lemes de Souza e Cia", phone: "(34) 3322-2100", address: "Av Almirante Barroso, 369 - Fabrício", category: "Restaurante" },
+            { name: "Restaurante O Comendador", phone: "(34) 3311-6151", address: "Praça Comendador Quintino, 186 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante Parada do Dino", phone: "(34) 8881-9105", address: "Rua Estanislau Collenghi, 338 - Centro", category: "Restaurante" },
+            { name: "Restaurante Pimentel e Vieira Prado", phone: "(34) 3332-0531", address: "Rua Antônio Carlos, 81 - Jardim Alexandre Campos", category: "Restaurante" },
+            { name: "Restaurante Pizzaria e Bar Toca da Tábua", phone: "(34) 3312-4440", address: "Av. Dr. Odilon Fernandes, 744 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante Planeta Europa", phone: "(34) 3332-0971", address: "Praça Fr. Eugênio, 162 - Centro", category: "Restaurante" },
+            { name: "Restaurante Porto Gaia", phone: "(34) 3332-6803", address: "Rua João Prata, 500 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante Recanto Gaucho", phone: "(34) 5833-0852", address: "Rodovia Br-050, sn, Km 157 - Parque Hileia", category: "Restaurante" },
+            { name: "Restaurante Recanto Jardim", phone: "(34) 3336-6568", address: "Rua Miguel Stefani, 125 - Jardim Induberaba", category: "Restaurante" },
+            { name: "Restaurante Sabor A Mais", phone: "(34) 3471-4990", address: "Av Ns. do Desterro, 300 - Jardim Elza Amuí I", category: "Restaurante" },
+            { name: "Restaurante Sabor de Minas", phone: "(34) 3333-2206", address: "Avenida Guilherme Ferreira, 49 - Centro", category: "Restaurante" },
+            { name: "Restaurante Sabor Mineiro", phone: "(34) 3312-4106", address: "Rua Conceição das Alagoas, 243 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Sabor Vital", phone: "(34) 3338-6910", address: "Rua Rodolfo Machado Borges, 195 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Sampaio", phone: "(34) 3315-1213", address: "Av. Alexandre Campos, 350 - Jardim Alexandre Campos", category: "Restaurante" },
+            { name: "Restaurante Santa Brasa", phone: "(34) 3311-4050", address: "Av. Santa Beatriz da Silva, S/N - Shopping Center", category: "Restaurante" },
+            { name: "Restaurante Serve Lar", phone: "(34) 3315-1072", address: "Rua Mário Vinícius de Almeida, 323 - Jardim Elza Amuí II", category: "Restaurante" },
+            { name: "Restaurante Serve Mais", phone: "(34) 3313-8141", address: "Rua Francisco Pucci, 64 - Olinda", category: "Restaurante" },
+            { name: "Restaurante Solar 17", phone: "(34) 3332-8760", address: "Rua São Sebastião, 91 - São Sebastião", category: "Restaurante" },
+            { name: "Restaurante Souza & Rocha", phone: "(34) 3321-7599", address: "Rua Conceição das Alagoas, 588 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Stilo Mineiro", phone: "(34) 3336-2561", address: "Av Deputado José Marcus Cherem, 485 - Vila São Cristóvão", category: "Restaurante" },
+            { name: "Restaurante Suprema Refeicoes", phone: "(34) 3338-4010", address: "Rua Tupaciguara, 142 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Tabu", phone: "(34) 3336-7702", address: "Av. Francisco Pagliaro, 299 - Centro", category: "Restaurante" },
+            { name: "Restaurante Tabua Quente", phone: "(34) 3332-6444", address: "Av Doutor Odilon Fernandes, 744 - Estados Unidos", category: "Restaurante" },
+            { name: "Restaurante Takanori", phone: "(34) 3311-2513", address: "Rua Ronan Martins Mq, 560 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Treis Coroas", phone: "(34) 3338-3974", address: "Rua Boa Esperança, 14 - Vila Maria Helena", category: "Restaurante" },
+            { name: "Restaurante Triângulo", phone: "(34) 3325-8923", address: "Rua Doutor Ludovice, 424 - Nossa Sra. da Abadia", category: "Restaurante" },
+            { name: "Restaurante Uberaba", phone: "(34) 9925-3507", address: "Rua Ronan Martins Mq, 170 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Universitário", phone: "(34) 3311-5988", address: "Rua Rio Grande do Norte, 1306 - Santa Maria", category: "Restaurante" },
+            { name: "Restaurante Visage", phone: "(34) 3336-4002", address: "Rua Ituiutaba, 730 - São Benedito", category: "Restaurante" },
+            { name: "Restaurante Vivenda do Camarão", phone: "(34) 3312-4340", address: "Av Santa Beatriz da Silva, 1501 - Sta Maria", category: "Restaurante" },
+            { name: "Restaurante Yara", phone: "(34) 3338-2674", address: "Rua Santo Antônio do Monte, 106 - Boa Vista", category: "Restaurante" },
+            { name: "Restaurante Yaya", phone: "(34) 3338-2674", address: "Rua Santo Antônio, 106 - Centro", category: "Restaurante" },
+            { name: "Restaurante Irmaos Paiva", phone: "(34) 3315-5144", address: "Rua Vital de Negreiros, 811 - Fabrício", category: "Restaurante" },
+            { name: "Restaurante Point Comestiveis", phone: "(34) 3316-2112", address: "Av Santos Dumont, 10 - Santa Maria", category: "Restaurante" },
+
+            // CHURRASCARIAS
+            { name: "Boi Bao", phone: "(34) 3336-4436", address: "Av Tonico dos Santos, 278 - Induberaba", category: "Churrascaria" },
+            { name: "Casa Grill", phone: "(34) 3313-0201", address: "Av Guilherme Ferreira, 1626 - São Benedito", category: "Churrascaria" },
+            { name: "Cupim Grill", phone: "(34) 3311-2269", address: "Praça Vicentino Rodrigues Cunha, 110", category: "Churrascaria" },
+            { name: "Esplanada Grill", phone: "(34) 3336-1060", address: "Rua Professor Terra, 114 - Estados Unidos", category: "Churrascaria" },
+            { name: "Gourmet Grill", phone: "(34) 3332-6691", address: "Av Guilherme Ferreira, 720 - Sao Benedito", category: "Churrascaria" },
+            { name: "Lajeado", phone: "(34) 3336-6280", address: "Rodovia Br-050,S/N - Prq Hileia", category: "Churrascaria" },
+            { name: "Montana Grill", phone: "(34) 3311-7196", address: "Av Santa Beatriz da Silva, 1511", category: "Churrascaria" },
+            { name: "Picanha na Lenha", phone: "(34) 3313-2085", address: "Av Fidelis Reis, 903 - Boa Vista", category: "Churrascaria" },
+            { name: "Rancho do Boi", phone: "(34) 3316-2865", address: "Av Doutor Odilon Fernandes, 605", category: "Churrascaria" },
+            { name: "Rodeio", phone: "(34) 3336-4942", address: "Av Tonico dos Santos, 128 - Induberaba", category: "Churrascaria" },
+            { name: "Churrascaria Toinzinho", phone: "(34) 3314-7556", address: "Centro da Cidade, 0 - Centro", category: "Churrascaria" },
+            { name: "Churrascaria Zebu", phone: "(34) 3336-4666", address: "Av Tonico dos Santos, 668 - Jardim Induberaba", category: "Churrascaria" },
+
+            // CANTINAS
+            { name: "Cantina da Cida", phone: "(34) 3312-7613", address: "Rua Campo Formoso, 304 - São Benedito", category: "Cantina" },
+            { name: "Cantina do Nego", phone: "(34) 3311-2466", address: "Av Br. do Rio Branco, 1011 - São Benedito", category: "Cantina" },
+            
+            // BARES & CHOPERIAS
+            { name: "Bar da Cida", phone: "(34) 3333-4070", address: "Rua Tristão de Castro, 604 - São Benedito", category: "Bar" },
+            { name: "Bar do Japão", phone: "(34) 3312-5041", address: "Rua Leonardus Paulus Smeele, 29 - Rezende", category: "Bar" },
+            { name: "Bar Costelao", phone: "(34) 3332-0726", address: "Rua Capitão Batista Machado, 554", category: "Bar" },
+            { name: "CH Choperia", phone: "(34) 3332-7671", address: "Av Santa Beatriz da Silva, 1501", category: "Choperia" },
+            { name: "Chop Time", phone: "(34) 3314-4300", address: "Av Santa Beatriz da Silva, 1501", category: "Choperia" },
+            { name: "Choperia Colorado", phone: "(34) 3314-1220", address: "Rua Cel. Manoel Borges, 1029", category: "Choperia" },
+            { name: "Choperia do Mario", phone: "(34) 3332-7671", address: "Rua Artur Machado, 602", category: "Choperia" },
+            { name: "Cachaçaria Água Doce", phone: "(34) 3332-0531", address: "Rua Antônio Carlos, 81", category: "Cachaçaria" },
+
+            // PIZZARIAS
+            { name: "Dk+1", phone: "(34) 3333-5285", address: "Av Nenê Sabino, 387 - Olinda", category: "Pizzaria" },
+            { name: "Fornace Pizzaria", phone: "(34) 3321-7267", address: "Av. Dr. Odilon Fernandes, 870", category: "Pizzaria" },
+            { name: "Califórnia", phone: "(34) 3316-6351", address: "Av Padre Eddie Bernardes Silva, 980", category: "Pizzaria" },
+            { name: "Star Way", phone: "(34) 3311-8226", address: "Rua Araguari, 150 - São Benedito", category: "Pizzaria" },
+            { name: "Bella Pizza", phone: "(34) 3311-3888", address: "Rua Piauí, 1440 - Santa Maria", category: "Pizzaria" },
+            { name: "Cascata", phone: "(34) 3312-5225", address: "Rua São Benedito, 685", category: "Pizzaria" },
+            { name: "Cone Cone", phone: "(34) 3313-2216", address: "Rua Anthero Augusto Franca, 26", category: "Pizzaria" },
+            { name: "Disque Pizza", phone: "(34) 3332-8118", address: "Rua Tristão de Castro, 415", category: "Pizzaria" },
+            { name: "Luiggi", phone: "(34) 9676-9300", address: "Praça São Jorge, 26", category: "Pizzaria" },
+            { name: "Pizzadella", phone: "(34) 3315-0802", address: "Av Apolônio Sales, 609", category: "Pizzaria" },
+            { name: "Pizzaria e Sorveteria Tropicalia", phone: "(34) 3336-7001", address: "Rua São Benedito, 865 - São Benedito", category: "Pizzaria" },
+            { name: "Pizzaria Fornace", phone: "(34) 3801-7030", address: "Av Doutor Odilon Fernandes, 870 - Centro", category: "Pizzaria" },
+            { name: "Pizzaria Gaucha", phone: "(34) 3332-0925", address: "Av Doutor Fidelis Reis, 860 - Centro", category: "Pizzaria" },
+            { name: "Pizzaria Medalha Express", phone: "(34) 3321-6458", address: "Av. Dr. Fidélis Réis, 398 - Centro", category: "Pizzaria" },
+            { name: "Pizzaria Pizza Pre Assada", phone: "(34) 3313-0101", address: "Av Guilherme Ferreira, 675 - Sao Benedito", category: "Pizzaria" },
+            { name: "Pizzaria Pizzas e Crepes do Luiggi", phone: "(34) 9676-9300", address: "Praça São Jorge, 26 - Parque São Geraldo", category: "Pizzaria" },
+            { name: "Pizzaria Prizza II", phone: "(34) 3314-0202", address: "Av. Leopoldino de Oliveira, 2582 - Centro", category: "Pizzaria" },
+            { name: "Pizzaria Quero Pizza", phone: "(34) 3315-6200", address: "Av Santa Beatriz da Silva, 1501 - Santa Maria", category: "Pizzaria" },
+            { name: "Pizzaria Recanto d'Italia", phone: "(34) 3333-5351", address: "Av. Nossa Senhora do Desterro, 1240 - Centro", category: "Pizzaria" },
+            { name: "Pizzaria Trem Mineiro", phone: "(34) 3314-0405", address: "Rua Fr. Alberto Chambert, 35 - Conjunto Guanabara", category: "Pizzaria" },
+            { name: "Pizzaria Trem Mineiro Pizzas e Batatas", phone: "(34) 3321-9111", address: "Av Quinze de Novembro, 312 - Estados Unidos", category: "Pizzaria" },
+            { name: "Pizzaria União Wf", phone: "(34) 3316-9703", address: "Av Mei Mei, 10 - Jardim Esplanada", category: "Pizzaria" },
+            { name: "Pizzaria Veracci Pizza", phone: "(34) 3313-0101", address: "Av. Guilherme Ferreira, 675 - São Benedito", category: "Pizzaria" },
+            { name: "Pizzaria Zebu", phone: "(34) 3338-6066", address: "Av Leopoldino de Oliveira, 1 - Mercês", category: "Pizzaria" },
+
+            // LANCHONETES & OUTROS
+            { name: "Casa do Pastel", phone: "(34) 3312-5618", address: "Av. Guilherme Ferreira, 1626", category: "Lanchonete" },
+            { name: "Alexs Lanches", phone: "(34) 3331-0100", address: "Av Leopoldino de Oliveira, 3916", category: "Lanchonete" },
+            { name: "Antonio Carlos", phone: "(34) 3321-7039", address: "Rua Artur Machado, 313", category: "Lanchonete" },
+            { name: "Babilonia Lanches", phone: "(34) 3322-8977", address: "Rua Prudente de Morais, 826", category: "Lanchonete" },
+            { name: "Casa do Sanduíche", phone: "(34) 3338-0070", address: "Av Santos Dumont, 247", category: "Lanchonete" },
+            { name: "Skinao", phone: "(34) 3336-8152", address: "Av Fernando Costa, 119", category: "Lanchonete" },
+            { name: "Pastelaria de Minas", phone: "(34) 3313-0005", address: "Avenida Francisco Pagliaro, 0", category: "Pastelaria" },
+            { name: "Dom Pastel", phone: "(34) 3317-5017", address: "Avenida Da Saudade, S/N", category: "Pastelaria" },
+            { name: "Pastelaria Juice", phone: "(34) 3321-4860", address: "Rua Artur Machado, 115", category: "Pastelaria" },
+            { name: "Lanchonete Estação da Batata", phone: "(34) 3312-0777", address: "Avenida João XXIII, 1210 - Parque das Américas", category: "Lanchonete" },
+            { name: "Lanchonete Evalda Maria de Oliveira", phone: "(34) 3333-9943", address: "Rua Lauro Borges, 97 - Estados Unidos", category: "Lanchonete" },
+            { name: "Lanchonete Geladinho Todo Suco", phone: "(34) 3334-2551", address: "Av Prof Maria Paz Barcelos Alme 829 - Centro", category: "Lanchonete" },
+            { name: "Lanchonete Giraffas", phone: "(34) 2103-1800", address: "Av Santa Beatriz da Silva, 1501 - Sao Benedito", category: "Lanchonete" },
+            { name: "Lanchonete Ilha do Açaí Brasil", phone: "(34) 3332-0240", address: "Av Santos Dumont, 679 - Santa Maria", category: "Lanchonete" },
+            { name: "Lanchonete Ivo Lourenco de Oliveira", phone: "(34) 3322-2207", address: "Rua Itália, 765 - Boa Vista", category: "Lanchonete" },
+            { name: "Lanchonete Jd Delicias", phone: "(34) 9631-0048", address: "Av Dos Curiós, 378 - Conjunto Pontal", category: "Lanchonete" },
+            { name: "Lanchonete Joao Francisco", phone: "(34) 3322-2538", address: "Rua Professor Chaves, 540 - Boa Vista", category: "Lanchonete" },
+            { name: "Lanchonete Ki Sabor", phone: "(34) 3333-7270", address: "Praça Rui Barbosa, 300 - Centro", category: "Lanchonete" },
+            { name: "Lanchonete Kobayashi e Kobayassi", phone: "(34) 3333-2458", address: "Av Leopoldino de Oliveira, 3490 - Mercês", category: "Lanchonete" },
+            { name: "Lanchonete Laika Alimentacao", phone: "(34) 3312-3233", address: "Rua Coronel Manoel Borges, 54 - Mercês", category: "Lanchonete" },
+            { name: "Lanchonete Lanches M M", phone: "(34) 3336-3025", address: "Rua Monte Alegre, 64 - São Benedito", category: "Lanchonete" },
+            { name: "Lanchonete Luiz Alberto Ferreira e Cia", phone: "(34) 3333-7270", address: "Praça Rui Barbosa, 300 - Centro", category: "Lanchonete" },
+            { name: "Lanchonete Luiz Ciabotti Neto", phone: "(34) 3333-7907", address: "Rua Quintiliano Jardim, 56 - Centro", category: "Lanchonete" },
+            { name: "Lanchonete Marcelo Lanches", phone: "(34) 3322-2247", address: "Av Da Saudade, 1270 - Santa Marta", category: "Lanchonete" },
+            { name: "Lanchonete Maria Ines Castro", phone: "(34) 3333-9105", address: "Av Nenê Sabino, 29 - Olinda", category: "Lanchonete" },
+            { name: "Lanchonete Marilene Aparecida Machado Assuncao", phone: "(34) 3332-9960", address: "Av Da Saudade, 823 - Santa Marta", category: "Lanchonete" },
+            { name: "Lanchonete Maurita Maria Marzinoto", phone: "(34) 3315-4439", address: "Rua Pernambuco, 175 - Santa Maria", category: "Lanchonete" },
+            { name: "Lanchonete Mauro Ivanir Firmino", phone: "(34) 3321-4972", address: "Praça Rui Barbosa, 111 - Centro", category: "Lanchonete" },
+            { name: "Lanchonete Maxima Etelvina Barbosa de Freitas", phone: "(34) 3338-8762", address: "Av Alberto Martins Fontoura Borges, 410 - São Benedito", category: "Lanchonete" },
+            { name: "Lanchonete O Rei da Quitanda", phone: "(34) 3332-8155", address: "Rua Maj. Eustáquio, 23 - São Benedito", category: "Lanchonete" },
+            { name: "Lanchonete O Rei do Pão de Queijo", phone: "(34) 3312-2999", address: "Av. Leopoldino de Oliveira, 3773 - Centro", category: "Lanchonete" },
+            { name: "Lanchonete Organização dos Amigos", phone: "(34) 3312-0058", address: "Rua Miguel Abdanur, 35 - Leblon", category: "Lanchonete" },
+            { name: "Lanchonete Osmar de Vicente", phone: "(34) 3333-6544", address: "Av Fernando Costa, 109 - São Benedito", category: "Lanchonete" },
+            { name: "Lanchonete Piergiorgio Pace Lanches", phone: "(34) 3338-9664", address: "Av Leopoldino de Oliveira, 4177 - Mercês", category: "Lanchonete" },
+            { name: "Lanchonete Pop S Lanches", phone: "(34) 3312-0251", address: "Av Leopoldino de Oliveira, 4392 - Mercês", category: "Lanchonete" },
+            { name: "Lanchonete Rei do Óleo", phone: "(34) 3076-1809", address: "Av João XXIII, 2282 - Parque das Américas", category: "Lanchonete" },
+            { name: "Lanchonete Rei do Pao de Queijo", phone: "(34) 3312-3666", address: "Rua Coronel Manoel Borges, 54 - Mercês", category: "Lanchonete" },
+            { name: "Lanchonete Rogro S Prensadao", phone: "(34) 9267-6144", address: "Av Getúlio Guarita, 364 - Nossa Senhora da Abadia", category: "Lanchonete" },
+            { name: "Lanchonete Romilson Pereira de Souza", phone: "(34) 3075-3838", address: "Rua João Pinheiro, 3053 - Boa Vista", category: "Lanchonete" },
+            { name: "Lanchonete Sanduba Lanches", phone: "(34) 3316-4049", address: "Rua Catulino Nunes Santos, 81 - Núcleo Habitacional", category: "Lanchonete" },
+            { name: "Lanchonete Subway", phone: "(34) 3336-1090", address: "Av Leopoldino de Oliveira, 3315 - Mercês", category: "Lanchonete" },
+            { name: "Mecnaldo S Lanches", phone: "(34) 3312-2067", address: "Praça Rui Barbosa, 382 - Centro", category: "Lanchonete" },
+
+            // CAFÉS, DOCES, PADARIAS
+            { name: "Padaria Andrey Macedo", phone: "(34) 3312-6607", address: "Rua Quito, 368 - Boa Vista", category: "Padaria" },
+            { name: "Bread Factory", phone: "(34) 3312-1988", address: "Av Lucas Borges, 586", category: "Padaria" },
+            { name: "Edgard de Souza", phone: "(34) 3314-1510", address: "Avenida João Xxiii, 1509", category: "Padaria" },
+            { name: "Novo Estilo", phone: "(34) 3316-9263", address: "Rua Palmira Cecúlia, 59", category: "Padaria" },
+            { name: "Pão de Milho", phone: "(34) 3336-8219", address: "Avenida João XXIII, 1509", category: "Padaria" },
+            { name: "Tropicalia", phone: "(34) 3336-7001", address: "Rua São Benedito, 865", category: "Sorveteria" },
+            { name: "Chandelly", phone: "(34) 3312-9800", address: "Rua Gov. Valadares, 422", category: "Sorveteria" },
+            { name: "Milk Shake Sorvetes", phone: "(34) 3332-9960", address: "Avenida Da Saudade, 823", category: "Sorveteria" },
+            { name: "Sanremo", phone: "(34) 3312-0670", address: "Rua Vig. Silva, 243", category: "Sorveteria" },
+            { name: "Sorvetes Cascata", phone: "(34) 3312-9061", address: "Rua Segismundo Mendes, 12", category: "Sorveteria" },
+            { name: "Suiça Sorveteria", phone: "(34) 8819-0016", address: "Br 262 Km 822, 0", category: "Sorveteria" },
+            { name: "Café do Produtor", phone: "(34) 3314-2777", address: "Rua Odair Ribeiro Sanchez, 75", category: "Café" },
+            { name: "Rainha do Pao de Queijo", phone: "(34) 3322-7076", address: "Av Orlando Rodrigues da Cunha, 2318", category: "Café" },
+            { name: "Doces Barbaros", phone: "(34) 3322-3003", address: "Rua Antônio Carlos, 390", category: "Confeitaria" },
+            { name: "Espaco Doce", phone: "(34) 3076-4668", address: "Av Abílio Borges de Araújo, 450", category: "Confeitaria" },
+            { name: "Trigalle", phone: "(34) 3333-5239", address: "Rua Coronel Manoel Borges, 419", category: "Confeitaria" }
+        ];
+
+        const rawDataHospedagem = [
+            { name: "MANHATTAN FLAT SERVICE", phone: "(34) 3319-1200", address: "Praça Frei Eugênio, 444", category: "Flat" },
+            { name: "HOTEL ALBATROZ", phone: "(34) 3336-1855", address: "Rua Donato Cicci, 33", category: "Hotel" },
+            { name: "CASA DO FOLCLORE", phone: "(34) 3313-6030", address: "Rua Porto Velho, 115", category: "Hotel" },
+            { name: "CHAVES PALACE HOTEL", phone: "(34) 3319-9900", address: "Praça Rui Barbosa, 218", category: "Hotel" },
+            { name: "DEL REY HOTEL", phone: "(34) 3336-2022", address: "Rua Veríssimo, 103", category: "Hotel" },
+            { name: "GRANDE HOTEL", phone: "(34) 3321-4422", address: "Av Leopoldino De Oliveira, 350", category: "Hotel" },
+            { name: "HAVANA PALACE", phone: "(34) 3331-9600", address: "Rua Juiz De Fora, 12", category: "Hotel" },
+            { name: "HOTEL ANTARES", phone: "(34) 3314-0200", address: "Rodovia Br-050 - Km.173", category: "Hotel" },
+            { name: "HOTEL CAROLINA", phone: "(34) 3311-2121", address: "Rua Paraíba, 1373", category: "Hotel" },
+            { name: "CAROLINA PLAZA", phone: "(34) 3336-3535", address: "Av João Xxiii, 1333", category: "Hotel" },
+            { name: "HOTEL CATETINHO", phone: "(34) 3314-5295", address: "Rodovia Br-050 - Km.186", category: "Hotel" },
+            { name: "FAZENDA SÃO FRANCISCO", phone: "(34) 3338-8989", address: "Rodovia Br-050 - Km.184", category: "Hotel Fazenda" },
+            { name: "HOTEL COMODORO", phone: "(34) 3336-2583", address: "Praça Dr Jorge Frange, 290 - São Benedito", category: "Hotel" },
+            { name: "HOTEL EXECUTIVO", phone: "(34) 3336-6111", address: "Av Orlando Rodrigues Da Cunha, 187 - Leblon", category: "Hotel" },
+            { name: "HOTEL ITUIUTABA", phone: "(34) 3333-3135", address: "Rua Dr Paulo Pontes, 89 - Centro", category: "Hotel" },
+            { name: "HOTEL JAGUAR", phone: "(34) 3316-7075", address: "Rua Arlindo Melo, 1963 - Vila São Cristóvão", category: "Hotel" },
+            { name: "HOTEL PORTO BELLO", phone: "(34) 3336-7530", address: "Av Barão Do Rio Branco, 1000 - São Benedito", category: "Hotel" },
+            { name: "HOTEL SÃO JOSÉ", phone: "(34) 3332-2290", address: "Rua João Pinheiro, 605 - Centro", category: "Hotel" },
+            { name: "HOTEL VILLA ROMANA", phone: "(34) 3314-6666", address: "Rua Varginha, 700 - São Benedito", category: "Hotel" },
+            { name: "KARAJÁ HOTEL", phone: "(34) 3319-3700", address: "Av Fernando Costa, 146 - São Benedito", category: "Hotel" },
+            { name: "QUÉFREN RESIDENCE HOTEL", phone: "(34) 3311-5900", address: "Rua Adelardo Do Nascimento, 849 - Universitário", category: "Hotel" },
+            { name: "SHELTON INN HOTEL UBERABA", phone: "(34) 3331-6300 / 3336-4297", address: "Av Filomena Cartafina, 152 - Jd Recreio", category: "Hotel" },
+            { name: "TAMAREIRAS PARK HOTEL", phone: "(34) 3318-8500", address: "Rua Olegário Maciel, 187 - Centro", category: "Hotel" },
+            { name: "UBERABA APART HOTEL", phone: "(34) 3319-3333", address: "Av. Guilherme Ferreira, 2400 - São Benedito", category: "Hotel" },
+            { name: "VILLAGE HOTEL UBERABA", phone: "(34) 3311-3000", address: "Rodovia Br-050 - Km.179", category: "Hotel" },
+            { name: "VITÓRIA PALACE HOTEL", phone: "(34) 3338-0192", address: "Av Fernando Costa, 187 - São Benedito", category: "Hotel" }
+        ];
+
+        // ==========================================
+        // 2. CONFIGURAÇÃO E RENDERIZAÇÃO
+        // ==========================================
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Init Lenis (Smooth Scroll)
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // CATEGORIAS DISPONÍVEIS PARA FILTRO
+        const gastronomyCategories = ["Restaurante", "Churrascaria", "Pizzaria", "Lanchonete", "Bar", "Choperia", "Padaria", "Café", "Sorveteria", "Cantina", "Pastelaria", "Confeitaria", "Cachaçaria"];
+
+        // ==========================================
+        // FUNÇÕES DE RENDERIZAÇÃO E LÓGICA
+        // ==========================================
+
+        // Gera um número aleatório de "Lugares Disponíveis" para simular interatividade
+        function getRandomSeats() {
+            return Math.floor(Math.random() * 40) + 5;
+        }
+
+        // Renderiza os botões de filtro com contadores
+        function renderFilters() {
+            const filterContainer = document.getElementById('gastronomy-filters');
+            // Mantém o botão 'Todos' e limpa o resto (se houver)
+            const allBtn = filterContainer.firstElementChild;
+            filterContainer.innerHTML = '';
+            filterContainer.appendChild(allBtn);
+
+            // Atualiza contador 'Todos'
+            document.getElementById('count-all').innerText = rawDataGastronomia.length;
+
+            gastronomyCategories.forEach(cat => {
+                const count = rawDataGastronomia.filter(item => item.category === cat).length;
+                if (count > 0) {
+                    const btn = document.createElement('button');
+                    btn.className = `filter-tab flex items-center gap-2 px-6 py-2 rounded-full border border-white/10 text-sm text-gray-300 hover:border-gold transition-all whitespace-nowrap`;
+                    btn.setAttribute('onclick', `filterGastronomy('${cat}', this)`);
+                    btn.innerHTML = `${cat}s <span class="count-badge bg-white/10 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">${count}</span>`;
+                    filterContainer.appendChild(btn);
+                }
+            });
+        }
+
+        // Renderiza Cards
+        function renderCards(data, containerId, styleType = 'standard') {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = ''; // Limpar container
+
+            if (data.length === 0) {
+                document.getElementById('no-results').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('no-results').classList.add('hidden');
+            }
+
+            data.forEach((item, index) => {
+                let cardHTML = '';
+                const seats = getRandomSeats(); // Simulação de dados em tempo real
+
+                if (styleType === 'standard') {
+                    // Card Gastronomia (Com contador de lugares)
+                    cardHTML = `
+                        <div class="place-card group relative bg-white/5 border border-white/10 rounded-lg p-6 overflow-hidden hover:bg-white/10 h-full flex flex-col justify-between">
+                             <div class="absolute top-0 right-0 p-4 opacity-10 text-5xl font-serif italic text-gold group-hover:opacity-20 transition select-none">${item.name.charAt(0)}</div>
+                             
+                             <div class="relative z-10 mb-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div class="text-[10px] uppercase tracking-widest text-gold border border-gold/30 px-2 py-0.5 rounded">${item.category}</div>
+                                    <div class="flex items-center gap-1 text-[10px] text-green-400 bg-green-900/20 px-2 py-0.5 rounded-full animate-pulse">
+                                        <span class="w-1.5 h-1.5 bg-green-400 rounded-full"></span> ${seats} Lugares
+                                    </div>
+                                </div>
+                                <h4 class="font-cinzel text-xl text-white group-hover:text-gold transition leading-tight" title="${item.name}">${item.name}</h4>
+                             </div>
+
+                             <div class="relative z-10 space-y-3 text-sm text-gray-400 font-light mt-auto border-t border-white/5 pt-4">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-gold mt-0.5 text-xs">📍</span>
+                                    <span class="text-xs leading-relaxed">${item.address}</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-gold text-xs">📞</span>
+                                    <span class="text-xs font-mono select-all">${item.phone}</span>
+                                </div>
+                                <button class="w-full mt-2 py-2 text-xs border border-white/20 hover:bg-gold hover:text-black hover:border-gold transition uppercase tracking-widest rounded">Reservar Mesa</button>
+                             </div>
+                        </div>
+                    `;
+                } else if (styleType === 'hotel') {
+                    // Card Hotel
+                    cardHTML = `
+                        <div class="place-card group relative flex flex-col bg-[#111] border border-white/10 rounded-xl p-8 hover:border-gold transition h-full">
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="text-xs border border-gold/30 text-gold px-3 py-1 rounded-full uppercase tracking-wider">${item.category}</div>
+                                <p class="text-gray-500 text-xs flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Disponível</p>
+                            </div>
+                            <h4 class="font-cinzel text-2xl text-white mb-4 group-hover:text-gold transition">${item.name}</h4>
+                            <div class="space-y-3 text-sm text-gray-400 mt-auto">
+                                <p class="flex gap-3 items-start"><span class="text-gold mt-1">📍</span> <span class="leading-relaxed">${item.address}</span></p>
+                                <p class="flex gap-3 items-center"><span class="text-gold">📞</span> ${item.phone}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Wrap
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = cardHTML;
+                wrapper.className = 'reveal-card opacity-0 translate-y-4 h-full'; 
+                container.appendChild(wrapper);
+            });
+        }
+
+        // Lógica de Filtro Gastronomia
+        window.filterGastronomy = function(category, btnElement) {
+            // Update Active State
+            document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const container = document.getElementById('grid-gastronomy');
+            
+            // Animate Out
+            gsap.to(container.children, {
+                opacity: 0, y: 10, duration: 0.2, stagger: 0.02, onComplete: () => {
+                    let filteredData = rawDataGastronomia;
+                    if(category !== 'all') {
+                        filteredData = rawDataGastronomia.filter(item => item.category === category);
+                    }
+                    
+                    renderCards(filteredData, 'grid-gastronomy', 'standard');
+                    
+                    // Animate In New
+                    gsap.fromTo(container.querySelectorAll('.reveal-card'), 
+                        { opacity: 0, y: 20 }, 
+                        { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power2.out" }
+                    );
+                    
+                    ScrollTrigger.refresh();
+                }
+            });
+        }
+
+        // Lógica de Filtro Hospedagem
+        window.filterHotels = function(type, btnElement) {
+            // Update Active State
+            document.querySelectorAll('.filter-tab-hotel').forEach(b => b.classList.remove('active', 'bg-white', 'text-black'));
+            document.querySelectorAll('.filter-tab-hotel').forEach(b => b.classList.add('text-gray-300')); // Reset style
+            
+            btnElement.classList.add('active', 'bg-white', 'text-black');
+            btnElement.classList.remove('text-gray-300');
+
+            const container = document.getElementById('grid-hoteis');
+            
+            gsap.to(container.children, {
+                opacity: 0, y: 20, duration: 0.3, stagger: 0.05, onComplete: () => {
+                    let filtered = rawDataHospedagem;
+                    if(type !== 'all') {
+                        filtered = rawDataHospedagem.filter(h => h.category.includes(type));
+                    }
+                    renderCards(filtered, 'grid-hoteis', 'hotel');
+                    
+                    const newCards = container.querySelectorAll('.reveal-card');
+                    gsap.fromTo(newCards, 
+                        { opacity: 0, y: 20 }, 
+                        { opacity: 1, y: 0, duration: 0.5, stagger: 0.1 }
+                    );
+                    ScrollTrigger.refresh();
+                }
+            });
+        };
+
+        function initContent() {
+            // Renderizar Filtros
+            renderFilters();
+
+            // Renderizar Gastronomia (Todos)
+            renderCards(rawDataGastronomia, 'grid-gastronomy', 'standard');
+
+            // Renderizar Hospedagem (Todos)
+            renderCards(rawDataHospedagem, 'grid-hoteis', 'hotel');
+
+            // Animations
+            setTimeout(setupScrollAnimations, 100);
+            
+            // Hide Loader
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').remove(), 800);
+            }, 1000);
+        }
+
+        function setupScrollAnimations() {
+            // Hero Text
+            gsap.from(".reveal-hero", {
+                y: 50, opacity: 0, duration: 1.5, stagger: 0.2, ease: "power3.out"
+            });
+
+            // Parallax BG
+            gsap.to("#hero-bg", {
+                yPercent: 30, ease: "none",
+                scrollTrigger: { trigger: "header", start: "top top", end: "bottom top", scrub: true }
+            });
+
+            // Sections Reveal
+            const sections = ['#gastronomy-act', '#hospitality-act'];
+            sections.forEach(sec => {
+                gsap.from(sec + " h2", {
+                    scrollTrigger: { trigger: sec, start: "top 80%" },
+                    y: 50, opacity: 0, duration: 1
+                });
+            });
+
+            // Initial Cards Reveal
+            const grids = ['grid-gastronomy', 'grid-hoteis'];
+            grids.forEach(gridId => {
+                const grid = document.getElementById(gridId);
+                if(grid) {
+                    ScrollTrigger.batch(grid.children, {
+                        start: "top 90%",
+                        onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, stagger: 0.05, duration: 0.6, ease: "power2.out" }),
+                        once: true
+                    });
+                }
+            });
+        }
+
+        // Smooth Scroll Anchor
+        window.scrollToSection = function(id) {
+            const el = document.getElementById(id);
+            if(el) lenis.scrollTo(el);
+        };
+
+        // Start
+        initContent();
+
+    </script>
+</body>
+</html>
