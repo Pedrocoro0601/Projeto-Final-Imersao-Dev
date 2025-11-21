@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Uberaba - MG </title>
     
     <!-- Fonts -->
@@ -43,14 +43,18 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
 
+        /* FIX: Lock body to viewport to prevent page scrolling on mobile */
         body {
             background: var(--bg-black);
             color: white;
             font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
-            height: 100vh;
             width: 100vw;
+            height: 100dvh; /* Use dynamic viewport height */
+            position: fixed; /* Force fixed to prevent scroll bounce */
+            inset: 0;
             user-select: none;
+            -webkit-user-select: none;
         }
 
         /* =========================================
@@ -62,6 +66,8 @@
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             z-index: 100;
+            padding: 20px;
+            text-align: center;
         }
 
         .power-btn {
@@ -91,6 +97,19 @@
             opacity: 0;
             animation: fadeIn 2s forwards;
         }
+
+        .mobile-disclaimer {
+            margin-top: 20px;
+            font-family: 'Segoe UI', sans-serif;
+            color: #444;
+            font-size: 0.8rem;
+            max-width: 300px;
+            line-height: 1.4;
+            display: none; /* Hidden on Desktop */
+            opacity: 0;
+            animation: fadeIn 2s 1s forwards;
+        }
+
         @keyframes fadeIn { to { opacity: 1; } }
 
         /* =========================================
@@ -105,6 +124,7 @@
             color: #ccc;
             display: none;
             z-index: 90;
+            overflow-y: auto; /* Allow internal scroll if bios text is long */
         }
         .bios-line { margin-bottom: 5px; }
         .bios-highlight { color: yellow; }
@@ -134,12 +154,21 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            margin-top: 25vh;
+            
+            /* CENTERING FIX */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%; /* Mobile friendly */
+            max-width: 400px; /* Desktop limit */
+            
             background: rgba(0,0,0,0.4);
             padding: 40px;
             border-radius: 10px;
             backdrop-filter: blur(15px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 85;
         }
         .user-avatar {
             width: 100px; height: 100px;
@@ -153,12 +182,12 @@
             font-size: 2rem; color: white;
             border: 2px solid rgba(255,255,255,0.2);
         }
-        .user-name { font-size: 1.5rem; margin-bottom: 20px; font-weight: 600; }
+        .user-name { font-size: 1.5rem; margin-bottom: 20px; font-weight: 600; text-align: center; }
         .pass-input {
             background: rgba(255,255,255,0.9);
             border: 2px solid transparent;
             padding: 10px 15px;
-            width: 250px;
+            width: 100%;
             border-radius: 4px;
             font-size: 1rem;
             margin-bottom: 15px;
@@ -171,6 +200,7 @@
             border-radius: 4px;
             font-weight: 600;
             opacity: 0.5;
+            cursor: pointer;
         }
 
         /* =========================================
@@ -406,6 +436,7 @@
             height: 30px; background: #333;
             display: flex; align-items: center; justify-content: center;
             color: #ccc; font-size: 12px; position: relative;
+            flex-shrink: 0;
         }
         .vs-controls { position: absolute; right: 0; display: flex; }
         .vs-control { width: 40px; height: 30px; display: flex; justify-content: center; align-items: center; }
@@ -415,10 +446,10 @@
         .vs-body { flex: 1; display: flex; overflow: hidden; }
 
         /* Sidebar */
-        .vs-activitybar { width: 50px; background: #333; display: flex; flex-direction: column; align-items: center; padding-top: 10px; gap: 20px; color: #858585; font-size: 24px; }
+        .vs-activitybar { width: 50px; background: #333; display: flex; flex-direction: column; align-items: center; padding-top: 10px; gap: 20px; color: #858585; font-size: 24px; flex-shrink: 0; }
         .vs-activitybar i:first-child { color: white; border-left: 2px solid white; padding-left: 10px; margin-left: -12px; }
         
-        .vs-sidebar { width: 200px; background: var(--vscode-sidebar); border-right: 1px solid #111; padding: 10px; font-size: 13px; color: #ccc; }
+        .vs-sidebar { width: 200px; background: var(--vscode-sidebar); border-right: 1px solid #111; padding: 10px; font-size: 13px; color: #ccc; flex-shrink: 0; }
         .vs-file-tree { margin-top: 10px; margin-left: 10px; }
         .vs-file { display: flex; align-items: center; gap: 6px; padding: 3px; color: #d4d4d4; cursor: pointer; background: transparent; }
         .vs-file.active { background: #37373d; }
@@ -452,8 +483,9 @@
             background: var(--vscode-bg); 
             display: flex; flex-direction: column;
             border-right: 1px solid #111;
+            min-height: 0; /* FIX: Prevent flex item from overflowing parent */
         }
-        .vs-tabs { background: var(--vscode-sidebar); display: flex; height: 35px; }
+        .vs-tabs { background: var(--vscode-sidebar); display: flex; height: 35px; flex-shrink: 0; }
         .vs-tab { 
             background: var(--vscode-bg); color: #fff; 
             padding: 8px 15px; font-size: 13px; 
@@ -464,9 +496,12 @@
             flex: 1; padding: 10px; 
             font-family: 'Fira Code', monospace; 
             font-size: 12px; line-height: 1.5;
-            color: #d4d4d4; overflow-y: auto;
-            position: relative; scroll-behavior: smooth;
+            color: #d4d4d4; 
+            overflow-y: auto;
+            position: relative; 
+            scroll-behavior: smooth;
             white-space: pre;
+            min-height: 0; /* FIX: Critical for flex containers scrolling correctly */
         }
         
         /* Preview Panel (Right) - Adapted for the new request */
@@ -647,6 +682,92 @@
         @keyframes pulse { 0%,100% {opacity: 0.5} 50% {opacity: 1} }
         @keyframes blink { 50% {opacity: 0} }
 
+        /* =========================================
+           MOBILE RESPONSIVENESS (Advanced)
+           ========================================= */
+        @media (max-width: 768px) {
+            body { 
+                overflow: hidden; 
+                position: fixed; 
+                height: 100%; 
+                width: 100%; 
+            }
+            
+            .desktop-icon { width: 80px; }
+            .icon-img { font-size: 1.8rem; }
+            .icon-label { font-size: 0.7rem; }
+            .desktop-grid { flex-direction: row; align-content: flex-start; gap: 10px; padding: 15px; }
+
+            .mobile-disclaimer { display: block; }
+
+            /* VS Code Mobile Layout */
+            #scene-vscode {
+                width: 100%;
+                height: 100%;
+                border: none;
+                border-radius: 0;
+                transform: none !important;
+                top: 0; left: 0;
+            }
+
+            .vs-body {
+                flex-direction: column;
+            }
+
+            /* Hide Sidebars on Mobile to maximize space */
+            .vs-activitybar, .vs-sidebar {
+                display: none;
+            }
+
+            .vs-editor-area {
+                flex-direction: column;
+                height: 100%;
+                overflow: hidden; /* Prevents container expansion */
+            }
+
+            /* Code Panel on Top (50%) */
+            .vs-code-panel {
+                width: 100%;
+                height: 50%; /* Strict height */
+                flex-basis: 50%;
+                border-right: none;
+                border-bottom: 1px solid #333;
+            }
+
+            .vs-code-content {
+                font-size: 10px; /* Smaller font for code */
+                padding: 5px;
+            }
+
+            /* Preview Panel on Bottom (50%) */
+            .vs-preview-panel {
+                width: 100%;
+                height: 50%; /* Strict height */
+                flex-basis: 50%;
+                opacity: 1; /* Visible immediately on mobile */
+            }
+
+            /* Adjust Preview Elements for small space */
+            .brand-title {
+                font-size: 1.8rem;
+                margin-bottom: 5px;
+            }
+            .alura-gemini-text { font-size: 0.6rem; }
+            .project-subtitle { font-size: 0.7rem; }
+            
+            .primary-action {
+                margin-top: 15px;
+                padding: 8px 20px;
+                font-size: 0.7rem;
+                transform: translateY(0); /* Reset transform logic for simple show */
+            }
+
+            .typing-hint {
+                bottom: 5px; right: 5px;
+                padding: 4px 8px; font-size: 10px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -723,6 +844,10 @@
             <i class="fa-solid fa-power-off"></i>
         </div>
         <div class="power-msg">LIGAR COMPUTADOR </div>
+        <!-- Mobile Disclaimer -->
+        <div class="mobile-disclaimer">
+            A imersão completa de programar a entrada do site é somente quando acessado pelo computador. Pelo celular o processo é automático.
+        </div>
     </div>
 
     <!-- 2. BIOS SCENE -->
@@ -939,7 +1064,7 @@
                 </div>
             </div>
         </div>
-        <div style="height: 22px; background: #007acc; display: flex; align-items: center; padding: 0 10px; font-size: 12px; color: white;">
+        <div style="height: 22px; background: #007acc; display: flex; align-items: center; padding: 0 10px; font-size: 12px; color: white; flex-shrink: 0;">
              <span id="status-bar-text">READY</span>
         </div>
     </div>
@@ -1016,9 +1141,17 @@
             loginScene.style.display = 'flex';
             
             setTimeout(() => {
-                gsap.to(lockContent, { y: -500, opacity: 0, duration: 1 });
+                // Move clock out
+                gsap.to(lockContent, { y: -200, opacity: 0, duration: 0.8 });
+                
+                // Show Login Form (Centered)
                 loginForm.style.display = 'flex';
-                gsap.from(loginForm, { y: 50, opacity: 0, duration: 1 });
+                
+                // Animate using Scale/Opacity to preserve CSS Transform centering
+                gsap.fromTo(loginForm, 
+                    { opacity: 0, scale: 0.9 },
+                    { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" }
+                );
                 
                 const avatarDiv = document.querySelector('.user-avatar');
                 const style = getComputedStyle(document.body);
@@ -1102,14 +1235,20 @@
             const vs = document.getElementById('scene-vscode');
             vs.style.display = 'flex';
 
+            const isMobile = window.innerWidth < 768;
+
             gsap.to(vs, { 
-                scale: 1, 
+                scale: isMobile ? 1 : 1, // Ensure full scale on mobile too
                 opacity: 1, 
                 duration: 1.5, 
                 ease: "expo.out",
                 onComplete: () => {
                     state.isCoding = true;
                     initGeminiPreview(); 
+                    if (isMobile) {
+                        // Auto run code on mobile
+                        startMobileAutoTyping();
+                    }
                 }
             });
         }
@@ -1446,10 +1585,9 @@
 
         updateUIForFile(fileSequence[0]);
 
-        document.addEventListener('keydown', (e) => {
-            if(!state.isCoding || state.errorStage) return;
-
-            if(!state.previewVisible) {
+        // Function to type the next chunk (reusable)
+        function typeNextChunk() {
+            if (!state.previewVisible) {
                 state.previewVisible = true;
                 const prevPanel = document.getElementById('preview-container');
                 prevPanel.style.opacity = 1;
@@ -1464,23 +1602,28 @@
                 }
                 return;
             }
-            
+
             const chunk = currentCodeChunks[state.index];
             const cursor = document.querySelector('.typing-cursor');
-            cursor.insertAdjacentHTML('beforebegin', chunk);
-            state.index++;
-            
-            container.scrollTop = container.scrollHeight;
+            if(cursor) {
+                cursor.insertAdjacentHTML('beforebegin', chunk);
+                state.index++;
+                // Important: Only scroll the internal container, never the window
+                if(container) container.scrollTop = container.scrollHeight;
+            }
 
             if (fileSequence[currentFileIndex].id === 'js') {
                 checkCodeProgress(container.innerText);
             }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(!state.isCoding || state.errorStage) return;
+            typeNextChunk();
         });
 
         let typeWriterStarted = false;
         function checkCodeProgress(text) {
-            // Check logic against the NEW JS code provided
-            
             if(text.includes('const scene') && !typeWriterStarted) {
                 typeWriterStarted = true;
                 typeWriter("IMERSÃO DEV", document.getElementById('typewriter-text'));
@@ -1492,8 +1635,23 @@
             }
 
             if(text.includes('animate();')) {
+                // Only trigger error on Desktop
+                if(window.innerWidth >= 768) {
+                    // Wait a bit then trigger error logic (managed by user input usually, but let's leave logic for CTA)
+                } else {
+                    // Mobile: Ensure state is set to access granted immediately
+                    state.accessGranted = true;
+                }
+                
                 gsap.to('#cta-btn', { opacity: 1, y: 0, duration: 0.8, ease: "back.out(1.7)" });
-                document.getElementById('typing-hint').innerHTML = "CÓDIGO FINALIZADO. CLIQUE EM 'ACESSAR SITE'.";
+                
+                const hint = document.getElementById('typing-hint');
+                if(window.innerWidth < 768) {
+                    hint.innerText = "CÓDIGO AUTOMATIZADO. ACESSO LIBERADO.";
+                } else {
+                    hint.innerHTML = "CÓDIGO FINALIZADO. CLIQUE EM 'ACESSAR SITE'.";
+                }
+                
                 document.getElementById('status-bar-text').innerText = "COMPILATION SUCCESS";
             }
         }
@@ -1508,19 +1666,32 @@
         }
 
         // ==========================================
+        // MOBILE AUTO TYPING
+        // ==========================================
+        function startMobileAutoTyping() {
+            // Slower typing speed for mobile to be readable
+            const typingSpeed = 40; 
+            
+            const autoTyper = setInterval(() => {
+                // Stop if we are done with all files
+                if (currentFileIndex === fileSequence.length - 1 && state.index >= currentCodeChunks.length) {
+                    clearInterval(autoTyper);
+                    return;
+                }
+                typeNextChunk();
+            }, typingSpeed);
+        }
+
+        // ==========================================
         // ERROR & GEMINI FIX SEQUENCE
         // ==========================================
-        const prevBtn = document.getElementById('cta-btn'); // Reusing CTA as prevBtn logically
+        const prevBtn = document.getElementById('cta-btn'); 
         const modal = document.getElementById('error-modal');
         const closeModal = document.getElementById('btn-close-modal');
         const ackModal = document.getElementById('btn-ack-error');
         const geminiTool = document.getElementById('gemini-tool');
         const successModal = document.getElementById('gemini-success-modal');
         const closeSuccess = document.getElementById('btn-close-success');
-
-        // NOTE: This logic is now partly controlled by the "ACESSAR SITE" button inside the preview logic
-        // BUT we still need the VS Code error simulation logic
-        // Let's hook the logic into the button created in the preview.
 
         function triggerError() {
             state.errorStage = true;
@@ -1585,7 +1756,7 @@
                 if(chunk.includes('k-')) chunk = chunk.replace('class="', 'class="gemini-glow ');
                 
                 cursor.insertAdjacentHTML('beforebegin', chunk);
-                container.scrollTop = container.scrollHeight;
+                if(container) container.scrollTop = container.scrollHeight;
                 i++;
             }, 20); 
         }
@@ -1669,6 +1840,15 @@
                 mouseY = (event.clientY - rect.top) - windowHalfY;
             });
 
+            // Handle Resize Logic for vertical layout on mobile
+            window.addEventListener('resize', () => {
+                const newWidth = container.clientWidth;
+                const newHeight = container.clientHeight;
+                renderer.setSize(newWidth, newHeight);
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+            });
+
             const clock = new THREE.Clock();
 
             const animate = () => {
@@ -1703,7 +1883,10 @@
             const ctaBtn = document.getElementById('cta-btn');
             if(ctaBtn) {
                 ctaBtn.addEventListener('click', (e) => {
-                    if(!state.accessGranted) {
+                    // Mobile check: always allow access on mobile
+                    const isMobile = window.innerWidth < 768;
+                    
+                    if(!state.accessGranted && !isMobile) {
                         triggerError();
                         return;
                     }
