@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conexão Uberaba | Mídia & Frequência</title>
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;600;700&family=Russo+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuração Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#D4AF37',
+                        neonblue: '#00f3ff',
+                        darkbase: '#050505',
+                        panel: '#121212',
+                        signalGreen: '#00ff9d',
+                        signalRed: '#ff0055'
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                        russo: ['Russo One', 'sans-serif'],
+                        mono: ['Share Tech Mono', 'monospace']
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'scan': 'scan 4s linear infinite'
+                    },
+                    keyframes: {
+                        scan: {
+                            '0%': { backgroundPosition: '0% 0%' },
+                            '100%': { backgroundPosition: '0% 100%' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for Futuristic UI */
+        body {
+            background-color: #050505;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        /* Background Grid */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Scanline Effect */
+        .scanline {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.1) 51%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+        }
+
+        .scanner-bar {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 10px;
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+            animation: scanDown 8s linear infinite;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        @keyframes scanDown {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        /* Glassmorphism Cards */
+        .media-card {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .media-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 2px; height: 0;
+            background: var(--accent-color, #00f3ff);
+            transition: height 0.5s ease;
+        }
+
+        .media-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--accent-color, #00f3ff);
+            box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.2);
+        }
+
+        .media-card:hover::before {
+            height: 100%;
+        }
+
+        /* Glitch Text Effect on Hover */
+        .glitch-hover:hover {
+            animation: glitch-anim 0.3s infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        /* Equalizer Bars */
+        .equalizer {
+            display: flex;
+            gap: 2px;
+            align-items: flex-end;
+            height: 20px;
+        }
+        .bar {
+            width: 4px;
+            background: #00f3ff;
+            animation: equalize 1s infinite ease-in-out alternate;
+        }
+        .media-card:hover .bar {
+            animation-play-state: running;
+        }
+        .bar:nth-child(odd) { height: 40%; animation-delay: -0.2s; }
+        .bar:nth-child(even) { height: 70%; animation-delay: -0.5s; }
+
+        @keyframes equalize {
+            0% { height: 20%; }
+            100% { height: 100%; }
+        }
+
+        /* Category Filter Active State */
+        .filter-btn.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #00f3ff;
+            color: #00f3ff;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        /* Loader */
+        #loader {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column;
+        }
+        .frequency-line {
+            width: 300px; height: 2px; background: #333; position: relative; overflow: hidden;
+        }
+        .frequency-blip {
+            width: 50px; height: 100%; background: #00f3ff; position: absolute;
+            animation: loadScan 2s infinite ease-in-out;
+            box-shadow: 0 0 15px #00f3ff;
+        }
+        @keyframes loadScan { 0% { left: -20%; } 100% { left: 120%; } }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+
+    </style>
+</head>
+<body>
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="font-mono text-neonblue text-xl mb-4 tracking-widest">ESTABELECENDO CONEXÃO...</div>
+        <div class="frequency-line"><div class="frequency-blip"></div></div>
+        <div class="font-mono text-gray-500 text-xs mt-2">Frequência: 19.75 MHz</div>
+    </div>
+
+    <!-- BACKGROUND ELEMENTS -->
+    <div class="grid-bg"></div>
+    <div class="scanline"></div>
+    <div class="scanner-bar"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center backdrop-blur-sm border-b border-white/5">
+        <a href="index.html" class="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+            <div class="w-8 h-8 border border-gray-600 rounded-full flex items-center justify-center group-hover:border-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </div>
+            <span class="font-cinzel text-sm tracking-widest">Voltar ao Hub</span>
+        </a>
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 bg-signalGreen rounded-full animate-pulse"></div>
+            <span class="font-mono text-xs text-signalGreen tracking-widest">SINAL: ESTÁVEL</span>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="pt-32 pb-20 px-6 container mx-auto max-w-7xl">
+        
+        <!-- HEADER -->
+        <header class="text-center mb-20 reveal-load">
+            <div class="inline-block border border-neonblue/30 px-4 py-1 rounded-full mb-6 bg-neonblue/5 backdrop-blur-md">
+                <span class="font-mono text-neonblue text-xs tracking-[0.3em]">UBERABA FREQUENCY</span>
+            </div>
+            <h1 class="font-russo text-5xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-6 uppercase tracking-tighter glitch-hover cursor-default">
+                CONEXÃO <span class="text-neonblue">UBERABA</span>
+            </h1>
+            <p class="font-montserrat text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed">
+                O centro de controle da informação. Sintonize nas ondas do rádio ou acesse as manchetes digitais. Toda a cidade em um só lugar.
+            </p>
+        </header>
+
+        <!-- FILTERS -->
+        <div class="flex justify-center gap-4 mb-16 reveal-load">
+            <button class="filter-btn active px-6 py-2 border border-white/10 rounded text-sm font-mono uppercase tracking-widest hover:bg-white/5 transition-all" data-filter="all">
+                /// Todos
+            </button>
+            <button class="filter-btn px-6 py-2 border border-white/10 rounded text-sm font-mono uppercase tracking-widest hover:bg-white/5 transition-all" data-filter="paper">
+                📝 Jornais
+            </button>
+            <button class="filter-btn px-6 py-2 border border-white/10 rounded text-sm font-mono uppercase tracking-widest hover:bg-white/5 transition-all" data-filter="radio">
+                📻 Rádios
+            </button>
+        </div>
+
+        <!-- GRID -->
+        <div id="grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Conteúdo será injetado via JS para facilitar a animação de filtro -->
+        </div>
+
+    </main>
+
+    <footer class="border-t border-white/10 py-8 text-center">
+        <p class="font-mono text-xs text-gray-600">CONEXÃO UBERABA /// SYSTEM V.1.0 /// ACESSO AUTORIZADO</p>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
+    <script>
+        // DATA
+        const mediaData = [
+            // JORNAIS
+            { type: 'paper', title: 'JM Online', link: 'https://jmonline.com.br', desc: 'Principal jornal diário de Uberaba e região. Cobertura completa de política, polícia e cotidiano.', icon: '📰', color: '#D4AF37' },
+            { type: 'paper', title: 'Jornal de Uberaba', link: 'https://www.jornaldeuberaba.com.br', desc: 'Tradicional, com forte foco nos bastidores da política local e colunas de opinião influentes.', icon: '📰', color: '#D4AF37' },
+            { type: 'paper', title: 'Jornal Replay', link: 'https://www.jornalreplay.net', desc: 'O ponto de encontro do esporte. Do futebol amador (Amadorão) ao profissional.', icon: '⚽', color: '#D4AF37' },
+            { type: 'paper', title: 'Folha de Uberaba', link: 'https://www.folhauberaba.com.br', desc: 'Portal ágil focado em acontecimentos rápidos, cobertura policial e utilidade pública.', icon: '⚡', color: '#D4AF37' },
+            { type: 'paper', title: 'Portal Curtoo', link: 'https://www.curtoo.com', desc: 'Cultura e entretenimento. Agenda de shows, gastronomia e dicas do que fazer na cidade.', icon: '🎉', color: '#D4AF37' },
+            { type: 'paper', title: 'Portal Uberaba', link: 'https://www.portaluberaba.com', desc: 'Agregador de notícias gerais com foco em manchetes de impacto regional e nacional.', icon: '🌐', color: '#D4AF37' },
+            { type: 'paper', title: 'Guia Uberaba', link: 'https://guiaextra.com/uberaba', desc: 'O guia comercial definitivo. Telefones úteis, empresas e classificados.', icon: '📒', color: '#D4AF37' },
+            
+            // RÁDIOS
+            { type: 'radio', title: 'Zebu FM', freq: '93.9 FM', link: 'https://www.zebufm.com.br', desc: 'Líder absoluta. O melhor do sertanejo, pagode e grandes promoções.', icon: '🎙️', color: '#00f3ff' },
+            { type: 'radio', title: '98 FM', freq: '98.1 FM', link: 'https://98fmuberaba.com.br', desc: 'Rádio Beat. Jovem, moderna, pop, funk e eletrônico. Energia lá em cima.', icon: '🎧', color: '#00f3ff' },
+            { type: 'radio', title: 'Supersom FM', freq: '97.1 FM', link: 'https://www.supersomfm.com.br', desc: 'Popular e próxima da comunidade. Sertanejo e sucessos nacionais.', icon: '🔊', color: '#00f3ff' },
+            { type: 'radio', title: 'Rádio América', freq: '99.1 FM', link: 'https://www.radioamerica.com.br', desc: 'Arquidiocese de Uberaba. Jornalismo de credibilidade e música suave.', icon: '✝️', color: '#00f3ff' },
+            { type: 'radio', title: 'Sete Colinas FM', freq: '101.7 FM', link: 'https://www.setecolinas.com.br', desc: 'Qualidade e tradição. MPB, Flashback e jornalismo opinativo forte.', icon: '🎼', color: '#00f3ff' },
+            { type: 'radio', title: 'Rádio JM FM', freq: '95.5 FM', link: 'https://jmonline.com.br/radio', desc: 'A voz do jornal no rádio. Notícias o dia todo e sertanejo universitário.', icon: '🗞️', color: '#00f3ff' },
+            { type: 'radio', title: 'Jovem Pan FM', freq: '103.7 FM', link: 'https://jovempan.com.br/afiliada/uberaba-fm', desc: 'Rede nacional. Pop internacional, humor e novidades do mundo da música.', icon: '🎤', color: '#00f3ff' },
+            { type: 'radio', title: 'Rádio ON FM', freq: '104.9 FM', link: 'https://www.instagram.com/radioonfm', desc: 'Comunitária e alternativa. Cultura local e debates de bairro.', icon: '📡', color: '#00f3ff' },
+            { type: 'radio', title: 'Rádio Alegria FM', freq: '99.5 FM', link: '#', desc: 'Público gospel. Louvores, música contemporânea cristã e mensagens de fé.', icon: '🙏', color: '#00f3ff' },
+            { type: 'radio', title: 'Clube FM', freq: '89.9 FM', link: 'https://www.clubefm.com.br', desc: 'Tá na Clube, tá bom demais. Sucessos populares e muitos prêmios.', icon: '🎁', color: '#00f3ff' },
+            { type: 'radio', title: 'Maravilha FM', freq: '89.3 FM', link: '#', desc: 'Programação religiosa e músicas inspiradoras com mensagens de otimismo.', icon: '✨', color: '#00f3ff' },
+            { type: 'radio', title: 'Rádio Câmara', freq: '94.7 FM', link: 'https://www.camarauberaba.mg.gov.br', desc: 'Oficial do Legislativo. Sessões ao vivo e MPB de altíssima qualidade.', icon: '🏛️', color: '#00f3ff' }
+        ];
+
+        const container = document.getElementById('grid-container');
+
+        // RENDER CARDS
+        function renderCards(filter = 'all') {
+            container.innerHTML = '';
+            
+            const filtered = filter === 'all' ? mediaData : mediaData.filter(item => item.type === filter);
+
+            filtered.forEach((item, index) => {
+                const isRadio = item.type === 'radio';
+                const accentColor = item.color;
+                const rgbColor = isRadio ? '0, 243, 255' : '212, 175, 55';
+
+                const card = document.createElement('div');
+                card.className = 'media-card p-6 rounded-lg cursor-pointer group opacity-0 transform translate-y-4';
+                card.style.setProperty('--accent-color', accentColor);
+                card.style.setProperty('--accent-rgb', rgbColor);
+
+                // Dynamic HTML based on type
+                let headerMeta = isRadio 
+                    ? `<div class="flex items-center gap-2"><span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span><span class="font-mono text-xs text-gray-400">AO VIVO /// <span class="text-white font-bold">${item.freq}</span></span></div>`
+                    : `<div class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full"></span><span class="font-mono text-xs text-gray-400">ONLINE</span></div>`;
+
+                let visualizer = isRadio 
+                    ? `<div class="equalizer mt-4 opacity-50 group-hover:opacity-100 transition-opacity"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>`
+                    : `<div class="h-1 w-10 bg-gold mt-4 group-hover:w-full transition-all duration-500"></div>`;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded bg-white/5 flex items-center justify-center text-xl border border-white/10 group-hover:border-white/30 transition-colors">
+                            ${item.icon}
+                        </div>
+                        ${headerMeta}
+                    </div>
+                    <h3 class="font-cinzel text-xl text-white mb-2 group-hover:text-[${accentColor}] transition-colors">${item.title}</h3>
+                    <p class="font-montserrat text-sm text-gray-400 leading-relaxed mb-6 border-b border-white/5 pb-4">${item.desc}</p>
+                    
+                    <div class="flex justify-between items-end">
+                        <a href="${item.link}" target="_blank" class="font-mono text-xs uppercase tracking-widest text-white/70 group-hover:text-white flex items-center gap-2 transition-colors hover:underline">
+                            Acessar Canal <span class="transform group-hover:translate-x-1 transition-transform">→</span>
+                        </a>
+                        ${visualizer}
+                    </div>
+                    
+                    <!-- Background Decor -->
+                    <div class="absolute top-0 right-0 p-2 opacity-10 font-mono text-[10rem] leading-none -z-10 select-none pointer-events-none group-hover:opacity-20 transition-opacity text-[${accentColor}]">
+                        ${isRadio ? 'FM' : 'NEWS'}
+                    </div>
+                `;
+
+                container.appendChild(card);
+
+                // Animation Entrance
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    delay: index * 0.05,
+                    ease: "power2.out"
+                });
+            });
+        }
+
+        // INIT
+        window.addEventListener('load', () => {
+            // Loader Animation
+            const tl = gsap.timeline();
+            tl.to(".frequency-blip", { width: "100%", duration: 1.5, ease: "power2.inOut" })
+              .to("#loader", { opacity: 0, duration: 0.5, onComplete: () => document.getElementById('loader').style.display = 'none' })
+              .from(".reveal-load", { y: 50, opacity: 0, stagger: 0.2, duration: 1, ease: "power3.out" });
+
+            renderCards('all');
+        });
+
+        // FILTER LOGIC
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+                
+                // Fade out grid
+                gsap.to("#grid-container", {
+                    opacity: 0,
+                    y: 10,
+                    duration: 0.2,
+                    onComplete: () => {
+                        renderCards(filter);
+                        // Fade in grid handled inside renderCards via element animation, but container reset needed
+                        gsap.set("#grid-container", { opacity: 1, y: 0 });
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
