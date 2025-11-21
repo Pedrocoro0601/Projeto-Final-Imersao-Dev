@@ -57,7 +57,9 @@ O Guia da Cidade (Site Principal)
 
 - Capital do Zebu: Destaque para a ABCZ e a genética bovina com efeitos holográficos.
 
-- Guia de Bolso: Lista funcional de Hotéis e Restaurantes com filtros em tempo real.
+- Guia: Lista funcional de Hotéis e Restaurantes.
+
+- Guia: Lista funcional das Radios e Jornais da cidade.
 
 - Conexão Uberaba: Um hub simulando frequências de rádio e jornais locais.
 
