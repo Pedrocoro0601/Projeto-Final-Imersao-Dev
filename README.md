@@ -34,7 +34,9 @@ O projeto foi construído utilizando tecnologias modernas de Front-end, focando 
 - Bibliotecas Adicionais: Lenis (Smooth Scroll), FontAwesome (Ícones).
 
 Funcionalidades
+
 A Simulação (Intro)
+
 - Botão Power: Inicia a sequência de boot.
 
 - BIOS Check: Simulação real de carregamento de hardware.
