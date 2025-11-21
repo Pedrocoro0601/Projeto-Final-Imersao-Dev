@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uberaba - MG </title>
+    
+    <!-- Link para o CSS Externo -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@700;900&family=Russo+One&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuração Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#D4AF37',
+                        coffee: '#1A120B',
+                        deepblack: '#0a0a0a',
+                        neonblue: '#00f3ff',
+                        neonturquoise: '#00E5FF',
+                        electricpurple: '#BF00FF',
+                        ciaOrange: '#FF6600',
+                        bioBlue: '#00D4FF',
+                        bioDark: '#000510',
+                        uscRed: '#D90429',
+                        uscDarkRed: '#6D0214'
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                        cormorant: ['Cormorant Garamond', 'serif'],
+                        russo: ['Russo One', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- ÁUDIO DA INTRODUÇÃO -->
+    <audio id="intro-audio" loop>
+        <source src="musicauberaba.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- AVISO MOBILE CINEMATOGRÁFICO (ATUALIZADO) -->
+    <div id="mobile-warning" class="fixed top-0 left-0 w-full h-full z-[100000] bg-black flex flex-col items-center justify-center overflow-hidden lg:hidden touch-none select-none">
+        
+        <!-- 1. VÍDEO DE FUNDO (Ambiente) -->
+        <div class="absolute inset-0 w-full h-full overflow-hidden">
+            <video class="absolute inset-0 w-full h-full object-cover opacity-30 blur-sm grayscale" autoplay muted loop playsinline>
+                <source src="SiteVideo.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- 2. CAMADA ESCURA DE SOBREPOSIÇÃO -->
+        <div id="mobile-overlay-layer" class="absolute inset-0 bg-black/80 transition-opacity duration-500 ease-out z-10"></div>
+
+        <!-- 3. VIDEO DE PREVIEW (POPUP MENOR) - Oculto por padrão -->
+        <div id="mobile-preview-popup" class="absolute inset-0 z-20 flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500 ease-out scale-90">
+            <div class="relative w-[90%] aspect-video bg-black rounded-xl overflow-hidden border border-gold/50 shadow-[0_0_40px_rgba(212,175,55,0.3)]">
+                <!-- Header do "Monitor" -->
+                <div class="absolute top-0 left-0 w-full h-8 bg-black/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-3 z-20">
+                    <div class="flex gap-1.5">
+                        <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                        <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                    </div>
+                    <span class="text-[8px] font-montserrat text-gold tracking-widest uppercase">Desktop Experience</span>
+                </div>
+                
+                <!-- Vídeo Principal -->
+                <video id="mobile-popup-video" class="w-full h-full object-cover" muted loop playsinline>
+                    <source src="SiteVideo.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <!-- 4. CONTEÚDO DO AVISO (Texto e Botão) -->
+        <div id="mobile-content-box" class="relative z-30 p-6 transition-all duration-500 ease-out transform scale-100 opacity-100">
+            <div class="border border-gold/30 p-8 bg-black/70 backdrop-blur-md max-w-sm shadow-[0_0_30px_rgba(0,0,0,0.8)] rounded-xl">
+                <h3 class="font-cinzel text-2xl text-gold mb-4 text-center">Experiência Limitada</h3>
+                <p class="font-montserrat text-gray-300 mb-6 text-sm leading-relaxed text-center">
+                    Este site é uma experiência imersiva projetada para computadores.
+                    <br><br>
+                    <span class="text-white font-bold block mt-2">Isso é o que você está perdendo:</span>
+                </p>
+                
+                <!-- BOTÃO PRESSIONE E SEGURE -->
+                <div class="flex justify-center">
+                    <button id="preview-btn" class="group relative flex items-center justify-center gap-3 px-6 py-3 font-cinzel font-bold text-white border border-gold/50 rounded-full overflow-hidden transition-all duration-300 bg-white/5 active:scale-95 touch-none select-none -webkit-user-select-none" style="-webkit-touch-callout: none;">
+                        <!-- Animação de fundo ao segurar -->
+                        <span class="absolute inset-0 w-full h-full bg-gold/20 transform scale-x-0 group-active:scale-x-100 transition-transform duration-200 origin-left"></span>
+                        
+                        <span class="relative flex items-center gap-2 pointer-events-none">
+                            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            Segure para Espiar
+                        </span>
+                    </button>
+                </div>
+
+                <p class="font-montserrat text-gray-500 text-[10px] uppercase tracking-widest text-center mt-6">Acesse pelo computador</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO DO SITE -->
+    <div id="desktop-content" class="hidden lg:block">
+    
+        <!-- 1. INTRO -->
+        <section id="intro" class="scrolly-sec">
+            <div class="bg-img">
+                 <div class="loop-container">
+                    <img src="Uberaba1.png" alt="Slide 1">
+                    <img src="Uberaba2.png" alt="Slide 2">
+                    <img src="Uberaba4.png" alt="Slide 3">
+                    <img src="Uberaba4.png" alt="Slide 3">
+                    <img src="Uberaba5.png" alt="Slide 3">
+                 </div>
+                 <div id="intro-particles"></div>
+            </div>
+            
+            <div id="canvas-container">
+                <canvas id="fluid-canvas"></canvas>
+            </div>
+
+            <div class="scroll-hint">
+                <span class="scroll-text">Explore</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <!-- 2. HISTÓRIA -->
+        <section id="history">
+            <div class="history-header">Linha do Tempo</div>
+            <div class="history-container">
+                <div class="history-card"><span class="history-year">1725</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">A Rota dos Bandeirantes</h3><p class="text-base md:text-xl max-w-2xl">A expedição de Bartolomeu Bueno da Silva Filho (filho do Anhanguera) funda Vila Boa em Goiás. A rota utilizada, conhecida como Estrada Real ou Anhanguera, atravessa as terras onde hoje se situa Uberaba, ligando São Paulo às minas de ouro.</p></div></div>
+                <div class="history-card"><span class="history-year">1742</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">Conflitos no Sertão</h3><p class="text-base md:text-xl max-w-2xl">O Coronel Antônio Pires de Campos é nomeado pelo governo de Goiás para garantir a segurança das estradas. O período é marcado por batalhas sangrentas e pelo extermínio das populações indígenas locais, como os Caiapós, para dar passagem à colonização..</p></div></div>
+                <div class="history-card"><span class="history-year">1766</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">O Auge do Desemboque</h3><p class="text-base md:text-xl max-w-2xl">Criação do Julgado de Nossa Senhora do Desterro do Desemboque. A região prospera com a exploração de ouro e goza de isenção de impostos (a "derrama") até o esgotamento das minas em 1781.</p></div></div>
+                <div class="history-card"><span class="history-year">1809</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">A Chegada de Major Eustáquio</h3><p class="text-base md:text-xl max-w-2xl">Buscando dinamizar a região, o governo nomeia Antônio Eustáquio da Silva Oliveira (Major Eustáquio) como Comandante Regente dos Sertões da Farinha Podre (atual Triângulo Mineiro).</p></div></div>
+                <div class="history-card"><span class="history-year">1810</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">As Primeiras Fixações</h3><p class="text-base md:text-xl max-w-2xl">Major Eustáquio e sua comitiva estabelecem-se às margens do Córrego das Lages, edificando a Chácara da Boa Vista (local da atual Epamig) e atraindo fazendeiros e comerciantes para a rota Goiás–São Paulo.</p></div></div>
+                <div class="history-card"><span class="history-year">1816</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">Mudança de Jurisdição</h3><p class="text-base md:text-xl max-w-2xl">A região do Triângulo Mineiro deixa a jurisdição de Goiás e é anexada à Capitania de Minas Gerais.</p></div></div>
+                <div class="history-card"><span class="history-year">1818</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">O Reconhecimento Religioso</h3><p class="text-base md:text-xl max-w-2xl">Construção e bênção da Capela dedicada a Santo Antônio e São Sebastião pelo Padre Hermógenes. A presença da Igreja oficializa o reconhecimento social e político do povoado.</p></div></div>
+                <div class="history-card"><span class="history-year">1820</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">Elevação a Freguesia</h3><p class="text-base md:text-xl max-w-2xl">O Rei D. João VI decreta a elevação de Uberaba à condição de Freguesia. Este ato representou a emancipação civil, militar e religiosa da comunidade e é a data considerada para a comemoração do aniversário da cidade.</p></div></div>
+                <div class="history-card"><span class="history-year">1836</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">Criação do Município</h3><p class="text-base md:text-xl max-w-2xl">Com o crescimento populacional e a chegada de agricultores e pecuaristas, é criado oficialmente o Município de Santo Antônio de Uberaba.</p></div></div>
+                <div class="history-card"><span class="history-year">1840</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">Sede de Comarca</h3><p class="text-base md:text-xl max-w-2xl">A cidade passa a sediar uma Comarca, centralizando a distribuição da justiça na região.</p></div></div>
+                <div class="history-card"><span class="history-year">1856</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">Título de Cidade</h3><p class="text-base md:text-xl max-w-2xl">Devido à sua prosperidade regional, a Vila recebe o título oficial de Cidade.</p></div></div>
+                <div class="history-card"><span class="history-year">1889</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">A Chegada dos Trilhos</h3><p class="text-base md:text-xl max-w-2xl">O trem impulsiona o comércio, facilita a imigração europeia e consolida o desenvolvimento da pecuária zebuína, transformando a arquitetura e a economia local.</p></div></div>
+                <div class="history-card"><span class="history-year">HOJE</span><div class="history-content"><div class="timeline-marker"></div><h3 class="text-2xl md:text-4xl font-bold font-montserrat mb-4">Século XX aos Dias Atuais</h3><p class="text-base md:text-xl max-w-2xl">Uberaba se moderniza, diversificando seu parque industrial e tornando-se referência mundial em genética bovina, agricultura produtiva e polo universitário.</p></div></div>
+                
+                <!-- CARD FINAL: BOTÃO PARA HISTÓRIA COMPLETA -->
+                <div class="history-card history-end-card">
+                    <span class="history-year">MAIS</span>
+                    <div class="history-content flex flex-col items-center justify-center text-center">
+                        <div class="timeline-marker"></div>
+                        <h3 class="text-3xl md:text-5xl font-bold font-cinzel mb-6 text-gray-800">O Legado Completo</h3>
+                        <p class="text-base md:text-xl mb-8 max-w-lg mx-auto">Mergulhe profundamente nas origens, batalhas e glórias que forjaram esta terra.</p>
+                        <button id="open-history-book-btn" class="group relative px-8 py-4 bg-black text-gold border border-gold font-cinzel font-bold text-lg tracking-widest overflow-hidden transition-all duration-300 hover:bg-gold hover:text-black shadow-[0_0_20px_rgba(0,0,0,0.3)]">
+                            <span class="relative z-10">Abrir o Livro da História</span>
+                            <div class="absolute inset-0 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left z-0"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. STATS -->
+        <section id="stats">
+            <h2 class="stats-header">Dados IBGE</h2>
+            <div class="stats-grid">
+                <div class="stat-block"><span class="stat-label">População último censo (2022)</span><div class="stat-number count-up" data-value="337836">0</div><div class="w-16 h-[2px] bg-white/20 mt-6"></div></div>
+                <div class="stat-block"><span class="stat-label text-gold">População estimada (2025)</span><div class="flex items-center"><div class="stat-number count-up text-gold" data-value="356781">0</div><span class="trend-icon">↗</span></div></div>
+                <div class="stat-block"><span class="stat-label">Densidade demográfica (hab/km²)</span><div class="stat-number count-up" data-value="74.68" data-format="float">0</div><div id="density-grid"></div></div>
+            </div>
+        </section>
+
+        <!-- 4. DINO HERO -->
+        <section id="dino-hero" class="scrolly-sec">
+            <div class="dino-hero-bg"></div>
+            <div class="dino-fog"></div>
+            <h1 class="dino-title">TERRA DE<br>GIGANTES</h1>
+        </section>
+
+        <!-- 5. DINO CONTENT -->
+        <section id="dino-content">
+            <div class="dino-block">
+                <div class="dino-text-col reveal-up">
+                    <h2 class="dino-heading">O Maior do Brasil</h2>
+                    <p class="dino-para">Há 70 milhões de anos, o <i>Uberabatitan ribeiroi</i> dominava esta terra. Com 27m de comprimento e 10m de altura, é o maior dinossauro já encontrado no país.</p>
+                </div>
+                <div class="dino-visual-col reveal-up"><img src="DinoUberaba.webp" alt="Uberabatitan Silhueta" class=""></div>
+            </div>
+            <div class="dino-block reverse">
+                <div class="dino-text-col reveal-up"><h2 class="dino-heading">Ninhos Intactos</h2><p class="dino-para">Peirópolis é o único lugar do Brasil com ninhadas intactas. Um sítio geológico de relevância mundial.</p></div>
+                <div class="dino-visual-col reveal-up"><img src="Ninho.webp" alt="Ovos Fóssil" class="rounded-lg shadow-2xl w-4/5 grayscale hover:grayscale-0 transition duration-500"></div>
+            </div>
+            <div class="dino-grid reveal-up">
+                <div class="dino-card"><h4>O Visionário</h4><p class="text-gray-400">Frederico Peiró e a era do calcário (1896).</p></div>
+                <div class="dino-card"><h4>Ciência Viva</h4><p class="text-gray-400">Museu dos Dinossauros e fósseis reais.</p></div>
+                <div class="dino-card"><h4>Refúgio</h4><p class="text-gray-400">Cachoeiras e turismo científico.</p></div>
+            </div>
+        </section>
+
+        <!-- 6. MUSEU -->
+        <section id="museu">
+            <div class="museu-header"><h2 class="museu-title">Museu dos Dinossauros</h2><p class="museu-desc">Localizado em Peirópolis, a cerca de 20km do centro, o museu abriga um tesouro paleontológico descoberto desde a década de 1940. Integrante do Geopark Terra de Gigantes, o complexo exibe fósseis originais e réplicas em meio à natureza, consolidando Uberaba mundialmente como a Terra dos Dinossauros do Brasil.</p></div>
+            <div class="gallery-wrapper"><div class="gallery-track"><div class="gallery-item"><div class="gallery-img-wrapper w-full h-full overflow-hidden"><img src="Museu1.jpg" class="gallery-img" alt="Fósseis"></div><span class="gallery-caption"></span></div><div class="gallery-item"><div class="gallery-img-wrapper w-full h-full overflow-hidden"><img src="Museu2.jpg" class="gallery-img" alt="Jardim"></div><span class="gallery-caption"></span></div><div class="gallery-item"><div class="gallery-img-wrapper w-full h-full overflow-hidden"><img src="Museu3.jpg" class="gallery-img" alt="Laboratório"></div><span class="gallery-caption"></span></div><div class="gallery-item"><div class="gallery-img-wrapper w-full h-full overflow-hidden"><img src="Museu4.jpg" class="gallery-img" alt="Dioramas"></div><span class="gallery-caption"></span></div><div class="gallery-item"><div class="gallery-img-wrapper w-full h-full overflow-hidden"><img src="Museu5.jpg" class="gallery-img" alt="Turismo"></div><span class="gallery-caption"></span></div></div></div>
+        </section>
+
+        <!-- 7. ZEBU LUXURY EXPERIENCE -->
+        <div id="zebu-wrapper">
+            <div class="zebu-transition-gradient"></div>
+            <div class="noise-overlay"></div>
+
+            <!-- ATO 1: ZEBU HERO (GOLDEN ERA) -->
+            <section id="zebu-hero">
+                <div class="zebu-bg-img"></div>
+                <div class="zebu-overlay"></div>
+                
+                <h1 class="zebu-gold-title">O OURO<br>DO CAMPO</h1>
+                <div class="zebu-subtitle">A &nbsp;capital&nbsp; mundial&nbsp; do&nbsp; Zebu.&nbsp;</div>
+            </section>
+
+            <!-- ATO 2: ABCZ HISTORY (MODIFIED - VIDEO LOOP AND NO IMAGE) -->
+            <section id="abcz-history" class="relative overflow-hidden">
+                <!-- VIDEO BACKGROUND ELEMENT (Autoplay Loop) -->
+                <video id="abcz-video-bg" class="absolute inset-0 w-full h-full object-cover opacity-50 z-0 pointer-events-none grayscale" autoplay muted playsinline loop>
+                    <source src="videozebu.mp4" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/40 z-0 pointer-events-none"></div>
+
+                <div class="abcz-container relative z-10 flex items-center justify-center h-full">
+                    <!-- IMAGEM REMOVIDA -->
+                    
+                    <div class="abcz-content text-center max-w-4xl mx-auto">
+                        <h2 class="abcz-heading text-center mx-auto">A Guardiã da<br>Genética</h2>
+                        <div class="abcz-text-wrapper mx-auto border-l-0 border-t-2 border-t-gold pt-8">
+                            <p class="abcz-para text-lg md:text-xl">
+                                Com mais de 25 mil associados, a ABCZ é a maior associação de zebuínos do mundo. 
+                                A missão é garantir o registro genealógico e promover o melhoramento genético 
+                                para uma produção de carne e leite sustentável.
+                            </p>
+                            <!-- ID adicionado para o efeito Typewriter -->
+                            <p id="abcz-typewriter" class="abcz-highlight min-h-[3rem] mt-4">
+                                <!-- O texto será inserido via JS -->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ELITE GENETICS SHOWCASE -->
+            <section id="elite-genetics" class="relative">
+                <!-- VÍDEOS DE FUNDO PARA CADA RAÇA (Invisíveis por padrão) -->
+                <video id="vid-nelore" class="elite-bg-video" muted loop playsinline><source src="nelore branco.mp4" type="video/mp4"></video>
+                <video id="vid-brahman" class="elite-bg-video" muted loop playsinline><source src="nelore2.mp4" type="video/mp4"></video>
+                <video id="vid-gir" class="elite-bg-video" muted loop playsinline><source src="videonelorepintado.mp4" type="video/mp4"></video>
+                <video id="vid-guzera" class="elite-bg-video" muted loop playsinline><source src="videoguzera.mp4" type="video/mp4"></video>
+
+                <div class="elite-bg-pattern"></div>
+                
+                <div class="elite-header">
+                    <div class="elite-subtitle">Alta Performance</div>
+                    <h2 class="elite-title">Genética de Ouro</h2>
+                </div>
+
+                <!-- Container agora com suporte a 4 colunas no desktop -->
+                <div class="elite-cards-container grid-cols-4-forced">
+                    <!-- CARD 1: NELORE (Adicionado data-video) -->
+                    <div class="elite-card" data-video="vid-nelore">
+                        <div class="elite-card-base">
+                            <img src="nelore 1 teste.png" class="elite-base-img" alt="Fundo Card">
+                            <div class="elite-info"><h3 class="elite-name"></h3></div>
+                        </div>
+                        <div class="elite-cow-wrapper">
+                            <img src="Nelore1 (sem fundo).png" class="elite-cow-img" alt="Nelore 3D">
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: BRAHMAN (Adicionado data-video) -->
+                    <div class="elite-card" data-video="vid-brahman">
+                        <div class="elite-card-base">
+                            <img src="Nelore 2 teste.png" class="elite-base-img" alt="Fundo Card">
+                            <div class="elite-info"><h3 class="elite-name"></h3></div>
+                        </div>
+                        <div class="elite-cow-wrapper">
+                            <img src="Nelore 2 (sem fundo).png" class="elite-cow-img" alt="Brahman 3D">
+                        </div>
+                    </div>
+
+                    <!-- CARD 3: GIR (Adicionado data-video) -->
+                    <div class="elite-card" data-video="vid-gir">
+                        <div class="elite-card-base">
+                            <img src="nelore 3 teste.png" class="elite-base-img" alt="Fundo Card">
+                            <div class="elite-info"><h3 class="elite-name"></h3></div>
+                        </div>
+                        <div class="elite-cow-wrapper">
+                            <img src="Nelore 3 (sem fundo).png" class="elite-cow-img" alt="Gir 3D">
+                        </div>
+                    </div>
+
+                    <!-- CARD 4: GUZERÁ (Adicionado data-video) -->
+                    <div class="elite-card" data-video="vid-guzera">
+                        <div class="elite-card-base">
+                            <img src="guzera 2 teste.png" class="elite-base-img" alt="Fundo Card">
+                            <div class="elite-info"><h3 class="elite-name"></h3></div>
+                        </div>
+                        <div class="elite-cow-wrapper">
+                            <!-- Reutilizando imagem por enquanto, substitua pela correta -->
+                            <img src="guzera sem fundo.png" class="elite-cow-img" style="filter: hue-rotate(20deg);" alt="Guzerá 3D">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO VACA DE MILHÕES (NOVA) -->
+            <section id="cow-million" class="relative min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden z-20 py-20">
+                <!-- Efeitos de Fundo -->
+                <div class="million-gold-dust"></div>
+                <div class="million-spotlight"></div>
+                
+                <!-- Conteúdo Principal -->
+                <div class="container mx-auto px-6 relative z-10 flex flex-col items-center text-center">
+                    <div class="million-badge reveal-up">RECORDISTA MUNDIAL</div>
+                    
+                    <h2 class="million-title reveal-up">VIATINA-19</h2>
+                    
+                    <div class="million-visual-container my-10 perspective-container">
+                        <div class="cow-silhouette">
+                            <!-- IMAGEM ATUALIZADA CONFORME SOLICITAÇÃO -->
+                            <img src="viatina.png" alt="Viatina-19" class="million-cow-img" title="Certifique-se que o arquivo Viatina_Nova.png esteja na pasta">
+                        </div>
+                        <div class="price-reveal-container">
+                            <div class="price-shine"></div>
+                            <h3 class="million-price">R$ 21.000.000,00</h3>
+                        </div>
+                    </div>
+                    
+                    <p class="million-desc max-w-2xl reveal-up">
+                        Uma das vacas mais cara da história. Arrematada em leilão em Uberaba, ela redefiniu os limites da valorização genética global. Uma obra-prima da natureza avaliada em ouro.
+                    </p>
+                    
+                    <button class="million-btn mt-8 reveal-up">Descubra o Valor</button>
+                </div>
+            </section>
+
+            <!-- HQ SECTION -->
+            <section id="hq-section">
+                <!-- Background específico para o hover do ABCZ -->
+                <div id="hq-abcz-bg" class="absolute inset-0 w-full h-full bg-cover bg-center opacity-0 transition-opacity duration-500 z-[1]" 
+                     style="background-image: url('SedeABCZ.jpeg');"></div> <!-- Substitua pela imagem correta -->
+                
+                <div class="hq-bg"></div>
+                <div class="hq-overlay"></div>
+                <div class="hq-content-box">
+                    <h2 class="hq-title">Sede em<br>Uberaba</h2>
+                    <div class="hq-subtitle-wrapper">
+                        <!-- Span interativo para o hover -->
+                        <p class="hq-subtitle"> <span id="abcz-hover-target" class="text-gold cursor-pointer border-b border-gold/30 hover:border-gold transition-colors duration-300 relative z-20">ABCZ</span> - O centro das atenções de centenas de países</p>
+                    </div>
+                </div>
+                <div class="hq-coords">19° 44' 53" S | 47° 56' 24" O</div>
+            </section>
+
+            <!-- ======================================================= -->
+            <!-- NOVA SEÇÃO: PARQUE TECNOLÓGICO DE GENÉTICA BOVINA -->
+            <!-- SCROLLYTELLING: DO PASTO AO MICROSCÓPIO -->
+            <!-- ======================================================= -->
+            
+            <div class="genetics-hub-wrapper relative z-20">
+                
+                <!-- SEÇÃO 1: O MACRO (GIGANTES DA GENÉTICA) -->
+                <section id="genetics-macro" class="relative min-h-[150vh] bg-[#0B0705] overflow-hidden py-20">
+                    <!-- Elemento Conector: Linha da Vida -->
+                    <div class="genetic-line absolute left-[10%] md:left-1/2 top-0 w-[2px] bg-gradient-to-b from-gold via-gold to-transparent h-0 z-0"></div>
+                    
+                    <div class="container mx-auto px-6 relative z-10">
+                        <div class="text-center mb-20">
+                            <h2 class="font-cinzel text-3xl md:text-5xl text-gold mb-4 reveal-genetics">Parque Tecnológico</h2>
+                            <p class="font-montserrat text-gray-400 text-sm uppercase tracking-[0.3em] reveal-genetics">Os Gigantes da Genética</p>
+                        </div>
+
+                        <!-- GRUPO 1: CENTRAIS (LAYOUT ALTERNADO) -->
+                        <div class="grid grid-cols-1 gap-24 md:gap-40">
+                            
+                            <!-- BLOCO ESQUERDA -->
+                            <div class="flex flex-col md:flex-row items-center justify-center gap-10 w-full reveal-macro-card">
+                                <div class="w-full md:w-5/12 text-right order-2 md:order-1">
+                                    <h3 class="font-cinzel text-2xl text-white mb-2">Alta Genetics</h3>
+                                    <p class="font-montserrat text-gray-400 text-sm leading-relaxed">Uma das maiores centrais do mundo. Localizada estrategicamente na BR-050, é um verdadeiro santuário genético que recebe visitantes internacionais diariamente.</p>
+                                </div>
+                                <div class="w-[20px] h-[20px] rounded-full bg-gold border-4 border-[#0B0705] relative z-10 hidden md:block order-1 md:order-2 shadow-[0_0_15px_#D4AF37]"></div>
+                                <div class="w-full md:w-5/12 order-3">
+                                    <div class="genetic-card p-6 bg-white/5 border border-gold/20 backdrop-blur-sm rounded-lg hover:border-gold transition duration-500">
+                                        <h3 class="font-cinzel text-xl text-gold mb-2">ABS Pecplan</h3>
+                                        <p class="text-xs text-gray-300">Liderança global absoluta. Foco total em genética de corte e leite de alta precisão, impulsionada pelo braço de biotecnologia ABS NEO.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BLOCO DIREITA -->
+                            <div class="flex flex-col md:flex-row items-center justify-center gap-10 w-full reveal-macro-card">
+                                <div class="w-full md:w-5/12 text-right order-2 md:order-1">
+                                    <div class="genetic-card p-6 bg-white/5 border border-gold/20 backdrop-blur-sm rounded-lg hover:border-gold transition duration-500">
+                                        <h3 class="font-cinzel text-xl text-gold mb-2">Genex Brasil</h3>
+                                        <p class="text-xs text-gray-300">Novo Centro de Biotecnologia e Difusão Genética. Um banco genético de qualidade inquestionável sediado em Uberaba.</p>
+                                    </div>
+                                </div>
+                                <div class="w-[20px] h-[20px] rounded-full bg-gold border-4 border-[#0B0705] relative z-10 hidden md:block order-1 md:order-2 shadow-[0_0_15px_#D4AF37]"></div>
+                                <div class="w-full md:w-5/12 order-3">
+                                    <h3 class="font-cinzel text-2xl text-white mb-2">Select Sires</h3>
+                                    <p class="font-montserrat text-gray-400 text-sm leading-relaxed">Força de marca global. Oferece suporte técnico estratégico vital para os criadores que buscam o topo da pirâmide produtiva.</p>
+                                </div>
+                            </div>
+
+                             <!-- GRUPO 3: ASSOCIAÇÕES (CENTRALIZADO) -->
+                             <div class="flex flex-col items-center justify-center gap-6 w-full mt-10 reveal-macro-card">
+                                <div class="w-[30px] h-[30px] rounded-full bg-gold border-4 border-[#0B0705] relative z-10 shadow-[0_0_25px_#D4AF37] mb-6"></div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+                                    <div class="p-8 bg-gradient-to-br from-coffee to-black border border-gold/30 rounded-xl text-center hover:scale-105 transition duration-500">
+                                        <h3 class="font-cinzel text-2xl text-gold mb-2">ABCZ</h3>
+                                        <p class="text-sm text-gray-300">A entidade máxima. Gestora do PMGZ, o maior programa de melhoramento genético de zebuínos do mundo.</p>
+                                    </div>
+                                    <div class="p-8 bg-gradient-to-bl from-coffee to-black border border-gold/30 rounded-xl text-center hover:scale-105 transition duration-500">
+                                        <h3 class="font-cinzel text-2xl text-gold mb-2">Girolando</h3>
+                                        <p class="text-sm text-gray-300">A raça tropical brasileira. Sede nacional da raça que revolucionou a produção leiteira nos trópicos.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TRANSIÇÃO: A MUDANÇA DE ESCALA -->
+                <div id="genetics-transition" class="h-[30vh] bg-gradient-to-b from-[#0B0705] to-bioDark relative overflow-hidden flex items-center justify-center">
+                    <div class="dna-strand absolute w-[200px] h-full opacity-20"></div>
+                    <h3 class="font-cinzel text-3xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-gold to-bioBlue relative z-10 text-center">A Engenharia da Vida</h3>
+                </div>
+
+                <!-- SEÇÃO 2: O MICRO (BIOTECNOLOGIA) -->
+                <section id="genetics-micro" class="relative min-h-screen bg-bioDark text-white py-20 overflow-hidden">
+                    <!-- Efeitos de Fundo -->
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/hexellence.png')] opacity-5"></div>
+                    <div class="absolute top-0 left-1/2 w-[1px] h-full bg-gradient-to-b from-bioBlue/50 to-transparent md:block hidden"></div>
+                    
+                    <div class="container mx-auto px-6 relative z-10">
+                        <div class="text-center mb-16">
+                            <p class="font-mono text-bioBlue text-xs mb-2 uppercase tracking-widest blink-effect">/// System: Microscope Zoom_Level_1000x</p>
+                            <h2 class="font-cinzel text-4xl text-white">Biotecnologia & FIV</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                            
+                            <!-- CARD BIO 1 -->
+                            <div class="micro-card relative group">
+                                <div class="absolute inset-0 bg-bioBlue/10 blur-xl rounded-full opacity-0 group-hover:opacity-40 transition duration-700"></div>
+                                <div class="relative p-8 bg-black/60 border border-bioBlue/30 rounded-xl backdrop-blur-md overflow-hidden hover:border-bioBlue transition duration-500 micro-blur-effect">
+                                    <div class="absolute top-0 right-0 p-2 opacity-50"><svg class="w-6 h-6 text-bioBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg></div>
+                                    <h3 class="font-cinzel text-2xl text-white mb-2 group-hover:text-bioBlue transition">Cenatte Embriões</h3>
+                                    <p class="font-mono text-xs text-bioBlue mb-4">Grupo Semex</p>
+                                    <p class="font-montserrat text-sm text-gray-300">Excelência absoluta em FIV (Fertilização In Vitro) e reprodução assistida de ponta.</p>
+                                </div>
+                            </div>
+
+                            <!-- CARD BIO 2 -->
+                            <div class="micro-card relative group mt-0 md:mt-12">
+                                <div class="absolute inset-0 bg-bioBlue/10 blur-xl rounded-full opacity-0 group-hover:opacity-40 transition duration-700"></div>
+                                <div class="relative p-8 bg-black/60 border border-bioBlue/30 rounded-xl backdrop-blur-md overflow-hidden hover:border-bioBlue transition duration-500 micro-blur-effect">
+                                     <div class="absolute top-0 right-0 p-2 opacity-50"><svg class="w-6 h-6 text-bioBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg></div>
+                                    <h3 class="font-cinzel text-2xl text-white mb-2 group-hover:text-bioBlue transition">Geneal</h3>
+                                    <p class="font-mono text-xs text-bioBlue mb-4">Clonagem & Células</p>
+                                    <p class="font-montserrat text-sm text-gray-300">Fronteira da ciência: especialização em clonagem, armazenamento celular e biotecnologia avançada.</p>
+                                </div>
+                            </div>
+
+                            <!-- CARD BIO 3 -->
+                            <div class="micro-card relative group">
+                                <div class="absolute inset-0 bg-bioBlue/10 blur-xl rounded-full opacity-0 group-hover:opacity-40 transition duration-700"></div>
+                                <div class="relative p-8 bg-black/60 border border-bioBlue/30 rounded-xl backdrop-blur-md overflow-hidden hover:border-bioBlue transition duration-500 micro-blur-effect">
+                                    <div class="absolute top-0 right-0 p-2 opacity-50"><svg class="w-6 h-6 text-bioBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                                    <h3 class="font-cinzel text-2xl text-white mb-2 group-hover:text-bioBlue transition">Minerembryo</h3>
+                                    <p class="font-mono text-xs text-bioBlue mb-4">Gestão de Receptoras</p>
+                                    <p class="font-montserrat text-sm text-gray-300">Tradição e eficiência em gestão de receptoras e técnicas de aspiração folicular (OPU).</p>
+                                </div>
+                            </div>
+
+                            <!-- CARD BIO 4 -->
+                            <div class="micro-card relative group mt-0 md:mt-12">
+                                <div class="absolute inset-0 bg-bioBlue/10 blur-xl rounded-full opacity-0 group-hover:opacity-40 transition duration-700"></div>
+                                <div class="relative p-8 bg-black/60 border border-bioBlue/30 rounded-xl backdrop-blur-md overflow-hidden hover:border-bioBlue transition duration-500 micro-blur-effect">
+                                    <div class="absolute top-0 right-0 p-2 opacity-50"><svg class="w-6 h-6 text-bioBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg></div>
+                                    <h3 class="font-cinzel text-2xl text-white mb-2 group-hover:text-bioBlue transition">ZebuEmbryo</h3>
+                                    <p class="font-mono text-xs text-bioBlue mb-4">Fazenda Sant’Anna</p>
+                                    <p class="font-montserrat text-sm text-gray-300">Sediada em local histórico, com foco exclusivo em doadoras de elite e preservação genética.</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- ATO 3: EVENTOS -->
+            <section id="zebu-events">
+                <div class="events-section-header">
+                    <h3>Grandes Eventos Realizados</h3>
+                </div>
+                <div class="event-block block-tradition">
+                    <div class="event-bg-reveal" style="background-image: url('ExpoZebu.jpg');"></div>
+                    <div class="event-content">
+                        <h3 class="event-title">ExpoZebu</h3>
+                        <p class="event-desc">Desde 1935. O maior palco da pecuária mundial. 200 mil visitantes, leilões e julgamentos sagrados.</p>
+                    </div>
+                </div>
+                <div class="event-block block-innovation">
+                    <div class="event-bg-reveal" style="background-image: url('ExpoGenetica2\ \(2\).png');"></div>
+                    <div class="event-content">
+                        <h3 class="event-title">ExpoGenética</h3>
+                        <p class="event-desc">O Futuro. Melhoramento genético de ponta, ciência aplicada e a vanguarda do PNAT.</p>
+                    </div>
+                </div>
+                <div class="cert-footer">
+                    <span class="cert-badge">ISO 9001</span>
+                    <span class="cert-badge">ISO 14001</span>
+                    <span class="text-xs text-white/50 uppercase tracking-widest self-center">Primeira associação certificada do Brasil</span>
+                </div>
+            </section>
+        </div>
+
+        <!-- 8. MEMORIAL CHICO XAVIER -->
+        <section id="chico-memorial">
+            <div class="star-dust"></div>
+            <div id="darkness-layer"></div>
+            <div id="glow-cursor"></div>
+            <button id="light-toggle">Apagar Luzes</button>
+            <div class="memorial-content">
+                <div class="memorial-header">
+                    <h2 class="memorial-title">Memorial Chico Xavier</h2>
+                    <p class="memorial-quote">"Embora ninguém possa voltar atrás e fazer um novo começo, qualquer um pode começar agora e fazer um novo fim."</p>
+                </div>
+                <div class="masonry-gallery">
+                    <div class="memory-card"><img src="Memorial1.jpg" alt="Memorial" class="memory-img"></div>
+                    <div class="memory-card"><img src="Memorial2.jpg" alt="História" class="memory-img"></div>
+                    <div class="memory-card"><img src="Memorial3.jpg" alt="Paz" class="memory-img"></div>
+                    <div class="memory-card"><img src="Memorial4.jpg" alt="Luz" class="memory-img"></div>
+                    <div class="memory-card"><img src="Memorial5.jpg" alt="Uberaba" class="memory-img"></div>
+                    <div class="memory-card"><img src="Memorial6.jpg" alt="Espiritualidade" class="memory-img"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- =========================================
+             NOVA SEÇÃO: ROTA DOS MUSEUS
+             ========================================= -->
+        <section id="museum-route" class="relative py-32 bg-[#0D0D0D] overflow-hidden z-20">
+            <!-- Elemento de fundo (Sinuous Road SVG) -->
+            <div class="absolute inset-0 w-full h-full pointer-events-none hidden lg:block">
+                <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                     <path id="museum-path" d="M50,0 C50,10 20,20 20,35 C20,50 80,60 80,75 C80,90 50,90 50,100" 
+                           fill="none" stroke="#D4AF37" stroke-width="0.3" stroke-dasharray="5,5" opacity="0.4" vector-effect="non-scaling-stroke" />
+                </svg>
+            </div>
+            <div class="absolute left-8 top-0 bottom-0 w-[1px] bg-gold/30 border-r border-dashed border-gold/50 lg:hidden z-0"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-24 reveal-museum">
+                    <h2 class="font-cinzel text-4xl md:text-6xl text-gold mb-4 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">Rota dos Museus</h2>
+                    <p class="font-montserrat text-gray-400 tracking-[0.3em] uppercase text-sm">Circuito Histórico & Cultural</p>
+                </div>
+
+                <div class="flex flex-col gap-20 relative">
+                    
+                    <!-- MUSEUM ITEM 1 (LEFT) -->
+                    <div class="museum-row flex flex-col lg:flex-row items-center justify-center w-full gap-12 relative">
+                         <!-- Node Indicator -->
+                         <div class="absolute left-[-13px] lg:left-1/2 lg:-translate-x-1/2 top-0 w-6 h-6 rounded-full border-2 border-gold bg-[#0D0D0D] z-20 shadow-[0_0_15px_#D4AF37] hidden md:block"></div>
+                         
+                         <div class="w-full lg:w-5/12 flex justify-end order-2 lg:order-1">
+                             <div class="museum-card p-8 bg-[#151515] border border-white/10 rounded-xl w-full hover:border-gold/50 transition-all duration-500 group reveal-left">
+                                 <h3 class="font-cinzel text-xl text-white mb-2 group-hover:text-gold transition-colors">Museu da Capela N.S. das Dores</h3>
+                                 <p class="font-montserrat text-xs text-gray-400 mb-4 uppercase tracking-wider">Memorial Dominicanas de Monteils</p>
+                                 <div class="flex flex-col gap-2 text-sm text-gray-300 font-light">
+                                     <div class="flex items-start gap-2"><span class="text-gold">📍</span> Praça Tomás Ulhôa, 340 - Bairro Abadia</div>
+                                     <div class="flex items-center gap-2"><span class="text-gold">📞</span> (34) 3331-9937</div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="w-full lg:w-5/12 order-1 lg:order-2 hidden lg:block"></div> <!-- Spacer -->
+                    </div>
+
+                    <!-- MUSEUM ITEM 2 (RIGHT) -->
+                    <div class="museum-row flex flex-col lg:flex-row items-center justify-center w-full gap-12 relative">
+                         <div class="absolute left-[-13px] lg:left-1/2 lg:-translate-x-1/2 top-0 w-6 h-6 rounded-full border-2 border-gold bg-[#0D0D0D] z-20 shadow-[0_0_15px_#D4AF37] hidden md:block"></div>
+                         <div class="w-full lg:w-5/12 hidden lg:block"></div> <!-- Spacer -->
+                         <div class="w-full lg:w-5/12">
+                             <div class="museum-card p-8 bg-[#151515] border border-white/10 rounded-xl w-full hover:border-gold/50 transition-all duration-500 group reveal-right">
+                                 <h3 class="font-cinzel text-xl text-white mb-2 group-hover:text-gold transition-colors">Igreja Santa Rita</h3>
+                                 <p class="font-montserrat text-xs text-gray-400 mb-4 uppercase tracking-wider">Museu de Arte Sacra</p>
+                                 <div class="flex flex-col gap-2 text-sm text-gray-300 font-light">
+                                     <div class="flex items-start gap-2"><span class="text-gold">📍</span> Praça Manoel Terra S/Nº – Centro</div>
+                                     <div class="flex items-center gap-2"><span class="text-gold">📞</span> (34) 3331-9200</div>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+
+                    <!-- MUSEUM ITEM 3 (LEFT) -->
+                    <div class="museum-row flex flex-col lg:flex-row items-center justify-center w-full gap-12 relative">
+                         <div class="absolute left-[-13px] lg:left-1/2 lg:-translate-x-1/2 top-0 w-6 h-6 rounded-full border-2 border-gold bg-[#0D0D0D] z-20 shadow-[0_0_15px_#D4AF37] hidden md:block"></div>
+                         <div class="w-full lg:w-5/12 flex justify-end order-2 lg:order-1">
+                             <div class="museum-card p-8 bg-[#151515] border border-white/10 rounded-xl w-full hover:border-gold/50 transition-all duration-500 group reveal-left">
+                                 <h3 class="font-cinzel text-xl text-white mb-2 group-hover:text-gold transition-colors">Museu de Arte Decorativa – MADA</h3>
+                                 <p class="font-montserrat text-xs text-gray-400 mb-4 uppercase tracking-wider">Residencial Dr. Abel Reis</p>
+                                 <div class="flex flex-col gap-2 text-sm text-gray-300 font-light">
+                                     <div class="flex items-start gap-2"><span class="text-gold">📍</span> Rua Maria de Lourdes Melo Coli, 30</div>
+                                     <div class="flex items-center gap-2"><span class="text-gold">📞</span> (34) 3338-9409</div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="w-full lg:w-5/12 order-1 lg:order-2 hidden lg:block"></div> <!-- Spacer -->
+                    </div>
+
+                    <!-- MUSEUM ITEM 4 (RIGHT) -->
+                    <div class="museum-row flex flex-col lg:flex-row items-center justify-center w-full gap-12 relative">
+                         <div class="absolute left-[-13px] lg:left-1/2 lg:-translate-x-1/2 top-0 w-6 h-6 rounded-full border-2 border-gold bg-[#0D0D0D] z-20 shadow-[0_0_15px_#D4AF37] hidden md:block"></div>
+                         <div class="w-full lg:w-5/12 hidden lg:block"></div> <!-- Spacer -->
+                         <div class="w-full lg:w-5/12">
+                             <div class="museum-card p-8 bg-[#151515] border border-white/10 rounded-xl w-full hover:border-gold/50 transition-all duration-500 group reveal-right">
+                                 <h3 class="font-cinzel text-xl text-white mb-2 group-hover:text-gold transition-colors">Sítio Histórico e Cultural ABCZ</h3>
+                                 <p class="font-montserrat text-xs text-gray-400 mb-4 uppercase tracking-wider">Parque Fernando Costa</p>
+                                 <div class="flex flex-col gap-2 text-sm text-gray-300 font-light">
+                                     <div class="flex items-start gap-2"><span class="text-gold">📍</span> Praça Vicentino Rodrigues da Cunha, 110</div>
+                                     <div class="flex items-center gap-2"><span class="text-gold">📞</span> (34) 3319-9900</div>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+
+                    <!-- MUSEUM ITEM 5 (LEFT) -->
+                    <div class="museum-row flex flex-col lg:flex-row items-center justify-center w-full gap-12 relative">
+                         <div class="absolute left-[-13px] lg:left-1/2 lg:-translate-x-1/2 top-0 w-6 h-6 rounded-full border-2 border-gold bg-[#0D0D0D] z-20 shadow-[0_0_15px_#D4AF37] hidden md:block"></div>
+                         <div class="w-full lg:w-5/12 flex justify-end order-2 lg:order-1">
+                             <div class="museum-card p-8 bg-[#151515] border border-white/10 rounded-xl w-full hover:border-gold/50 transition-all duration-500 group reveal-left">
+                                 <h3 class="font-cinzel text-xl text-white mb-2 group-hover:text-gold transition-colors">Museu da Memória do Judiciário</h3>
+                                 <p class="font-montserrat text-xs text-gray-400 mb-4 uppercase tracking-wider">Bairro Mercês</p>
+                                 <div class="flex flex-col gap-2 text-sm text-gray-300 font-light">
+                                     <div class="flex items-start gap-2"><span class="text-gold">📍</span> Av. Maranhão 1580</div>
+                                     <div class="flex items-center gap-2"><span class="text-gold">📞</span> (34) 3319-2802</div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="w-full lg:w-5/12 order-1 lg:order-2 hidden lg:block"></div> <!-- Spacer -->
+                    </div>
+
+                    <!-- MUSEUM ITEM 6 (RIGHT) -->
+                    <div class="museum-row flex flex-col lg:flex-row items-center justify-center w-full gap-12 relative">
+                         <div class="absolute left-[-13px] lg:left-1/2 lg:-translate-x-1/2 top-0 w-6 h-6 rounded-full border-2 border-gold bg-[#0D0D0D] z-20 shadow-[0_0_15px_#D4AF37] hidden md:block"></div>
+                         <div class="w-full lg:w-5/12 hidden lg:block"></div> <!-- Spacer -->
+                         <div class="w-full lg:w-5/12">
+                             <div class="museum-card p-8 bg-[#151515] border border-white/10 rounded-xl w-full hover:border-gold/50 transition-all duration-500 group reveal-right">
+                                 <h3 class="font-cinzel text-xl text-white mb-2 group-hover:text-gold transition-colors">Museu do Comércio</h3>
+                                 <p class="font-montserrat text-xs text-gray-400 mb-4 uppercase tracking-wider">Bairro Fabrício</p>
+                                 <div class="flex flex-col gap-2 text-sm text-gray-300 font-light">
+                                     <div class="flex items-start gap-2"><span class="text-gold">📍</span> Rua Luís Soares, 520</div>
+                                     <div class="flex items-center gap-2"><span class="text-gold">📞</span> (34) 3319-4400</div>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+
+                    <!-- MUSEUM ITEM 7 (LEFT) -->
+                    <div class="museum-row flex flex-col lg:flex-row items-center justify-center w-full gap-12 relative">
+                         <div class="absolute left-[-13px] lg:left-1/2 lg:-translate-x-1/2 top-0 w-6 h-6 rounded-full border-2 border-gold bg-[#0D0D0D] z-20 shadow-[0_0_15px_#D4AF37] hidden md:block"></div>
+                         <div class="w-full lg:w-5/12 flex justify-end order-2 lg:order-1">
+                             <div class="museum-card p-8 bg-[#151515] border border-white/10 rounded-xl w-full hover:border-gold/50 transition-all duration-500 group reveal-left">
+                                 <h3 class="font-cinzel text-xl text-white mb-2 group-hover:text-gold transition-colors">Museu da Nossa Gente</h3>
+                                 <p class="font-montserrat text-xs text-gray-400 mb-4 uppercase tracking-wider">Bairro Mercês</p>
+                                 <div class="flex flex-col gap-2 text-sm text-gray-300 font-light">
+                                     <div class="flex items-start gap-2"><span class="text-gold">📍</span> Av. Maranhão 1580</div>
+                                     <div class="flex items-center gap-2"><span class="text-gold">📞</span> (34) 3319-2802</div>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="w-full lg:w-5/12 order-1 lg:order-2 hidden lg:block"></div> <!-- Spacer -->
+                    </div>
+
+                    <!-- MUSEUM ITEM 8 (RIGHT) -->
+                    <div class="museum-row flex flex-col lg:flex-row items-center justify-center w-full gap-12 relative">
+                         <div class="absolute left-[-13px] lg:left-1/2 lg:-translate-x-1/2 top-0 w-6 h-6 rounded-full border-2 border-gold bg-[#0D0D0D] z-20 shadow-[0_0_15px_#D4AF37] hidden md:block"></div>
+                         <div class="w-full lg:w-5/12 hidden lg:block"></div> <!-- Spacer -->
+                         <div class="w-full lg:w-5/12">
+                             <div class="museum-card p-8 bg-[#151515] border border-white/10 rounded-xl w-full hover:border-gold/50 transition-all duration-500 group reveal-right">
+                                 <h3 class="font-cinzel text-xl text-white mb-2 group-hover:text-gold transition-colors">Centro de Artesanato de Uberaba</h3>
+                                 <p class="font-montserrat text-xs text-gray-400 mb-4 uppercase tracking-wider">Centro</p>
+                                 <div class="flex flex-col gap-2 text-sm text-gray-300 font-light">
+                                     <div class="flex items-start gap-2"><span class="text-gold">📍</span> Rua Senador Pena, 358</div>
+                                     <div class="flex items-center gap-2"><span class="text-gold">📞</span> (34) 3312-6822</div>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. CIDADE UNIVERSITÁRIA -->
+        <section id="university-city" class="relative min-h-screen bg-deepblack text-white py-20 overflow-hidden z-10 flex flex-col justify-center">
+            <!-- Title -->
+            <div class="container mx-auto px-6 mb-12 text-center">
+                 <h2 class="font-cinzel text-4xl md:text-6xl text-gold mb-4">Cidade Universitária</h2>
+                 <p class="font-montserrat text-gray-400 max-w-2xl mx-auto">Um polo de conhecimento que atrai estudantes de todo o país.</p>
+            </div>
+
+            <!-- Carousel/Grid -->
+            <div class="uni-carousel-container w-full overflow-x-auto pb-10 px-6 md:px-0 md:overflow-visible md:w-auto md:flex md:justify-center md:gap-8 snap-x snap-mandatory">
+                 <!-- Card 1: UFTM -->
+                 <div class="uni-card relative w-80 md:w-96 h-[500px] flex-shrink-0 snap-center group cursor-pointer overflow-hidden rounded-lg border border-white/10">
+                      <img src="UFTM.png" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="UFTM Building">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 md:opacity-60 transition-opacity duration-500 group-hover:opacity-90"></div>
+                      <div class="absolute bottom-0 left-0 w-full p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                          <h3 class="font-cinzel text-2xl text-gold mb-2">UFTM</h3>
+                          <p class="font-montserrat text-sm text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                               Universidade Federal do Triângulo Mineiro. Excelência em saúde e engenharias, referência nacional em pesquisa e extensão.
+                          </p>
+                      </div>
+                 </div>
+
+                 <!-- Card 2: UNIUBE -->
+                 <div class="uni-card relative w-80 md:w-96 h-[500px] flex-shrink-0 snap-center group cursor-pointer overflow-hidden rounded-lg border border-white/10">
+                      <img src="UNIUBE.webp" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="UNIUBE Campus">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 md:opacity-60 transition-opacity duration-500 group-hover:opacity-90"></div>
+                      <div class="absolute bottom-0 left-0 w-full p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                          <h3 class="font-cinzel text-2xl text-gold mb-2">UNIUBE</h3>
+                          <p class="font-montserrat text-sm text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                               Universidade de Uberaba. Tradição e inovação com um dos maiores campi privados do estado.
+                          </p>
+                      </div>
+                 </div>
+
+                 <!-- Card 3: FAZU -->
+                 <div class="uni-card relative w-80 md:w-96 h-[500px] flex-shrink-0 snap-center group cursor-pointer overflow-hidden rounded-lg border border-white/10">
+                      <img src="FAZU.webp" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="FAZU Campus">
+                      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 md:opacity-60 transition-opacity duration-500 group-hover:opacity-90"></div>
+                      <div class="absolute bottom-0 left-0 w-full p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                          <h3 class="font-cinzel text-2xl text-gold mb-2">FAZU</h3>
+                          <p class="font-montserrat text-sm text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                               Faculdades Associadas de Uberaba. Liderança mundial no ensino de ciências agrárias e zootecnia.
+                          </p>
+                      </div>
+                 </div>
+
+                 <!-- Card 4: IFTM -->
+                 <div class="uni-card relative w-80 md:w-96 h-[500px] flex-shrink-0 snap-center group cursor-pointer overflow-hidden rounded-lg border border-white/10">
+                    <img src="IFTM.jpg" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="IFTM Campus">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80 md:opacity-60 transition-opacity duration-500 group-hover:opacity-90"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <h3 class="font-cinzel text-2xl text-gold mb-2">IFTM</h3>
+                        <p class="font-montserrat text-sm text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                            Instituto Federal do Triângulo Mineiro. Referência em ensino técnico, tecnológico e superior, impulsionando a inovação e o desenvolvimento regional.
+                        </p>
+                    </div>
+               </div>
+            </div>
+
+            <!-- ANIMATED STUDENT COUNTER (NOVO) -->
+            <div class="container mx-auto mt-16 text-center">
+                <div class="student-counter-container reveal-up">
+                    <span class="text-gold text-5xl md:text-7xl font-cinzel font-bold" id="student-counter">0</span>
+                    <span class="text-gold text-5xl md:text-7xl font-cinzel font-bold">+</span>
+                    <p class="text-white/60 uppercase tracking-widest mt-2 font-montserrat">Estudantes Universitários</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PATRIMÔNIO RELIGIOSO -->
+        <section id="religious-architecture" class="relative z-10">
+            <div class="religious-line"></div>
+            <div class="relative min-h-screen flex flex-col justify-center items-center py-24 border-b border-gold/10 bg-black/95">
+                <div class="text-center mb-20 z-10 reveal-up">
+                    <h2 class="font-cinzel text-4xl md:text-5xl text-gold mb-4">Patrimônio Sagrado</h2>
+                    <p class="font-montserrat text-gray-400 tracking-widest uppercase text-sm">Ato I: Fé & História</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto px-6 w-full z-10">
+                    <div class="church-card group reveal-up">
+                        <div class="church-img-wrapper">
+                            <img src="CAPELA NOSSA SENHORA DAS DORES.webp" alt="Capela N.S. Dores" class="church-img">
+                        </div>
+                        <div class="church-content">
+                            <div>
+                                <h3 class="church-title">Capela Nossa Senhora das Dores</h3>
+                                <p class="text-gold text-xs mb-4 font-mono church-meta">1926 | Neo-Românico</p>
+                                <p class="church-desc">Projetada pelo arquiteto Padre Everard e concluída em 1930. É o único órgão de preservação da memória das Irmãs Dominicanas, atuando há mais de 123 anos no Brasil.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="church-card group reveal-up" style="transition-delay: 0.1s">
+                        <div class="church-img-wrapper">
+                            <img src="CATEDRAL METROPOLITANA.jpg" alt="Catedral Metropolitana" class="church-img">
+                        </div>
+                        <div class="church-content">
+                            <div>
+                                <h3 class="church-title">Catedral Metropolitana</h3>
+                                <p class="text-gold text-xs mb-4 font-mono church-meta">1820-1907 | Neogótico</p>
+                                <p class="church-desc">Elevada à Arquidiocese em 1962. Conserva o estilo neogótico original com frontispício projetado por Ataliba Valle. O coração da fé católica em Uberaba.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="church-card group reveal-up" style="transition-delay: 0.2s">
+                        <div class="church-img-wrapper">
+                            <img src="IGREJA SANTA RITA.JPG" alt="Igreja Santa Rita" class="church-img">
+                        </div>
+                        <div class="church-content">
+                            <div>
+                                <h3 class="church-title">Igreja Santa Rita</h3>
+                                <p class="text-gold text-xs mb-4 font-mono church-meta">1854 | Tombada IPHAN</p>
+                                <p class="church-desc">Único imóvel do Triângulo Mineiro tombado pelo Patrimônio Histórico Nacional. Construída por promessa, hoje abriga o precioso Museu de Arte Sacra.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="relative min-h-screen flex flex-col justify-center items-center py-24 bg-black">
+                <div class="text-center mb-20 z-10 reveal-up">
+                    <h2 class="font-cinzel text-4xl md:text-5xl text-gold mb-4">Arquitetura Divina</h2>
+                    <p class="font-montserrat text-gray-400 tracking-widest uppercase text-sm">Ato II: Devoção & Arte</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto px-6 w-full z-10">
+                    <div class="church-card group reveal-up">
+                        <div class="church-img-wrapper">
+                            <img src="IGREJA SÃO DOMINGOS.webp" alt="Igreja São Domingos" class="church-img">
+                        </div>
+                        <div class="church-content">
+                            <div>
+                                <h3 class="church-title">Igreja São Domingos</h3>
+                                <p class="text-gold text-xs mb-4 font-mono church-meta">1904 | Pedra Tapiocanga</p>
+                                <p class="church-desc">Marco da Ordem Dominicana. Impressiona com sua capela-mor em pedra tapiocanga e torres revestidas em cobre inglês. Um ícone neogótico.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="church-card group reveal-up" style="transition-delay: 0.1s">
+                        <div class="church-img-wrapper">
+                            <img src="SANTUÁRIO DA MEDALHA MILAGROSA.jpg" alt="Santuário Medalha Milagrosa" class="church-img">
+                        </div>
+                        <div class="church-content">
+                            <div>
+                                <h3 class="church-title">Santuário da Medalha Milagrosa</h3>
+                                <p class="text-gold text-xs mb-4 font-mono church-meta">1961 | Modernista</p>
+                                <p class="church-desc">Arquitetura original para 5 mil pessoas, projetada por Nicolau Laterza. Destaca-se pela decoração interna em gesso e sua imponente fachada em arcos.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="church-card group reveal-up" style="transition-delay: 0.2s">
+                        <div class="church-img-wrapper">
+                            <img src="SANTUÁRIO DE NOSSA SENHORA DA ABADIA.jpg" alt="Santuário N.S. da Abadia" class="church-img">
+                        </div>
+                        <div class="church-content">
+                            <div>
+                                <h3 class="church-title">Santuário de N.S. da Abadia</h3>
+                                <p class="text-gold text-xs mb-4 font-mono church-meta">1881 | Padroeira</p>
+                                <p class="church-desc">Lar da padroeira de Uberaba. Administrada pelos Padres Estigmatinos, possui uma imagem de 4,40m na torre e fachada adornada com anjos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VAREJO & ESTILO -->
+        <section id="retail-section" class="relative bg-zinc-900 text-white py-24 overflow-hidden z-10">
+            <div class="container mx-auto px-6 mb-20 text-center reveal-up">
+                <h2 class="font-cinzel text-4xl md:text-6xl text-gold mb-4 tracking-wide">Varejo & Estilo</h2>
+                <p class="font-montserrat text-gray-400 text-lg uppercase tracking-widest">Onde a economia pulsa forte</p>
+            </div>
+            <div class="container mx-auto px-6 flex flex-col gap-24">
+                <div class="flex flex-col lg:flex-row gap-10 items-center reveal-up">
+                    <div class="lg:w-1/3 flex flex-col gap-8">
+                        <h3 class="font-cinzel text-3xl text-white border-l-4 border-gold pl-6">Grandes Centros Modernos</h3>
+                        <div class="space-y-6">
+                            <div class="bg-white/5 p-6 rounded-r-xl border-l-2 border-white/20 hover:border-gold transition duration-300 group cursor-default">
+                                <h4 class="font-cinzel text-xl text-gold mb-2 group-hover:translate-x-2 transition-transform">Shopping Uberaba</h4>
+                                <p class="font-montserrat text-sm text-gray-300 leading-relaxed">O ícone da região. O principal destino de experiências, unindo um mix sofisticado de lojas a um polo gastronômico vibrante e eventos exclusivos.</p>
+                            </div>
+                            <div class="bg-white/5 p-6 rounded-r-xl border-l-2 border-white/20 hover:border-gold transition duration-300 group cursor-default">
+                                <h4 class="font-cinzel text-xl text-gold mb-2 group-hover:translate-x-2 transition-transform">Praça Uberaba Shopping</h4>
+                                <p class="font-montserrat text-sm text-gray-300 leading-relaxed">Contemporâneo. Redefine a conveniência com a mais moderna estrutura de cinema da cidade, academia de ponta e facilidades essenciais.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4 h-[500px]">
+                        <div class="retail-card relative rounded-lg overflow-hidden h-full">
+                            <img src="UberabaShoping1.jpg" alt="Shopping Uberaba" class="retail-block-img">
+                            <div class="absolute inset-0 retail-overlay"></div>
+                            <span class="absolute bottom-4 left-4 text-gold font-cinzel text-sm tracking-widest">Shopping Uberaba</span>
+                        </div>
+                        <div class="retail-card relative rounded-lg overflow-hidden h-full">
+                            <img src="praçashopping1.webp" alt="Praça Uberaba Shopping" class="retail-block-img">
+                            <div class="absolute inset-0 retail-overlay"></div>
+                            <span class="absolute bottom-4 left-4 text-gold font-cinzel text-sm tracking-widest">Praça Uberaba Shopping</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent"></div>
+                <div class="flex flex-col lg:flex-row-reverse gap-10 items-center reveal-up">
+                    <div class="lg:w-1/3 flex flex-col gap-8 text-right">
+                        <h3 class="font-cinzel text-3xl text-white border-r-4 border-gold pr-6">A Força do Centro</h3>
+                        <div class="space-y-6">
+                            <div class="bg-white/5 p-6 rounded-l-xl border-r-2 border-white/20 hover:border-gold transition duration-300 group cursor-default">
+                                <h4 class="font-cinzel text-xl text-gold mb-2 group-hover:-translate-x-2 transition-transform">O Calçadão</h4>
+                                <p class="font-montserrat text-sm text-gray-300 leading-relaxed">Um verdadeiro shopping a céu aberto. A energia vital da cidade, onde a economia popular ferve entre magazines gigantes e o dinamismo do setor bancário.</p>
+                            </div>
+                            <div class="bg-white/5 p-6 rounded-l-xl border-r-2 border-white/20 hover:border-gold transition duration-300 group cursor-default">
+                                <h4 class="font-cinzel text-xl text-gold mb-2 group-hover:-translate-x-2 transition-transform">Galerias & Conectividade</h4>
+                                <p class="font-montserrat text-sm text-gray-300 leading-relaxed">Ícones como o <strong>Manhattan Center</strong> e o <strong>Shopping José Generoso Lenza</strong> oferecem a agilidade e os serviços essenciais que conectam quem vive o dia a dia da cidade.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:w-2/3 grid grid-cols-2 gap-4 h-[500px]">
+                        <div class="retail-card relative rounded-lg overflow-hidden h-full">
+                            <img src="calçadao.jpg" alt="Galeria Interior" class="retail-block-img filter grayscale hover:grayscale-0">
+                            <div class="absolute inset-0 retail-overlay"></div>
+                            <span class="absolute bottom-4 right-4 text-gold font-cinzel text-sm tracking-widest">Calçadão</span>
+                        </div>
+                        <div class="retail-card relative rounded-lg overflow-hidden h-full">
+                            <img src="manhatam.jpg" alt="Conectividade" class="retail-block-img filter grayscale hover:grayscale-0">
+                            <div class="absolute inset-0 retail-overlay"></div>
+                            <span class="absolute bottom-4 right-4 text-gold font-cinzel text-sm tracking-widest">Manhattan Center</span>
+                        </div>
+                        <div class="retail-card relative rounded-lg overflow-hidden h-full col-span-2">
+                            <img src="shopping2.png" alt="Calçadão Panorâmica" class="retail-block-img filter sepia hover:sepia-0">
+                            <div class="absolute inset-0 retail-overlay"></div>
+                            <span class="absolute bottom-4 right-4 text-gold font-cinzel text-sm tracking-widest">Shopping José Generoso Lenza</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center max-w-3xl mx-auto mt-10 reveal-up">
+                    <p class="font-montserrat text-gray-400 italic border-t border-b border-white/10 py-6">"Do conforto do ar-condicionado das grifes internacionais ao movimento autêntico do calçadão, Uberaba prova que está pronta para atender, com excelência, qualquer perfil de consumidor."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CIA (COPA INTER ATLÉTICAS) -->
+        <section id="cia-experience">
+            <div class="cia-spotlights" id="cia-default-bg">
+                <div class="cia-spot"></div>
+                <div class="cia-spot"></div>
+            </div>
+            <div class="cia-bg-layer" id="cia-bg-arena" style="background-image: url('ARENA.avif');"></div>
+            <div class="cia-bg-layer" id="cia-bg-jogos" style="background-image: url('jogos\ cia.jpg');"></div>
+            <div class="cia-bg-layer" id="cia-bg-lineup" style="background-image: url('artistas.png');"></div>
+            <div class="cia-bg-layer" id="cia-bg-impacto" style="background-image: url('impacto.jpg');"></div>
+
+            <h2 class="cia-giant-text">C.I.A.</h2>
+
+            <div class="cia-content-grid">
+                <div class="cia-text-block reveal-up">
+                    <h2 class="cia-title">A MAIOR<br><span class="text-ciaOrange font-black">INTEGRAÇÃO</span><br>DO BRASIL</h2>
+                    <p class="cia-subtitle">Copa Inter Atléticas Uberaba</p>
+                    <p class="cia-desc font-montserrat mb-8">
+                        Não é apenas uma festa. É o evento que transforma a cidade. Mais de <strong>100 Atléticas</strong>, competições esportivas de alto nível e shows que param o país. A CIA é a pulsação jovem de Uberaba.
+                    </p>
+                </div>
+
+                <div class="cia-carousel-view reveal-up">
+                    <div class="cia-carousel-track">
+                        <div class="cia-card group" data-bg="cia-bg-arena">
+                            <span class="cia-card-icon">🏟️</span>
+                            <h4>A Arena</h4>
+                            <p>Uma estrutura colossal montada para receber milhares de universitários de todo o Brasil com segurança e tecnologia de ponta.</p>
+                        </div>
+                        <div class="cia-card group" data-bg="cia-bg-jogos">
+                            <span class="cia-card-icon">🏆</span>
+                            <h4>Jogos</h4>
+                            <p>Competições acirradas em diversas modalidades. O espírito esportivo encontra a rivalidade saudável nas quadras de Uberaba.</p>
+                        </div>
+                        <div class="cia-card group" data-bg="cia-bg-lineup">
+                            <span class="cia-card-icon">⚡</span>
+                            <h4>Line-Up</h4>
+                            <p>Os maiores artistas do cenário nacional em palcos simultâneos. Uma experiência visual e sonora inesquecível.</p>
+                        </div>
+                        <div class="cia-card group" data-bg="cia-bg-impacto">
+                            <span class="cia-card-icon">🚀</span>
+                            <h4>Impacto</h4>
+                            <p>Movimenta milhões na economia local, lotando hotéis e gerando empregos diretos e indiretos na região.</p>
+                        </div>
+                        <!-- Duplicados para Loop -->
+                        <div class="cia-card group" data-bg="cia-bg-arena">
+                            <span class="cia-card-icon">🏟️</span>
+                            <h4>A Arena</h4>
+                            <p>Uma estrutura colossal montada para receber milhares de universitários de todo o Brasil com segurança e tecnologia de ponta.</p>
+                        </div>
+                        <div class="cia-card group" data-bg="cia-bg-jogos">
+                            <span class="cia-card-icon">🏆</span>
+                            <h4>Jogos</h4>
+                            <p>Competições acirradas em diversas modalidades. O espírito esportivo encontra a rivalidade saudável nas quadras de Uberaba.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Ticker de Estatísticas Atualizado para Loop Infinito -->
+            <div class="cia-ticker">
+                <div class="cia-ticker-track-infinite">
+                    <span class="cia-stat-item">30 MIL PESSOAS <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">50 SHOWS <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">120 ATLÉTICAS <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">4 DIAS DE LOUCURA <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">100% OPEN BAR <span class="cia-stat-highlight">///</span></span>
+                    
+                    <span class="cia-stat-item">30 MIL PESSOAS <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">50 SHOWS <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">120 ATLÉTICAS <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">4 DIAS DE LOUCURA <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">100% OPEN BAR <span class="cia-stat-highlight">///</span></span>
+                    
+                    <span class="cia-stat-item">30 MIL PESSOAS <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">50 SHOWS <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">120 ATLÉTICAS <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">4 DIAS DE LOUCURA <span class="cia-stat-highlight">///</span></span>
+                    <span class="cia-stat-item">100% OPEN BAR <span class="cia-stat-highlight">///</span></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. LOGÍSTICA -->
+        <section id="logistics" class="relative bg-black text-white py-24 overflow-hidden z-10">
+            <div id="logistics-bg-default" class="absolute inset-0 z-0 opacity-20 transition-opacity duration-700" style="background-image: url('Uberaba3.png'); background-size: cover; background-position: center;"></div>
+            <div id="logistics-bg-tiub" class="absolute inset-0 z-0 opacity-0 transition-opacity duration-700" style="background-image: url('Trem.jpg'); background-size: cover; background-position: center;"></div>
+            <div id="logistics-bg-airport" class="absolute inset-0 z-0 opacity-0 transition-opacity duration-700" style="background-image: url('aeroporto.avif'); background-size: cover; background-position: center;"></div>
+            <div class="absolute inset-0 z-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none"></div>
+
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-20 reveal-up">
+                    <h2 class="font-cinzel text-4xl md:text-6xl text-gold mb-6">O Coração Logístico</h2>
+                    <p class="font-montserrat text-gray-300 max-w-2xl mx-auto text-lg">Onde o Brasil se conecta.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    <div id="card-tiub" class="logistics-card group relative overflow-hidden rounded-lg border border-gold/20 bg-coffee/30 p-8 hover:bg-coffee/50 transition duration-500 reveal-up">
+                        <h3 class="font-cinzel text-2xl md:text-3xl text-white mb-4 group-hover:text-gold transition">Terminal Integrador (TIUB)</h3>
+                        <p class="font-montserrat text-gray-300 leading-relaxed">Um gigante da eficiência operado pela <strong>VLI</strong>. Conectando a estratégia da BR-050 à malha ferroviária, o TIUB escoa a produção de grãos e açúcar direto para o Porto de Santos. Sua tecnologia exclusiva permite carregar trens inteiros sem desmembrá-los, redefinindo a velocidade logística.</p>
+                        <div class="absolute bottom-0 left-0 w-0 h-1 bg-gold group-hover:w-full transition-all duration-700"></div>
+                    </div>
+                    <div id="card-airport" class="logistics-card group relative overflow-hidden rounded-lg border border-gold/20 bg-coffee/30 p-8 hover:bg-coffee/50 transition duration-500 reveal-up">
+                        <h3 class="font-cinzel text-2xl md:text-3xl text-white mb-4 group-hover:text-gold transition">Aeroporto Mário de Almeida Franco</h3>
+                        <p class="font-montserrat text-gray-300 leading-relaxed">Uma nova era sob gestão da <strong>Aena Brasil</strong>. Com investimento maciço de <strong>R$ 150 milhões</strong>, a modernização dobrará a capacidade de passageiros. Localizado a apenas 3km do centro, é o diferencial definitivo para o turismo de negócios na região.</p>
+                        <div class="absolute bottom-0 left-0 w-0 h-1 bg-gold group-hover:w-full transition-all duration-700"></div>
+                    </div>
+                </div>
+                <div class="mt-20 text-center max-w-4xl mx-auto border-t border-white/10 pt-10 reveal-up">
+                    <p class="font-cinzel text-xl md:text-2xl text-gray-200 leading-relaxed">Essa infraestrutura robusta — unindo <span class="text-gold">Rodovia, Ferrovia e Aeroporto Moderno</span> — consolida Uberaba como o hub ideal para indústrias e logística de distribuição no centro do Brasil.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. UBERABA SPORT CLUB (USC) & UBERABÃO -->
+        <div id="usc-experience" class="relative z-20 bg-deepblack text-white overflow-hidden border-t-4 border-uscRed">
+            
+            <!-- SEÇÃO 1: PAIXÃO VERMELHA (USC HERO) -->
+            <section id="usc-hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+                <!-- BG dinâmico com fumaça vermelha -->
+                <div class="absolute inset-0 bg-[url('TorcidaUSC.jpg')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-deepblack via-uscDarkRed/50 to-deepblack opacity-90"></div>
+                
+                <!-- Overlay de pulsação -->
+                <div class="usc-pulse-overlay"></div>
+
+                <div class="container mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full">
+                    
+                    <!-- Coluna Texto -->
+                    <div class="text-center lg:text-left reveal-usc">
+                        <div class="inline-block border-2 border-white/20 px-4 py-1 rounded-full mb-6 backdrop-blur-sm bg-uscRed/20">
+                            <span class="font-russo text-sm uppercase tracking-widest text-white">Fundado em 1917</span>
+                        </div>
+                        <h2 class="font-russo text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 mb-2 tracking-tighter leading-none drop-shadow-2xl">
+                            UBERABA<br><span class="text-uscRed">SPORT CLUB</span>
+                        </h2>
+                        <p class="font-montserrat text-xl md:text-2xl text-gray-300 font-light tracking-widest uppercase mb-8">
+                            O Colorado • A Paixão do Triângulo
+                        </p>
+                        
+                    </div>
+
+                    <!-- Coluna Visual (Escudo 3D Parallax + Flip Card) -->
+                    <div class="relative flex items-center justify-center h-[50vh] lg:h-auto reveal-usc">
+                        <div class="usc-badge-glow absolute w-[300px] h-[300px] bg-uscRed rounded-full blur-[100px] opacity-40 animate-pulse"></div>
+                        
+                        <!-- 3D Flip Card Container -->
+                        <div class="usc-flip-container w-64 md:w-96 z-10 usc-parallax-badge">
+                            <div class="usc-flip-inner">
+                                <div class="usc-flip-front">
+                                    <img src="escudotime.jpg" alt="Escudo Uberaba Sport Club" class="w-full h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+                                </div>
+                                <div class="usc-flip-back">
+                                    <img src="mascote.png" alt="Mascote Zebu" class="w-full h-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="absolute -bottom-10 font-russo text-[10rem] text-white opacity-5 select-none pointer-events-none whitespace-nowrap">USC</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 2: O CALDEIRÃO (UBERABÃO + TÍTULOS) -->
+            <section id="usc-stadium" class="relative py-24 bg-[#0f0505]">
+                 <!-- MASCOTE GIGANTE SOBREPOSTO (MOVIDO PARA CÁ PARA POSICIONAMENTO RELATIVO) -->
+               <!--  <div class="usc-mascot-overlap">
+                    <img src="mascote.png" alt="Zebu Mascote Gigante" class="w-full h-full object-contain">
+                </div>-->
+
+                <div class="container mx-auto px-6 relative z-20">
+                    
+                    <!-- Info Estádio -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-24 items-end">
+                        <div class="lg:col-span-4 reveal-usc">
+                            <h3 class="font-russo text-4xl md:text-5xl text-white mb-4 uppercase">O Caldeirão<br><span class="text-uscRed">Uberabão</span></h3>
+                            <div class="h-1 w-20 bg-uscRed mb-6"></div>
+                            <p class="font-montserrat text-gray-400 leading-relaxed mb-6">
+                                O Estádio Municipal Engenheiro João Guido, carinhosamente conhecido como Uberabão, é o palco onde a história acontece.
+                            </p>
+                            <div class="flex flex-col gap-4">
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                    <span class="text-gray-500 uppercase text-sm">Capacidade</span>
+                                    <span class="font-russo text-xl text-white">15.306</span>
+                                </div>
+                                <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                    <span class="text-gray-500 uppercase text-sm">Localização</span>
+                                    <span class="font-russo text-xl text-white">Uberaba, MG</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-8 h-[400px] relative rounded-2xl overflow-hidden border border-white/10 group reveal-usc shadow-2xl shadow-uscRed/10">
+                            <img src="uberabão.jpg" alt="Estádio Uberabão" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
+                            <div class="absolute inset-0 bg-gradient-to-r from-[#0f0505] via-transparent to-transparent"></div>
+                        </div>
+                    </div>
+
+                    <!-- Sala de Troféus (Grid) -->
+                    <div class="relative">
+                        <div class="text-center mb-12 reveal-usc">
+                            <h3 class="font-cinzel text-3xl text-white mb-2">Glórias & Conquistas</h3>
+                            <p class="font-montserrat text-sm text-uscRed uppercase tracking-[0.3em]">Hall da Fama</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <!-- Card 1 -->
+                            <div class="trophy-card p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-uscRed/90 hover:border-uscRed transition-all duration-500 group cursor-default reveal-usc">
+                                <div class="text-4xl mb-4 opacity-50 group-hover:opacity-100 group-hover:text-white text-uscRed transition">🏆</div>
+                                <h4 class="font-russo text-white text-lg mb-1">Módulo II</h4>
+                                <p class="text-gray-400 text-sm group-hover:text-white/90 mb-3">Campeão Mineiro 2003</p>
+                                <div class="w-full h-[2px] bg-white/10 group-hover:bg-white/40"></div>
+                            </div>
+
+                            <!-- Card 2 -->
+                            <div class="trophy-card p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-uscRed/90 hover:border-uscRed transition-all duration-500 group cursor-default reveal-usc">
+                                <div class="text-4xl mb-4 opacity-50 group-hover:opacity-100 group-hover:text-white text-uscRed transition">🥈</div>
+                                <h4 class="font-russo text-white text-lg mb-1">2ª Divisão</h4>
+                                <p class="text-gray-400 text-sm group-hover:text-white/90 mb-3">Bicampeão Mineiro</p>
+                                <div class="w-full h-[2px] bg-white/10 group-hover:bg-white/40"></div>
+                            </div>
+
+                            <!-- Card 3 -->
+                            <div class="trophy-card p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-uscRed/90 hover:border-uscRed transition-all duration-500 group cursor-default reveal-usc">
+                                <div class="text-4xl mb-4 opacity-50 group-hover:opacity-100 group-hover:text-white text-uscRed transition">⚔️</div>
+                                <h4 class="font-russo text-white text-lg mb-1">Taça Minas</h4>
+                                <p class="text-gray-400 text-sm group-hover:text-white/90 mb-3">Tricampeão</p>
+                                <div class="w-full h-[2px] bg-white/10 group-hover:bg-white/40"></div>
+                            </div>
+
+                             <!-- Card 4 -->
+                             <div class="trophy-card p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-uscRed/90 hover:border-uscRed transition-all duration-500 group cursor-default reveal-usc">
+                                <div class="text-4xl mb-4 opacity-50 group-hover:opacity-100 group-hover:text-white text-uscRed transition">🇧🇷</div>
+                                <h4 class="font-russo text-white text-lg mb-1">Brasileirão</h4>
+                                <p class="text-gray-400 text-sm group-hover:text-white/90 mb-3">6x Participações na Elite</p>
+                                <div class="w-full h-[2px] bg-white/10 group-hover:bg-white/40"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+
+        <!-- RODAPÉ INTERATIVO "COMMAND CENTER" -->
+        <footer id="ultra-footer" class="bg-[#050505] border-t border-gold/20 relative z-10 text-white overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 pointer-events-none"></div>
+            
+            <div class="container mx-auto px-6 py-12 relative z-10">
+                
+                <!-- HEADER DO FOOTER (BRANDING + EASTER EGG) -->
+                <div class="flex flex-col md:flex-row justify-between items-center mb-12 border-b border-white/10 pb-8 gap-6">
+                    <div class="flex items-center gap-6">
+                        <div class="text-center md:text-left relative group" id="footer-egg-container">
+                            <h2 id="footer-city-name" class="font-cinzel text-3xl md:text-4xl text-gold cursor-pointer transition-all duration-500 group-hover:text-white select-none">
+                                UBERABA <span class="text-sm text-gray-500 block md:inline md:ml-2 font-montserrat font-light tracking-widest">/// M.G.</span>
+                            </h2>
+                             <!-- Ovos de Páscoa (Imagem Oculta) -->
+                            <div id="footer-egg-content" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden opacity-0 z-50 w-full justify-center pointer-events-none transition-all duration-500">
+                                 <a href="https://portal.uberaba.mg.gov.br/" target="_blank" class="hover:scale-110 transition-transform duration-300 pointer-events-auto block">
+                                     <img src="prefeitura 4.png" alt="Portal Uberaba" class="h-24 w-auto object-contain drop-shadow-[0_0_15px_#D4AF37]">
+                                 </a>
+                            </div>
+                        </div>
+                        
+                        <!-- BOTÃO DO HINO (TRIGGER MODAL) -->
+                        <button onclick="openAnthem()" class="anthem-trigger group relative flex items-center gap-3 px-5 py-2 bg-white/5 border border-gold/30 rounded-full hover:bg-gold/10 transition-all duration-300">
+                            <div class="w-8 h-8 rounded-full border border-gold flex items-center justify-center group-hover:rotate-90 transition-transform duration-700">
+                                <span class="text-lg">🎵</span>
+                            </div>
+                            <div class="flex flex-col text-left">
+                                <span class="text-[10px] text-gray-400 uppercase tracking-widest">Hino Oficial</span>
+                                <span class="text-sm font-cinzel text-gold group-hover:text-white transition-colors">Ouvir Agora</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-4 items-center">
+                         <!-- BOTÃO DE GUIAS -->
+                         <a href="uberaba-guias.html" class="inline-flex items-center justify-center px-6 py-2 font-cinzel font-medium text-gold transition duration-300 ease-out border border-gold/50 rounded-full shadow-md hover:bg-gold hover:text-black hover:shadow-[0_0_20px_rgba(212,175,55,0.6)]">
+                            Uberaba Experience
+                         </a>
+                         
+                         <!-- NOVO BOTÃO: CONEXÃO UBERABA -->
+                         <a href="conexao-uberaba.html" class="inline-flex items-center justify-center px-6 py-2 font-cinzel font-medium text-neonblue transition duration-300 ease-out border border-neonblue/50 rounded-full shadow-md hover:bg-neonblue hover:text-black hover:shadow-[0_0_20px_rgba(0,243,255,0.6)]">
+                             Conexão Uberaba
+                         </a>
+                    </div>
+                </div>
+
+                <!-- GRID DE EMERGÊNCIA E SERVIÇOS -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    
+                    <!-- COLUNA 1: TRANSPORTE & CONEXÃO -->
+                    <div class="footer-col">
+                        <h3 class="font-cinzel text-gold text-lg mb-6 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-gold rounded-full animate-pulse"></span> Transporte
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="contact-card group">
+                                <div class="icon-box border border-gray-700 group-hover:border-gold text-gray-400 group-hover:text-gold">✈️</div>
+                                <div class="info-box">
+                                    <span class="label">Aeroporto</span>
+                                    <span class="number">(34) 3319-9400</span>
+                                </div>
+                                <div class="card-bg"></div>
+                            </div>
+                            <div class="contact-card group">
+                                <div class="icon-box border border-gray-700 group-hover:border-gold text-gray-400 group-hover:text-gold">🚌</div>
+                                <div class="info-box">
+                                    <span class="label">Rodoviária</span>
+                                    <span class="number">(34) 3336-1458</span>
+                                </div>
+                                <div class="card-bg"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUNA 2: SEGURANÇA E ORDEM -->
+                    <div class="footer-col">
+                        <h3 class="font-cinzel text-blue-400 text-lg mb-6 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span> Segurança
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="contact-card group security">
+                                <div class="icon-box border border-gray-700 group-hover:border-blue-500 text-gray-400 group-hover:text-blue-500">👮</div>
+                                <div class="info-box">
+                                    <span class="label">Polícia Militar</span>
+                                    <span class="number text-lg font-bold text-white group-hover:text-blue-400 transition">190 <span class="text-xs font-normal text-gray-500 ml-2">/ (34) 3318-3800</span></span>
+                                </div>
+                                <div class="card-bg bg-blue-900/20"></div>
+                            </div>
+                            <div class="contact-card group security">
+                                <div class="icon-box border border-gray-700 group-hover:border-blue-500 text-gray-400 group-hover:text-blue-500">🕵️</div>
+                                <div class="info-box">
+                                    <span class="label">Polícia Civil</span>
+                                    <span class="number">181 / (34) 3311-9109</span>
+                                </div>
+                                <div class="card-bg bg-blue-900/20"></div>
+                            </div>
+                            <div class="contact-card group security">
+                                <div class="icon-box border border-gray-700 group-hover:border-blue-500 text-gray-400 group-hover:text-blue-500">🛡️</div>
+                                <div class="info-box">
+                                    <span class="label">Polícia Federal</span>
+                                    <span class="number">(34) 2104-5200</span>
+                                </div>
+                                <div class="card-bg bg-blue-900/20"></div>
+                            </div>
+                            <div class="contact-card group fire">
+                                <div class="icon-box border border-gray-700 group-hover:border-red-500 text-gray-400 group-hover:text-red-500">🔥</div>
+                                <div class="info-box">
+                                    <span class="label">Bombeiros</span>
+                                    <span class="number text-lg font-bold text-white group-hover:text-red-500 transition">193 <span class="text-xs font-normal text-gray-500 ml-2">/ (34) 3316-2180</span></span>
+                                </div>
+                                <div class="card-bg bg-red-900/20"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUNA 3: SAÚDE E EMERGÊNCIA -->
+                    <div class="footer-col">
+                        <h3 class="font-cinzel text-red-500 text-lg mb-6 flex items-center gap-2">
+                            <span class="w-2 h-2 bg-red-600 rounded-full animate-pulse"></span> Saúde
+                        </h3>
+                        <div class="space-y-4">
+                             <div class="contact-card group health">
+                                <div class="icon-box border border-gray-700 group-hover:border-red-500 text-gray-400 group-hover:text-red-500">🚑</div>
+                                <div class="info-box">
+                                    <span class="label">SAMU</span>
+                                    <span class="number text-2xl font-russo text-white group-hover:text-red-500 transition">192</span>
+                                </div>
+                                <div class="card-bg bg-red-900/20"></div>
+                            </div>
+                             <div class="contact-card group health">
+                                <div class="icon-box border border-gray-700 group-hover:border-red-500 text-gray-400 group-hover:text-red-500">🏥</div>
+                                <div class="info-box">
+                                    <span class="label">Ambulância</span>
+                                    <span class="number">(34) 3336-6369</span>
+                                </div>
+                                <div class="card-bg bg-red-900/20"></div>
+                            </div>
+                             <div class="contact-card group health">
+                                <div class="icon-box border border-gray-700 group-hover:border-red-500 text-gray-400 group-hover:text-red-500">🩺</div>
+                                <div class="info-box">
+                                    <span class="label">Pronto-Socorro (Hosp. Escola)</span>
+                                    <span class="number">(34) 3318-5000</span>
+                                </div>
+                                <div class="card-bg bg-red-900/20"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RODAPÉ INFERIOR -->
+                <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600 font-mono">
+                    <p>&copy; 2025 Uberaba City </p>
+                    <p class="mt-2 md:mt-0">Desenvolvido por Pedro Henrique | Imersão Alura + Google Gemini</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- ANTHEM CINEMA OVERLAY (MODAL) -->
+        <div id="anthem-modal" class="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-xl hidden opacity-0 transition-opacity duration-500 flex items-center justify-center">
+            <!-- Close Button -->
+            <button onclick="closeAnthem()" class="absolute top-8 right-8 z-50 group flex items-center gap-2 text-white/50 hover:text-white transition-colors">
+                <span class="font-cinzel text-sm uppercase tracking-widest">Fechar</span>
+                <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:border-gold group-hover:rotate-90 transition-all">✕</div>
+            </button>
+
+            <div class="container mx-auto px-6 h-full flex flex-col justify-center relative">
+                <!-- Header Modal -->
+                <div class="text-center mb-10">
+                    <h2 class="font-cinzel text-4xl md:text-5xl text-gold mb-2">Hino de Uberaba</h2>
+                    <p class="font-montserrat text-gray-400 text-sm uppercase tracking-[0.3em]">Símbolo de Orgulho & Tradição</p>
+                </div>
+
+                <!-- Content Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-[60vh]">
+                    
+                    <!-- Video Column -->
+                    <div class="w-full h-full flex items-center justify-center">
+                        <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(212,175,55,0.2)] border border-gold/30">
+                            <!-- O JS vai injetar o iframe aqui para evitar carregamento desnecessário -->
+                            <div id="anthem-video-container" class="w-full h-full bg-black"></div>
+                        </div>
+                    </div>
+
+                    <!-- Lyrics Column (Scrollable) -->
+                    <div class="w-full h-full overflow-hidden relative">
+                        <div class="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-black/95 to-transparent z-10 pointer-events-none"></div>
+                        <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-black/95 to-transparent z-10 pointer-events-none"></div>
+                        
+                        <div class="h-full overflow-y-auto custom-scrollbar px-4 py-20 text-center">
+                            <div class="font-playfair text-xl md:text-2xl text-gray-300 leading-relaxed space-y-8 italic tracking-wide anthem-lyrics">
+                                <p>Da jornada de fé, corajosa<br>De bandeiras por todo o Brasil,<br>Tu surgiste, Uberaba formosa,<br>Na campina, sob um céu de anil.</p>
+                                
+                                <p class="text-gold font-cinzel not-italic text-2xl md:text-3xl py-4 border-t border-b border-gold/20">
+                                    És Uberaba, o formoso<br>E mais rico florão,<br>Desde nosso sertão valoroso.<br>Oh! Grande terra gentil,<br>Um torrão sem igual,<br>No Planalto Central Do Brasil
+                                </p>
+                                
+                                <p>Não transiges com teu inimigo,<br>Mas acolhes, gentil, em teu colo,<br>Os que vêm ao trabalho, contigo,<br>Procurando elevar o teu solo.</p>
+                                
+                                <p class="text-gold font-cinzel not-italic text-2xl md:text-3xl py-4 border-t border-b border-gold/20">
+                                    És Uberaba, o formoso<br>E mais rico florão,<br>Desde nosso sertão valoroso.<br>Oh! Grande terra gentil,<br>Um torrão sem igual,<br>No Planalto Central Do Brasil
+                                </p>
+                                
+                                <p>Tuas matas, teus campos, teus montes,<br>De riquezas sem par, peregrinas,<br>Construíram, entre teus horizontes,<br>A mais bela das jóias mais finas!</p>
+                                
+                                <p class="text-gold font-cinzel not-italic text-2xl md:text-3xl py-4 border-t border-b border-gold/20">
+                                    És Uberaba, o formoso<br>E mais rico florão,<br>Desde nosso sertão valoroso.<br>Oh! Grande terra gentil,<br>Um torrão sem igual,<br>No Planalto Central Do Brasil
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DE HISTÓRIA COMPLETA (LIVRO IMERSIVO) -->
+        <div id="history-book-modal" class="fixed inset-0 z-[10000] bg-[#050505]/95 backdrop-blur-xl hidden opacity-0 pointer-events-none flex items-center justify-center transition-opacity duration-700">
+             <!-- Botão Fechar -->
+            <button id="close-history-book" class="absolute top-8 right-8 z-50 group flex items-center gap-2 text-white/50 hover:text-white transition-colors cursor-pointer">
+                <span class="font-cinzel text-sm uppercase tracking-widest">Fechar Livro</span>
+                <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:border-gold group-hover:rotate-90 transition-all text-xl">✕</div>
+            </button>
+
+            <div class="book-container relative w-[90vw] max-w-6xl h-[80vh] flex perspective-1000 opacity-0 transform scale-90 transition-all duration-700 delay-100" id="book-interface">
+                <!-- Lado Esquerdo (Capa/Intro) -->
+                <div class="book-page page-left w-1/2 hidden lg:flex flex-col items-center justify-center bg-[#100c08] border-r border-[#2a2a2a] relative overflow-hidden shadow-2xl">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-leather.png')] opacity-30"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent to-black/40 pointer-events-none"></div>
+                    
+                    <div class="relative z-10 text-center p-12 border-4 border-double border-gold/20 m-8 h-[calc(100%-4rem)] flex flex-col justify-center">
+                        <h2 class="font-cinzel text-5xl text-gold mb-4"><br>Uberaba</h2>
+                        <div class="w-16 h-1 bg-gold mx-auto my-6"></div>
+                        <p class="font-montserrat text-gray-400 text-sm uppercase tracking-[0.4em]"> A História</p>
+                    </div>
+                </div>
+
+                <!-- Lado Direito (Texto com Scroll) -->
+                <div class="book-page page-right w-full lg:w-1/2 bg-[#e6dccf] text-black relative overflow-hidden shadow-2xl flex flex-col">
+                     <!-- Textura de Papel Antigo -->
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] opacity-60 pointer-events-none z-0"></div>
+                    <!-- Sombra da lombada -->
+                    <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black/20 to-transparent pointer-events-none z-10"></div>
+
+                    <div class="relative z-10 h-full overflow-y-auto custom-scrollbar-dark p-8 md:p-16" data-lenis-prevent>
+                        <!-- PÁGINA 1 CONTENT -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">I. Origens & Denominações</h3>
+                        
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify mb-12">
+                            <p class="first-letter:text-5xl first-letter:float-left first-letter:mr-3 first-letter:font-cinzel first-letter:text-gold">
+                                Uberaba está inserida em uma região que já pertenceu à Capitania do Espírito Santo, São Paulo, Goiás e finalmente Minas Gerais.
+                            </p>
+                            <p class="mt-4">
+                                De 1660 a 1670 a Região do Triângulo Mineiro, onde está localizada a cidade de Uberaba, era conhecida como Sertão do Novo Sul, Sertão Grande, Sertão Sul e Geral Grande. Posteriormente, passou a ser conhecida como “Sertão da Farinha Podre”, termo nascido em 1807, quando uma bandeira saiu do Desemboque e invadiu os sertões do Pontal do Triângulo Mineiro até as margens do Rio Grande. Para justificar a denominação “Sertão da Farinha Podre” os viajantes deixavam sacos de farinha no caminho para se alimentarem na volta. Ao retornarem ao local encontravam a farinha apodrecida. Outra explicação mais plausível para a denominação é que seria originária de uma região portuguesa de onde vieram alguns portugueses exploradores.
+                            </p>
+                            <p class="mt-4">
+                                Finalmente, em 1884 a região ficou conhecida como Triângulo Mineiro, denominação idealizada pelo Dr. Raymond Henrique Des Genettes, médico francês, jornalista e político, radicado em Uberaba, por saber que a região situava-se entre os rios Grande e Paranaíba, terminava na junção desses dois rios, formando o Rio Paraná, e apresentava a forma aproximada de um triângulo.
+                            </p>
+                            <p class="mt-4">
+                                Os primeiros habitantes da região foram os índios tupis, depois os tremembés, os caiapós e os araxás, de tradições seminômades, cujas tribos se movimentavam de um local para outro. Eles viviam em grupos de poucas famílias, com simplicidade e sobreviviam do que a natureza oferecesse.
+                            </p>
+                        </div>
+
+                        <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 2 CONTENT -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">II. A Conquista do Sertão</h3>
+
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                Portugal passou a ter interesse pela Região a partir dos fins do século XVI, tendo como objetivo encontrar os minerais preciosos, amansar os índios e, se fosse preciso, até exterminá-los para que as metas da Coroa Portuguesa fossem cumpridas.
+                            </p>
+                            <p class="mt-4">
+                                A primeira investida do colonizador português, ou seja, do homem branco, sobre a Região do Triângulo Mineiro, começou em fins do Século XVI, precisamente a partir do ano de 1590, data da primeira “bandeira” (expedição), chefiada pelo capitão Sebastião Marinho, que partiu de São Paulo e atingiu o Rio Tocantins, em Goiás.
+                            </p>
+                            <p class="mt-4">
+                                Por volta de 1600 surgiu a Aldeia de Santana do Rio das Velhas (hoje Araguari), considerado o primeiro núcleo de povoamento branco na área que seria o futuro Estado de Minas Gerais, fundado pelos padres jesuítas com o objetivo de aculturar os índios, ou seja, catequizá-los.
+                            </p>
+                            <p class="mt-4 font-bold italic">Posteriormente, inúmeras “bandeiras” paulistas foram organizadas ao longo dos séculos XVII e XVIII:</p>
+                            <ul class="list-none pl-0 mt-4 space-y-4">
+                                <li class="pl-4 border-l-2 border-gold/50">
+                                    <strong>1615:</strong> Partiu de São Paulo uma “bandeira” liderada por Antônio Pedroso de Alvarenga que atravessou a Região do Triângulo Mineiro com destino a Goiás.
+                                </li>
+                                <li class="pl-4 border-l-2 border-gold/50">
+                                    <strong>1682:</strong> Outra “bandeira” partiu de São Paulo e também atravessou o Triângulo Mineiro até alcançar Goiás, sendo liderada por Bartolomeu Bueno da Silva (o velho Anhanguera) que levou seu filho Bartolomeu Bueno da Silva Filho de apenas 12 anos.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50 mt-12">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 3 CONTENT -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">III. A Rota dos Bandeirantes</h3>
+
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                Em 1722 partiu outra “bandeira” de São Paulo rumo a Goiás, visando para a abertura de uma estrada para a exploração de minas de ouro, prata e pedras preciosas. Essa missão ficou a cargo de Bartolomeu Bueno da Silva Filho (filho de Anhanguera). Ao passarem pela região se depararam com os índios caiapós. Essa expedição era composta por 152 homens, entre os quais 20 índios carregadores, 3 religiosos, 20 índios, 1 mascate francês e 39 cavalos. Ela partiu de São Paulo seguindo os rios Atibaia, Camanducaia, Moji-Guaçu, Grande (Porto da Espinha), passando em Uberaba, a sessenta metros dos fundos do atual cemitério São João Batista. Depois a expedição continuou a viagem em direção ao Rio das Velhas e penetrou em Goiás pelo Rio Corumbá. Segundo alguns relatos da época, a expedição passou por terras de Uberaba. Esta rota ficou conhecida como Estrada Real ou Anhanguera, que consistia em um importante caminho para que as autoridades portuguesas implantassem a colonização, a produção e escoamento dos minerais preciosos. Na verdade, a maioria das riquezas minerais do Brasil-Colônia foi levada para Portugal e utilizada para o pagamento de suas dívidas em relação à Inglaterra.
+                            </p>
+                            <p class="mt-4">
+                                Posteriormente, a expedição do filho de Anhanguera fundou em 1725 o povoado de Vila Boa em Goiás. Dessa forma foi aberta a estrada que passava pelas terras de Uberaba. Por esse feito, Bartolomeu Bueno da Silva Filho recebeu como recompensa a nomeação de Capitão-Mor Regente das minas de Goiás e o direito de conceder “sesmarias” (concessão de terras para povoamento).
+                            </p>
+                            <p class="mt-4">
+                                Em 1727, Antônio de Araújo Lanhoso foi o primeiro homem branco que se fixou na região de Uberaba e um dos primeiros a receber sesmarias ao longo da estrada de Anhanguera, a 15 km de Uberaba, no córrego do Lanhoso, que corre paralelo à rodovia para Uberlândia.
+                            </p>
+                            <p class="mt-4">
+                                Outra estrada denominada Picada de Goiás foi aberta em 1736, saindo de Minas Gerais e passando do lado oriental da Serra da Canastra, atingindo terras de Araxá em direção à Vila Boa. A estrada foi terminada em 1738, ligando as minas goianas a São João Del Rei e Vila Rica. Ao longo dessas estradas foram concedidas também sesmarias, ou seja, terras que aos poucos foram sendo ocupadas pelo colonizador branco.
+                            </p>
+                        </div>
+
+                        <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50 mt-12">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 4 CONTENT -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">IV. Jurisdição & Conflitos</h3>
+
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                Uberaba tem, então, a sua origem na ocupação do Triângulo Mineiro, que ficou sob a jurisdição de Goiás até 1816, quando a região passou a pertencer à província de Minas Gerais, de acordo com o Alvará de D. João VI, de 04/04/1816.
+                            </p>
+                            <p class="mt-4">
+                                A exploração e o povoamento de todo o Triângulo Mineiro, de modo geral, ocorreu, como em todo o “Brasil-Colônia”, pelo amansamento e extermínio das populações indígenas e dos negros nos quilombos. As estradas para a Região do Triângulo Mineiro e Goiás tornaram-se palco de batalhas entre os exploradores dos sertões e os índios. A invasão de terras indígenas provocou muitas vezes sangrentas guerras contra os caiapós, no antigo Sertão da Farinha Podre (Triângulo Mineiro). Vários quilombos também foram ameaçados pelos exploradores brancos.
+                            </p>
+                            <p class="mt-4">
+                                Diante dessa insegurança, o governo de Goiás viabilizou o policiamento das estradas e nomeou, em 1742, o coronel Antônio Pires de Campos Filho para policiar, amansar e até mesmo exterminar os índios caiapós da região do Triângulo Mineiro. Fato constatado com a matança dos caiapós, sendo em sua maioria derrotados, submetidos e alojados também com tribos bororo, do Mato Grosso, em 18 aldeias ao longo da estrada. Uma dessas aldeias de índios mansos (Aldeia de Uberaba Falso) ficava onde se fundou Uberaba, próxima à Barra do Córrego da Lage. O coronel instalou apenas quatro dessas 18 aldeias ao longo da Estrada de Anhanguera para proteger as caravanas que nela trafegavam. Mais tarde, em 1751, o coronel Pires de Campos faleceu em Paracatu, vítima de uma flechada, ocasionando septicemia.
+                            </p>
+                            <p class="mt-4">
+                                Em 1766 foi criado o Julgado de Nossa Senhora do Desterro das Cabeceiras do Rio das Velhas (Desemboque), sob a administração de Goiás, abrangendo a região do Triângulo e quase todo o sul de Goiás. Era um local rico em minas auríferas e de intensa exploração. A posse desse arraial pelo governo de Goiás era vantajosa aos moradores de Minas Gerais, pois estavam livres do pagamento de imposto sobre minerais, denominado "derrama", cobrado em Minas Gerais. Desemboque teve o seu esplendor até 1781, quando as minas auríferas se esgotaram. Algum tempo depois grande número de pessoas migrou para outras terras, ou seja, para o Arraial de Uberaba, fundado por Major Eustáquio. Portanto, a história do Desemboque é de fundamental importância para compreender o povoamento de Uberaba.
+                            </p>
+                        </div>
+
+                        <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50 mt-12">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 5 CONTENT -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">V. A Fundação e Major Eustáquio</h3>
+
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                Em 1807 um grupo de homens (Januário Luís da Silva, Pedro Gonçalves da Silva, José Gonçalves Heleno, Manuel Francisco, Manuel Bernardes Ferreira e outros) oriundos de Desemboque adentrou e ficou no Córrego da Lage. Segundo o historiador Borges Sampaio, o cirurgião prático Pedro Gonçalves da Silva, cujo apelido era Pedro Panga, aproveitando-se da vizinhança de índios mansos, se fixou e construiu, em 1809, uma casa, próxima de onde se encontra atualmente o Hospital Dr. Hélio Angotti.
+                            </p>
+                            <p class="mt-4">
+                                Prosseguindo a exploração das terras, o governo de Goiás para dinamizar a administração dos Sertões, nomeou em 1809, Antônio Eustáquio da Silva Oliveira (major Eustáquio), para a função de comandante “Regente do Sertão da Farinha Podre” (Triângulo Mineiro) e, em 1811 foi nomeado por Ato Governamental, “curador de índios”. Ele era natural de Ouro Preto e residente em Desemboque.
+                            </p>
+                            <p class="mt-4">
+                                Em 1810, major Eustáquio organizou no Desemboque uma “bandeira”, passando por terras de Uberaba e seguindo até o Rio da Prata, formado pelos rios Piracanjuba e do Peixe.
+                            </p>
+                            <p class="mt-4">
+                                Outra expedição chefiada por José Francisco Azevedo, atingiu a cabeceira do Ribeirão Lajeado, fundando o arraial da Capelinha em 1812, aproximadamente a 15 km do Rio Uberaba, próximo ao povoado de Santa Rosa. O povoado chegou a ter vinte casas e foi erguida uma capelinha com as imagens de Santo Antônio e São Sebastião. O Arraial era conhecido como Lageado ou Capelinha. Entretanto, não se desenvolveu por falta de água e terras férteis, conforme constatou major Eustáquio em visita ao local.
+                            </p>
+                        </div>
+
+                        <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50 mt-12">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 6 CONTENT (NEW) -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">VI. Consolidação do Arraial</h3>
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                Para prosseguir a colonização, o “Regente dos Sertões” major Antonio Eustáquio da Silva Oliveira (conhecido como major Eustáquio e fundador de Uberaba), comandou outra expedição em fins de 1812, composta por 30 homens, com o objetivo de procurar novas terras para se estabelecerem. A expedição chegou ao Rio Uberaba e fixou-se na margem esquerda do Córrego das Lages com o Rio Uberaba, onde foi edificada a Chácara da Boa Vista (hoje Fazenda Experimental da Epamig na Univerdecidade). 
+                            </p>
+                            <p class="mt-4">
+                                Major Eustáquio constatou que Uberaba tinha três condições para o povoamento: recursos hídricos, terras férteis e posição estratégica favorável. Junto com o major Eustáquio vieram fazendeiros e aventureiros que passaram a produzir e comercializar com as caravanas que ligavam Goiás a São Paulo.
+                            </p>
+                            <p class="mt-4">
+                                Em 1816 o major Eustáquio construiu um retiro para o gado, uma tenda de ferreiro e a sua residência na Praça Rui Barbosa. A sua função consistia em dar proteção para os colonos e índios mansos, além de expulsar para longe do arraial os índios bravos e quilombolas. Consequentemente, grande número de pessoas e famílias do arraial da Capelinha e do Desemboque, sabendo das condições propícias do arraial de Uberaba, migraram para o novo arraial. Era uma população muito heterogênea: mineiros que se estabeleceram como fazendeiros, boiadeiros, mascates, comerciantes, criadores de gado, ferreiros e até criminosos foragidos.
+                            </p>
+                            <p class="mt-4">
+                                Os moradores construíram suas casas térreas de pau-a-pique ao redor do retiro de major Eustáquio, formando a “Rua Grande” (atualmente Rua Manoel Borges e Vigário Silva). Edificaram suas casas e estabelecimentos comerciais acompanhando as ondulações dos terrenos e serpenteando os pequenos regatos. Os moradores do Arraial da Capelinha trouxeram para Uberaba os seus santos protetores e com autorização do major Eustáquio construíram uma Capela (atual Praça Frei Eugênio, hoje Escola Estadual Minas Gerais), tendo como oragos Santo Antônio e São Sebastião.
+                            </p>
+                            <p class="mt-4">
+                                Posteriormente a capela foi transformada em Matriz, com a criação da Paróquia, benzida em 1818 pelo vigário do Desemboque Hermógenes Cassimiro de Araújo Brunswick. Assim foi estabelecido o reconhecimento do povoado pela Igreja, instituição que tinha prestígios decisórios junto aos governos. A Igreja Católica estava unida ao Estado e a bênção de uma capela oficializava, na administração, o nome do Arraial, que passou a chamar-se “Arraial de Santo Antônio e São Sebastião da Farinha Podre”, designação ostentada até 1820.
+                            </p>
+                        </div>
+
+                        <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50 mt-12">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 7 CONTENT (NEW) -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">VII. A Freguesia e a Vila</h3>
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                Segundo o historiador Borges Sampaio, “o Arraial se desenvolveu e tinha 30 casas e já contava com 1.621 habitantes, dos quais 417 eram escravos”, o que demonstra a riqueza dos proprietários de terras e a grande exploração da mão-de-obra escrava. A atividade econômica predominante era a agricultura de subsistência, necessária para alimentar a sua população, além das tropas que passavam pelo arraial. Em 1819 havia criadores com 500 e até 1.000 cabeças de gado, fato que demonstra grande atividade pecuarista. As casas eram construídas com material simples e sem jardim, erguendo-se no alinhamento das ruas e serpenteando a naturalidade dos córregos.
+                            </p>
+                            <p class="mt-4">
+                                O colonizador branco foi ocupando as terras à medida que os índios eram aculturados ou expulsos de suas terras formando-se extensas propriedades, devido o baixo valor da terra e a isenção de impostos sobre elas.
+                            </p>
+                            <p class="mt-4">
+                                O arraial foi crescendo e isso permitiu que em 2 de março de 1820, o rei D. João VI decretasse a elevação do Arraial de Santo Antônio e São Sebastião à condição de Freguesia (Paróquia). (documento oficial mais antigo de Uberaba). Freguesia era o termo eclesiástico que designava o território de atuação de um vigário. Com isso ocorreu um desligamento dos laços religiosos que subordinavam o Arraial de Santo Antônio e São Sebastião (Uberaba) à Vila do Desemboque. O decreto constituiu um grande avanço para a comunidade. Significou a emancipação e gerência própria em assuntos de ordem civil, militar e religiosa. Foi o reconhecimento oficial tanto pela Igreja, quanto pelo Governo Real.
+                            </p>
+                            <p class="mt-4">
+                                Dada a importância histórica de 02/03/1820, quando a cidade foi elevada à Freguesia, (Decreto: documento oficial mais antigo do Município), instituiu-se oficialmente tal data para que se comemorasse o aniversário de Uberaba a partir de 1995. A Catedral (Igreja do Sagrado Coração de Jesus) também comemora sua fundação em 1820, pois foi criada por decreto a Freguesia que deu autonomia em relação a Desemboque.
+                            </p>
+                            <p class="mt-4">
+                                O fundador e comandante de Uberaba major Eustáquio e os fazendeiros mais importantes passaram a exigir a criação da Câmara Municipal. Entretanto, o fundador de Uberaba faleceu em 1832 e assumiu a liderança da Freguesia o seu irmão capitão Domingos da Silva Oliveira. Nessa época o Governo Regencial (1831 a 1840) implantou no Brasil uma política descentralizadora, viabilizando a elevação de Vila em muitos locais do País. Devido a esses fatos o Governo Provincial de Minas Gerais elevou Uberaba (Freguesia) à condição de Município (Vila) de Santo Antônio de Uberaba em 02 de fevereiro de 1836, tornando-se autônomo, com território demarcado e com a Câmara Municipal. Esta foi instalada em 1837, em um prédio na Praça Rui Barbosa, que também abrigou a cadeia. Os primeiros vereadores eleitos eram comerciantes prósperos, fazendeiros e representantes do clero.
+                            </p>
+                        </div>
+
+                        <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50 mt-12">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 8 CONTENT -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">VIII. De Vila a Cidade</h3>
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                Uberaba, em 1840 passou a sediar uma Comarca pela Lei provincial mineira nº 171, com a finalidade de implantar a justiça na região, tendo como primeiro juiz de Direito Joaquim Caetano da Silva Guimarães.
+                            </p>
+                            <p class="mt-4">
+                                O crescimento econômico e populacional da Vila de Santo Antônio de Uberaba viabilizou em 1846 a conquista de um Colégio Eleitoral, vindo a ser sede de grande colégio, que era responsável pela nomeação de um Deputado Geral e de um suplente para a Assembléia Legislativa. Tornou-se um importante centro comercial, com uma população de aproximadamente duas mil pessoas e 337 habitações.
+                            </p>
+                            <p class="mt-4">
+                                Em 1850 teve início a industrialização, com a implantação da fábrica de chapéus por Luís Soares Pinheiro. A educação também avançou: a primeira escola pública feminina de Uberaba foi criada em 1853 e o engenheiro Fernando Vaz de Melo fundou em 1854 o 1º estabelecimento de ensino Secundário de Uberaba.
+                            </p>
+                            <p class="mt-4">
+                                A Catedral Metropolitana do Sagrado Coração de Jesus, situada na Praça Rui Barbosa, iniciou a celebração dos atos paroquiais em 1856, muito antes do término de sua construção iniciada em 1827.
+                            </p>
+                            <p class="mt-4">
+                                Devido ao seu grande crescimento de Uberaba que era uma vila, mereceu o título de Cidade em 02 de maio de 1856, pela Lei Provincial Mineira nº 759.
+                            </p>
+                            <p class="mt-4">
+                                A Igreja Santa Rita, construída em 1856, é a primeira edificação de Uberaba tombada em 1939 pelo Instituto do Patrimônio Histórico e Artístico Nacional – Iphan pelo seu grande valor histórico, arquitetônico e cultural.
+                            </p>
+                        </div>
+                        
+                         <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50 mt-12">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 9 CONTENT (NEW - FROM PAGE 8 SOURCE) -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">IX. Tempos de Guerra e Progresso</h3>
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                Na década de 1860 a cidade tentou produzir algodão para a exportação, atendendo os interesses das indústrias de tecelagem. O Teatro São Luiz, localizado na Praça Rui Barbosa, entrou em funcionamento em 1864 promovendo eventos e espetáculos. Em 1865 passou a funcionar o primeiro Centro Espírita de Uberaba, por iniciativa do professor João Augusto Chaves.
+                            </p>
+                            <p class="mt-4">
+                                Sabe-se que a história e o desenvolvimento de Uberaba na década de 1870 estão diretamente ligados à Guerra do Paraguai (1865 a 1870). Com o bloqueio do Rio da Prata, todo o trânsito destinado à Província de Mato Grosso foi desviado para Uberaba. A cidade teve sua atividade comercial intensamente ampliada, servindo como ponto de passagem das tropas rumo ao fronte. Aconteceu em Uberaba o encontro de tropas que compuseram o Corpo Expedicionário, tendo como um dos membros o visconde de Taunay.
+                            </p>
+                            <p class="mt-4">
+                                Houve a construção do Cruzeiro do Cachimbo, próximo do 4º Batalhão, considerado um marco histórico pela celebração da missa em intenção ao Corpo Expedicionário. Hoje, o Cruzeiro do Cachimbo é um bem tombado pelo Conphau e instalado na Praça Magalhães Pinto.
+                            </p>
+                            <p class="mt-4">
+                                O progresso continuava a passos largos. O jornal Gazeta de Uberaba foi fundado em 27/04/1879. Entre 1881 e 1882 foi construída a igreja em homenagem a Nossa Senhora da Abadia, padroeira de Uberaba, com obras concluídas em 1899. Em 1882 foi inaugurada a iluminação pública por meio de vinte e cinco lampiões a querosene e fundada a Fábrica de Tecidos do Cassu (mais tarde Cia. Têxtil do Triângulo Mineiro). O Colégio Nossa Senhora das Dores foi fundado em 1885 pelas irmãs dominicanas, permanecendo ativo até hoje.
+                            </p>
+                            <p class="mt-4">
+                                O progresso de Uberaba se acentuou definitivamente com a inauguração da Estrada de Ferro em 1889, um acontecimento que viabilizou:
+                            </p>
+                            <ul class="list-none pl-0 mt-4 space-y-4">
+                                <li class="pl-4 border-l-2 border-gold/50">A partir de 1890, o desenvolvimento da pecuária zebuína, nascendo a zebuinocultura, que projetou o criatório uberabense e transformou Uberaba em centro difusor de tecnologia genética mundial;</li>
+                                <li class="pl-4 border-l-2 border-gold/50">O desenvolvimento comercial e intercâmbio com os grandes centros de Minas Gerais e São Paulo;</li>
+                                <li class="pl-4 border-l-2 border-gold/50">A aceleração da urbanização com o crescimento de edificações urbanas e comerciais;</li>
+                                <li class="pl-4 border-l-2 border-gold/50">A vinda do imigrante europeu (italianos, portugueses, espanhóis, alemães) e asiáticos, que trouxeram técnica e experiência, refletindo na estrutura urbana com palacetes em estilo eclético.</li>
+                            </ul>
+                        </div>
+
+                        <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50 mt-12">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 10 CONTENT (NEW - FROM PAGE 9 SOURCE) -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">X. Ordem e Instituições</h3>
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                Com o crescimento populacional, cresciam também os atos ilegais, exigindo um aparato policial. Em 06 de maio de 1890, o governador de Minas Gerais instituiu um decreto organizando "quatro corpos militares" para segurança do estado:
+                            </p>
+                            <ul class="list-none pl-0 mt-4 space-y-4 mb-6">
+                                <li class="pl-4 border-l-2 border-gold/50"><strong>Primeiro Corpo:</strong> Capital (Ouro Preto);</li>
+                                <li class="pl-4 border-l-2 border-gold/50"><strong>Segundo Corpo:</strong> Uberaba (Triângulo Mineiro);</li>
+                                <li class="pl-4 border-l-2 border-gold/50"><strong>Terceiro Corpo:</strong> Juiz de Fora;</li>
+                                <li class="pl-4 border-l-2 border-gold/50"><strong>Quarto Corpo:</strong> Diamantina.</li>
+                            </ul>
+                            <p class="mt-4">
+                                Uberaba foi contemplada com o Segundo Corpo Militar, mas sua permanência foi efêmera, sendo transferido em 1903. Foi somente em 25 de novembro de 1909 que a Força Militar se estabeleceu definitivamente com a criação do 4º Batalhão da Polícia Militar de Minas Gerais. Inicialmente na Rua Arthur Machado, depois na Praça Frei Eugênio, e desde 1947 instalado definitivamente na Praça Magalhães Pinto.
+                            </p>
+                            <p class="mt-4">
+                                O período foi marcado pelo fortalecimento institucional:
+                            </p>
+                            <p class="mt-4">
+                                O Instituto Zootécnico de Uberaba foi inaugurado em 1895 para formar profissionais na produção pecuária. Em 1899 foi fundado o Clube Lavoura e Comércio e lançado o jornal homônimo para defender os interesses ruralistas.
+                            </p>
+                            <p class="mt-4">
+                                O Colégio Marista iniciou suas atividades em 1903. Em 1904 inaugurou-se a Igreja São Domingos, a primeira igreja da ordem dominicana no Brasil. Em 1905 a empresa Ferreira, Caldeira & Cia implantou a energia elétrica, impulsionando o desenvolvimento.
+                            </p>
+                            <p class="mt-4">
+                                Em 1906 tiveram início as exposições de gado bovino, prestigiadas nas décadas seguintes pelo Presidente Getúlio Vargas. A Diocese de Uberaba foi criada em 1907 (elevada a Arquidiocese em 1962) e, em 1909, foi criada a primeira Biblioteca Pública Municipal.
+                            </p>
+                        </div>
+
+                        <!-- VISUAL SEPARATOR -->
+                        <div class="flex items-center justify-center mb-12 opacity-50 mt-12">
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                            <span class="mx-4 font-cinzel text-gold text-xl">❦</span>
+                            <div class="h-[1px] w-1/3 bg-[#2c2c2c]"></div>
+                        </div>
+
+                        <!-- PÁGINA 11 CONTENT (NEW - FROM PAGE 10 SOURCE) -->
+                        <h3 class="font-playfair text-3xl font-bold mb-6 text-[#2c2c2c] border-b border-[#2c2c2c]/20 pb-2">XI. A Era do Conhecimento</h3>
+                        <div class="prose prose-lg font-cormorant text-[#2c2c2c] leading-relaxed text-xl text-justify">
+                            <p>
+                                O século XX consolidou Uberaba como polo educacional. Em 1909 foi inaugurado o Grupo Escolar Brasil. Em 1917, o governo criou o Aprendizado Agrícola Borges Sampaio. Em 1926 criou-se a Escola de Farmácia e Odontologia.
+                            </p>
+                            <p class="mt-4">
+                                A diversidade religiosa se ampliou com os metodistas iniciando trabalhos em 1896 e inaugurando seu templo em 1924. As irmãs concepcionistas chegaram em 1949, inaugurando em 1961 a Igreja da Medalha Milagrosa.
+                            </p>
+                            <p class="mt-4">
+                                Mário Palmério fundou em 1947 a Faculdade de Odontologia do Triângulo Mineiro, embrião das Faculdades Integradas de Uberaba (Fiube) e da atual Universidade de Uberaba (Uniube). Em 1949 foi fundada a Faculdade de Filosofia e Letras São Tomás de Aquino. A Faculdade de Medicina do Triângulo Mineiro estabeleceu-se em 1954, transformada em Universidade Federal do Triângulo Mineiro (UFTM) em 2005.
+                            </p>
+                            <p class="mt-4">
+                                A economia se diversificou com a instalação dos distritos industriais nas décadas de 1970 e 1980. Na década de 1990 nasceu a Univerdecidade - Parque Tecnológico de Uberaba. Em 1992, foram criados o Centro de Pesquisas Paleontólogicas Llewellyn Ivor Price e o Museu dos Dinossauros em Peirópolis, abrigando fósseis de até 72 milhões de anos.
+                            </p>
+                            <p class="mt-4">
+                                Uberaba conta com marcos reconhecidos no Brasil e no mundo: a expressão espiritual de Chico Xavier, o desenvolvimento da pecuária zebuína e a paleontologia. Nos primórdios de sua história fora um Arraial, e hoje, no terceiro milênio, representa um centro comercial dinâmico, uma agricultura produtiva, uma pecuária de elite mundial e um polo de saber e cultura.
+                            </p>
+                        </div>
+
+                        <p class="italic text-gray-600 mt-8 text-base border-t border-black/10 pt-4">
+                             *Este códice histórico continua sendo escrito a cada dia por seu povo trabalhador e inovador.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- FIM DO WRAPPER DESKTOP -->
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Plugin de Texto para Typewriter -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>

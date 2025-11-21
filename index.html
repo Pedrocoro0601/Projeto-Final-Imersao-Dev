@@ -1,0 +1,1249 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uberaba - MG </title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600;800&family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            /* --- WALLPAPER CONFIGURATION --- */
+            --wallpaper-lock: url('Telabloqueio.jpg');
+            --wallpaper-desk: url('Windows10.png');
+            
+            /* --- USER AVATAR --- */
+            /* Coloque o caminho da sua foto aqui. Ex: url('./assets/perfil.jpg') */
+            /* Se deixar vazio ou inválido, mostrará o ícone padrão */
+            --user-avatar: url('Pedro.jpg'); 
+
+            /* --- COLORS --- */
+            --bg-black: #000000;
+            --win-bg: #f3f3f3;
+            --win-blue: #0078d7;
+            --vscode-bg: #1e1e1e;
+            --vscode-sidebar: #252526;
+            --vscode-statusbar: #007acc;
+            --alura-blue: #1056bf;
+            --gemini-grad-start: #4b90ff;
+            --gemini-grad-end: #ff5546;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
+
+        body {
+            background: var(--bg-black);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+        }
+
+        /* =========================================
+           SCENE 1: POWER BUTTON
+           ========================================= */
+        #scene-power {
+            position: absolute; inset: 0;
+            background: #050505;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 100;
+        }
+
+        .power-btn {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: 2px solid #333;
+            background: radial-gradient(circle, #222, #111);
+            color: #555;
+            font-size: 2rem;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .power-btn:hover {
+            color: #fff;
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .power-msg {
+            margin-top: 30px;
+            font-family: 'Fira Code', monospace;
+            color: #666;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* =========================================
+           SCENE 2: BIOS / BOOT
+           ========================================= */
+        #scene-bios {
+            position: absolute; inset: 0;
+            background: black;
+            padding: 40px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            color: #ccc;
+            display: none;
+            z-index: 90;
+        }
+        .bios-line { margin-bottom: 5px; }
+        .bios-highlight { color: yellow; }
+
+        /* =========================================
+           SCENE 3: WINDOWS LOCK & LOGIN
+           ========================================= */
+        #scene-login {
+            position: absolute; inset: 0;
+            background: var(--wallpaper-lock) no-repeat center center/cover;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            z-index: 80;
+            transition: backdrop-filter 0.5s;
+        }
+
+        #lock-screen-content {
+            margin-top: 15vh;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .lock-time { font-size: 6rem; font-weight: 300; }
+        .lock-date { font-size: 2rem; font-weight: 400; }
+
+        #login-form {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 25vh;
+            background: rgba(0,0,0,0.4);
+            padding: 40px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .user-avatar {
+            width: 100px; height: 100px;
+            background-color: #333;
+            background-image: var(--user-avatar);
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 2rem; color: white;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .user-name { font-size: 1.5rem; margin-bottom: 20px; font-weight: 600; }
+        .pass-input {
+            background: rgba(255,255,255,0.9);
+            border: 2px solid transparent;
+            padding: 10px 15px;
+            width: 250px;
+            border-radius: 4px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            pointer-events: none; /* Auto typed */
+        }
+        .login-btn {
+            background: var(--win-blue);
+            color: white; border: none;
+            padding: 10px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            opacity: 0.5;
+        }
+
+        /* =========================================
+           SCENE 4: DESKTOP
+           ========================================= */
+        #scene-desktop {
+            position: absolute; inset: 0;
+            background: var(--wallpaper-desk) no-repeat center center/cover;
+            display: none;
+            z-index: 70;
+        }
+
+        .desktop-grid {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            height: 90%;
+            align-content: flex-start;
+            gap: 15px;
+        }
+
+        .desktop-icon {
+            width: 100px; margin: 5px;
+            display: flex; flex-direction: column; align-items: center;
+            text-align: center; color: white;
+            text-shadow: 0 1px 3px black; cursor: pointer;
+            padding: 10px; border: 1px solid transparent; border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .desktop-icon:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+        .icon-img { font-size: 2.2rem; margin-bottom: 8px; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5)); }
+        .icon-label { font-size: 0.8rem; line-height: 1.2; }
+
+        /* Windows Generic Error Dialog (Fake) */
+        #win-error-box {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 380px;
+            background: #fff;
+            color: #000;
+            border: 1px solid #aaa;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 800; /* Above desktop icons */
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .win-err-header {
+            background: white; padding: 8px 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 12px;
+        }
+        .win-err-title { font-weight: 500; }
+        .win-err-close { 
+            cursor: pointer; font-size: 16px; line-height: 1; color: #555; 
+            width: 24px; height: 24px; display: flex; justify-content: center; align-items: center;
+        }
+        .win-err-close:hover { background: #e81123; color: white; }
+        
+        .win-err-body {
+            padding: 20px; background: #f0f0f0; display: flex; gap: 15px; align-items: center;
+        }
+        .win-err-icon {
+            font-size: 32px; color: #d92027; /* Red X circle style */
+        }
+        .win-err-msg { font-size: 13px; color: #333; flex: 1; }
+        
+        .win-err-footer {
+            background: #f0f0f0; padding: 15px; padding-top: 0;
+            display: flex; justify-content: flex-end;
+        }
+        .win-err-btn {
+            padding: 4px 25px; background: #e1e1e1; border: 1px solid #adadad;
+            font-size: 12px; cursor: pointer; min-width: 80px;
+        }
+        .win-err-btn:hover { background: #e5f1fb; border-color: #0078d7; }
+        .win-err-btn:focus { border-color: #0078d7; box-shadow: 0 0 0 1px #0078d7 inset; }
+
+
+        /* Windows Notification */
+        .win-notification {
+            position: fixed; bottom: 20px; right: -400px;
+            width: 350px; background: #1f1f1f;
+            border: 1px solid #333; border-radius: 8px;
+            padding: 15px; display: flex; gap: 15px;
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-family: 'Segoe UI'; transition: right 0.5s ease;
+        }
+        .notif-icon { font-size: 24px; color: var(--win-blue); }
+        .notif-content h4 { font-size: 14px; margin-bottom: 5px; color: white; }
+        .notif-content p { font-size: 12px; color: #ccc; }
+
+        /* Alert Modal (Critical Error inside VS Code) */
+        #error-modal {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 400px;
+            background: rgba(30, 30, 30, 0.95);
+            border: 1px solid #ff3333;
+            border-radius: 12px;
+            padding: 0;
+            display: none; opacity: 0;
+            flex-direction: column;
+            z-index: 3000;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+        }
+        .modal-header {
+            padding: 15px; border-bottom: 1px solid #444;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 12px 12px 0 0;
+        }
+        .modal-title { color: white; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .modal-close { cursor: pointer; color: #aaa; transition: 0.2s; font-size: 16px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+        .modal-close:hover { background: #ff3333; color: white; }
+        
+        .modal-body { padding: 30px 20px; text-align: center; color: #ddd; font-size: 14px; line-height: 1.5; }
+        .error-icon { font-size: 40px; color: #ff3333; margin-bottom: 15px; display: block; }
+        .modal-footer { padding: 15px; border-top: 1px solid #444; text-align: right; }
+        .modal-btn { padding: 8px 20px; background: #333; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .modal-btn:hover { background: #444; }
+
+        /* GEMINI SUCCESS MODAL */
+        #gemini-success-modal {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 500px;
+            background: rgba(20, 20, 30, 0.95);
+            border: 2px solid transparent;
+            background-image: linear-gradient(rgba(20, 20, 30, 0.95), rgba(20, 20, 30, 0.95)), linear-gradient(45deg, #4b90ff, #ff5546);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+            
+            border-radius: 16px;
+            padding: 0;
+            display: none; opacity: 0;
+            flex-direction: column;
+            z-index: 3100;
+            box-shadow: 0 0 50px rgba(75, 144, 255, 0.2);
+            backdrop-filter: blur(15px);
+        }
+
+        .gemini-header {
+            padding: 20px;
+            background: linear-gradient(to right, rgba(75, 144, 255, 0.1), rgba(255, 85, 70, 0.1));
+            display: flex; justify-content: space-between; align-items: center;
+            border-radius: 14px 14px 0 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .gemini-title {
+            font-size: 18px; font-weight: 700;
+            background: linear-gradient(to right, #4b90ff, #ff5546);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            display: flex; align-items: center; gap: 10px;
+        }
+        
+        .gemini-body {
+            padding: 30px; text-align: center; color: #eee;
+        }
+        .gemini-body h2 { font-size: 24px; margin-bottom: 15px; font-weight: 300; }
+        .gemini-body strong { color: #fff; font-weight: 700; }
+        .gemini-body p { margin-bottom: 15px; line-height: 1.6; color: #ccc; font-size: 14px; }
+
+        .gemini-close {
+            cursor: pointer; width: 30px; height: 30px;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 50%; background: rgba(255,255,255,0.1);
+            color: white; font-size: 14px; transition: 0.3s;
+        }
+        .gemini-close:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+
+
+        /* =========================================
+           SCENE 5: VS CODE (The App)
+           ========================================= */
+        #scene-vscode {
+            position: absolute; top: 50%; left: 50%;
+            width: 95%; height: 90%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: var(--vscode-bg);
+            display: none; flex-direction: column;
+            z-index: 75; opacity: 0;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            overflow: hidden; border: 1px solid #333;
+        }
+
+        /* Title Bar */
+        .vs-titlebar {
+            height: 30px; background: #333;
+            display: flex; align-items: center; justify-content: center;
+            color: #ccc; font-size: 12px; position: relative;
+        }
+        .vs-controls { position: absolute; right: 0; display: flex; }
+        .vs-control { width: 40px; height: 30px; display: flex; justify-content: center; align-items: center; }
+        .vs-control.close:hover { background: #e81123; color: white; }
+
+        /* Main Area */
+        .vs-body { flex: 1; display: flex; overflow: hidden; }
+
+        /* Sidebar */
+        .vs-activitybar { width: 50px; background: #333; display: flex; flex-direction: column; align-items: center; padding-top: 10px; gap: 20px; color: #858585; font-size: 24px; }
+        .vs-activitybar i:first-child { color: white; border-left: 2px solid white; padding-left: 10px; margin-left: -12px; }
+        
+        .vs-sidebar { width: 200px; background: var(--vscode-sidebar); border-right: 1px solid #111; padding: 10px; font-size: 13px; color: #ccc; }
+        .vs-file-tree { margin-top: 10px; margin-left: 10px; }
+        .vs-file { display: flex; align-items: center; gap: 6px; padding: 3px; color: #d4d4d4; cursor: pointer; background: transparent; }
+        .vs-file.active { background: #37373d; }
+        .vs-file i.react-icon { color: #61dbfb; }
+        
+        /* Gemini Icon in Sidebar */
+        .gemini-file { 
+            margin-top: 20px; border-top: 1px solid #333; padding-top: 10px; 
+            color: #aaa; cursor: pointer; opacity: 0.5; transition: all 0.3s;
+        }
+        .gemini-file:hover, .gemini-file.pulse { color: white; opacity: 1; }
+        .gemini-file.pulse { animation: pulse-glow 1.5s infinite; }
+        
+        @keyframes pulse-glow {
+            0% { text-shadow: 0 0 0px rgba(75, 144, 255, 0); }
+            50% { text-shadow: 0 0 10px rgba(75, 144, 255, 0.8); }
+            100% { text-shadow: 0 0 0px rgba(75, 144, 255, 0); }
+        }
+
+        .gemini-icon-glow {
+            background: linear-gradient(to right, var(--gemini-grad-start), var(--gemini-grad-end));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        /* Editor Area */
+        .vs-editor-area { flex: 1; display: flex; }
+        
+        /* Code Panel (Left) */
+        .vs-code-panel { 
+            width: 60%; 
+            background: var(--vscode-bg); 
+            display: flex; flex-direction: column;
+            border-right: 1px solid #111;
+        }
+        .vs-tabs { background: var(--vscode-sidebar); display: flex; height: 35px; }
+        .vs-tab { 
+            background: var(--vscode-bg); color: #fff; 
+            padding: 8px 15px; font-size: 13px; 
+            border-top: 1px solid #007acc;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .vs-code-content {
+            flex: 1; padding: 10px; 
+            font-family: 'Fira Code', monospace; 
+            font-size: 12px; line-height: 1.5;
+            color: #d4d4d4; overflow-y: auto;
+            position: relative; scroll-behavior: smooth;
+            white-space: pre;
+        }
+        
+        /* Preview Panel (Right) */
+        .vs-preview-panel { 
+            width: 40%; background: #000; 
+            position: relative; overflow: hidden;
+            opacity: 0; /* Starts Hidden */
+            transition: opacity 1.5s ease-in;
+        }
+        
+        /* Syntax Highlighting */
+        .k-import { color: #c586c0; } 
+        .k-var { color: #569cd6; }   
+        .k-func { color: #dcdcaa; }  
+        .k-tag { color: #569cd6; }    
+        .k-attr { color: #9cdcfe; }   
+        .k-str { color: #ce9178; }    
+        .k-comment { color: #6a9955; }
+        .k-bracket { color: #ffd700; }
+        
+        .typing-cursor {
+            display: inline-block; width: 2px; height: 16px; background: white;
+            animation: blink 1s infinite; vertical-align: middle;
+        }
+
+        .typing-hint {
+            position: absolute; bottom: 30px; right: 20px;
+            background: #252526; padding: 8px 15px; border: 1px solid #333;
+            color: #aaa; font-size: 12px; font-family: 'Segoe UI';
+            border-radius: 4px; pointer-events: none;
+            opacity: 0.8; animation: pulse 2s infinite;
+        }
+
+        /* Glitch Effect Class */
+        .glitch-error {
+            animation: glitch-anim 0.2s infinite;
+            filter: hue-rotate(90deg) contrast(1.2);
+            border: 2px solid red !important;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        @keyframes glitch-anim {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            20% { transform: translate(calc(-50% - 2px), calc(-50% + 2px)) scale(1); }
+            40% { transform: translate(calc(-50% - 2px), calc(-50% - 2px)) scale(1); }
+            60% { transform: translate(calc(-50% + 2px), calc(-50% + 2px)) scale(1); }
+            80% { transform: translate(calc(-50% + 2px), calc(-50% - 2px)) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Preview UI Elements */
+        .preview-ui {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 10;
+        }
+        #canvas-preview { position: absolute; inset: 0; }
+
+        .brand-title {
+            font-size: 2.5rem; font-weight: 800; color: white;
+            text-align: center; opacity: 1;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+            line-height: 1.1;
+        }
+        .brand-subtitle {
+            font-size: 0.9rem; font-family: 'Inter', sans-serif; letter-spacing: 3px;
+            margin-top: 10px; color: #aaa; text-transform: uppercase;
+            opacity: 0; transition: opacity 1s;
+        }
+        .alura-gemini-text {
+            font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.8rem;
+            margin-top: 5px; letter-spacing: 1px;
+            background: linear-gradient(to right, #ffffff, #4b90ff);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            opacity: 0;
+        }
+
+        .title-cursor { border-right: 3px solid #fff; animation: blink 1s step-end infinite; }
+
+        .cta-btn {
+            margin-top: 40px; padding: 12px 35px;
+            background: transparent; border: 1px solid rgba(255,255,255,0.3);
+            color: white; border-radius: 50px; font-size: 0.9rem;
+            cursor: pointer; opacity: 0; transition: 0.3s;
+            font-weight: 600; letter-spacing: 1px;
+            pointer-events: auto;
+        }
+        .cta-btn:hover { background: white; color: black; box-shadow: 0 0 20px white; }
+        .cta-btn.locked { opacity: 0.5; cursor: not-allowed; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e1e1e; }
+        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+        
+        @keyframes pulse { 0%,100% {opacity: 0.5} 50% {opacity: 1} }
+        @keyframes blink { 50% {border-color: transparent} }
+
+    </style>
+</head>
+<body>
+
+    <!-- NOTIFICATION SYSTEM -->
+    <div class="win-notification" id="win-notif">
+        <div class="notif-icon"><i class="fa-brands fa-windows"></i></div>
+        <div class="notif-content" id="notif-text">
+            <h4>Sistema Pronto</h4>
+            <p>Clique no ícone VS Code para iniciar.</p>
+        </div>
+    </div>
+
+    <!-- DESKTOP WINDOWS ERROR DIALOG -->
+    <div id="win-error-box">
+        <div class="win-err-header">
+            <span class="win-err-title">Erro do Sistema</span>
+            <div class="win-err-close" onclick="closeWinError()">✕</div>
+        </div>
+        <div class="win-err-body">
+            <div class="win-err-icon">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </div>
+            <div class="win-err-msg" id="win-error-msg-text">
+                O Windows não pode abrir este arquivo. Acesso restrito ao ambiente de desenvolvimento.
+            </div>
+        </div>
+        <div class="win-err-footer">
+            <button class="win-err-btn" onclick="closeWinError()">OK</button>
+        </div>
+    </div>
+
+    <!-- ALERT MODAL (CRITICAL ERROR IN VSCODE) -->
+    <div id="error-modal">
+        <div class="modal-header">
+            <div class="modal-title">
+                <i class="fa-solid fa-triangle-exclamation" style="color: #ff3333"></i> Runtime Error
+            </div>
+            <div class="modal-close" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="modal-body">
+            <i class="fa-solid fa-bug error-icon"></i>
+            <p><strong>CRITICAL FAILURE DETECTED</strong></p>
+            <p style="margin-top: 10px; color: #aaa;">O código contém erros de sintaxe que impossibilitam a compilação do projeto.</p>
+            <p style="margin-top: 10px; color: #fff;">Sugerido: Utilize a extensão <strong>Google Gemini AI</strong> na barra lateral para reescrever e corrigir o código.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn" id="btn-ack-error">Entendido</button>
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL (GEMINI PROMO) -->
+    <div id="gemini-success-modal">
+        <div class="gemini-header">
+            <div class="gemini-title">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Google Gemini AI
+            </div>
+            <div class="gemini-close" id="btn-close-success">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+        </div>
+        <div class="gemini-body">
+            <h2>Código Otimizado com Sucesso!</h2>
+            <p>
+                Através da parceria <strong>Alura + Google Gemini</strong>, utilizamos o poder da inteligência artificial para acelerar o desenvolvimento e corrigir bugs complexos em segundos.
+            </p>
+            <p style="color: #888; font-size: 12px;">Imersão Dev • Projeto Uberaba City • 2025</p>
+        </div>
+    </div>
+
+    <!-- 1. POWER SCENE -->
+    <div id="scene-power">
+        <div class="power-btn" id="btn-power">
+            <i class="fa-solid fa-power-off"></i>
+        </div>
+        <div class="power-msg">LIGAR COMPUTADOR </div>
+    </div>
+
+    <!-- 2. BIOS SCENE -->
+    <div id="scene-bios">
+        <div id="bios-text"></div>
+    </div>
+
+    <!-- 3. LOGIN SCENE -->
+    <div id="scene-login">
+        <div id="lock-screen-content">
+            <div class="lock-time" id="clock-time">10:00</div>
+            <div class="lock-date" id="clock-date">Terça-feira, 20 de Maio</div>
+        </div>
+
+        <div id="login-form">
+            <!-- Se a variável CSS --user-avatar não estiver definida, aparece o ícone -->
+            <div class="user-avatar">
+                <i class="fa-solid fa-user" style="opacity: 0.5;"></i>
+            </div>
+            <div class="user-name">Pedro Henrique</div>
+            <input type="password" class="pass-input" id="pass-input" placeholder="Senha">
+            <button class="login-btn">Entrar</button>
+        </div>
+    </div>
+
+    <!-- 4. DESKTOP SCENE -->
+    <div id="scene-desktop">
+        <div class="desktop-grid">
+            <div class="desktop-icon" onclick="wrongIcon('Lixeira')">
+                <i class="fa-solid fa-trash-can icon-img" style="color: #ddd"></i>
+                <div class="icon-label">Lixeira</div>
+            </div>
+            <div class="desktop-icon" onclick="wrongIcon('Meu Computador')">
+                <i class="fa-solid fa-desktop icon-img" style="color: #fff"></i>
+                <div class="icon-label">Meu Computador</div>
+            </div>
+            <div class="desktop-icon" onclick="wrongIcon('Fotos')">
+                <i class="fa-solid fa-images icon-img" style="color: #00bcd4"></i>
+                <div class="icon-label">Fotos</div>
+            </div>
+            <div class="desktop-icon" onclick="wrongIcon('Spotify')">
+                <i class="fa-brands fa-spotify icon-img" style="color: #1db954"></i>
+                <div class="icon-label">Spotify</div>
+            </div>
+            <div class="desktop-icon" id="icon-vscode">
+                <i class="fa-solid fa-code icon-img" style="color: #0078d7"></i>
+                <div class="icon-label">Visual Studio Code</div>
+            </div>
+            <div class="desktop-icon" onclick="wrongIcon('Configurações')">
+                <i class="fa-solid fa-gear icon-img" style="color: #aaa"></i>
+                <div class="icon-label">Configurações</div>
+            </div>
+            <div class="desktop-icon" onclick="wrongIcon('Google Chrome')">
+                <i class="fa-brands fa-chrome icon-img" style="color: #ffce44"></i>
+                <div class="icon-label">Google Chrome</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. VS CODE SCENE -->
+    <div id="scene-vscode">
+        <div class="vs-titlebar">
+            <span>ProjetoSiteUberaba.tsx - Visual Studio Code</span>
+            <div class="vs-controls">
+                <div class="vs-control"><i class="fa-solid fa-minus"></i></div>
+                <div class="vs-control"><i class="fa-regular fa-square"></i></div>
+                <div class="vs-control close"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+        </div>
+
+        <div class="vs-body">
+            <!-- Sidebar -->
+            <div class="vs-activitybar">
+                <i class="fa-regular fa-file"></i>
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-code-branch"></i>
+            </div>
+
+            <div class="vs-sidebar">
+                <div>EXPLORER</div>
+                <div class="vs-file-tree">
+                    <div style="font-weight: bold; margin-bottom: 5px;"><i class="fa-solid fa-angle-down"></i> PROJETO-UBERABA</div>
+                    <div class="vs-file active"><i class="fa-brands fa-react react-icon"></i> ProjetoSiteUberaba.tsx</div>
+                    <div class="vs-file"><i class="fa-brands fa-css3" style="color: #42a5f5"></i> styles.css</div>
+                    <div class="vs-file"><i class="fa-brands fa-js" style="color: #fdd835"></i> script.js</div>
+                    <div class="vs-file"><i class="fa-brands fa-html5" style="color: #e65100"></i> index.html</div>
+                    <div class="vs-file"><i class="fa-solid fa-gear" style="color: #aaa"></i> config.json</div>
+                    
+                    <!-- Gemini File -->
+                    <div class="gemini-file" id="gemini-tool">
+                        <i class="fa-solid fa-wand-magic-sparkles gemini-icon-glow"></i> 
+                        <span style="margin-left: 8px; font-weight: bold; font-size: 11px;">USAR GEMINI</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editor -->
+            <div class="vs-editor-area">
+                <div class="vs-code-panel">
+                    <div class="vs-tabs">
+                        <div class="vs-tab">
+                            <i class="fa-brands fa-react react-icon"></i> ProjetoSiteUberaba.tsx 
+                        </div>
+                    </div>
+                    <div class="vs-code-content" id="code-container">
+                        <span class="typing-cursor"></span>
+                    </div>
+                    <div class="typing-hint" id="typing-hint"><i class="fa-regular fa-keyboard"></i> DIGITE QUALQUER TECLA PARA CODAR</div>
+                </div>
+
+                <!-- Preview -->
+                <div class="vs-preview-panel" id="preview-container">
+                    <canvas id="canvas-preview"></canvas>
+                    <div class="preview-ui">
+                        <div class="brand-title">
+                            <span id="typewriter-text"></span><span class="title-cursor"></span>
+                        </div>
+                        <div class="alura-gemini-text" id="sub-brand">DA ALURA + GEMINI</div>
+                        <div class="brand-subtitle" id="sub-proj">PROJETO UBERABA</div>
+                        
+                        <button class="cta-btn" id="prev-btn">ACESSAR SITE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 22px; background: #007acc; display: flex; align-items: center; padding: 0 10px; font-size: 12px; color: white;">
+             <span id="status-bar-text">READY</span>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // TIME & UTILS
+        // ==========================================
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+            const dateStr = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+            if(document.getElementById('clock-time')) {
+                document.getElementById('clock-time').innerText = timeStr;
+                document.getElementById('clock-date').innerText = dateStr;
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // ==========================================
+        // BOOT SEQUENCE
+        // ==========================================
+        const btnPower = document.getElementById('btn-power');
+        
+        btnPower.addEventListener('click', () => {
+            btnPower.style.color = '#00ff00';
+            btnPower.style.boxShadow = '0 0 30px #00ff00';
+            document.querySelector('.power-msg').innerText = "INICIANDO SISTEMA...";
+            
+            setTimeout(() => {
+                document.getElementById('scene-power').style.display = 'none';
+                runBios();
+            }, 1500);
+        });
+
+        function runBios() {
+            const bios = document.getElementById('scene-bios');
+            const text = document.getElementById('bios-text');
+            bios.style.display = 'block';
+
+            const lines = [
+                "AMIBIOS(C)2025 American Megatrends, Inc.",
+                "ASUS PRIME Z790-A ACPI BIOS Revision 1203",
+                "CPU: Intel(R) Core(TM) i9-14900K CPU @ 6.00GHz",
+                "Checking NVRAM..",
+                "Initializing USB Controllers.. Done.",
+                "Detecting Memory... <span class='bios-highlight'>64GB OK</span>",
+                "Detecting Storage... <span class='bios-highlight'>NVMe M.2 2TB OK</span>",
+                "Loading Windows Kernel...",
+                "Booting..."
+            ];
+
+            let delay = 0;
+            lines.forEach((line) => {
+                setTimeout(() => {
+                    text.innerHTML += `<div class="bios-line">${line}</div>`;
+                    window.scrollTo(0, document.body.scrollHeight);
+                }, delay);
+                delay += 400; 
+            });
+
+            setTimeout(() => {
+                bios.style.display = 'none';
+                showLockScreen();
+            }, 5000);
+        }
+
+        function showLockScreen() {
+            const loginScene = document.getElementById('scene-login');
+            const lockContent = document.getElementById('lock-screen-content');
+            const loginForm = document.getElementById('login-form');
+            
+            loginScene.style.display = 'flex';
+            
+            setTimeout(() => {
+                gsap.to(lockContent, { y: -500, opacity: 0, duration: 1 });
+                loginForm.style.display = 'flex';
+                gsap.from(loginForm, { y: 50, opacity: 0, duration: 1 });
+                
+                // Check if custom avatar image is loaded via CSS var, if so remove icon
+                const avatarDiv = document.querySelector('.user-avatar');
+                const style = getComputedStyle(document.body);
+                const bgImg = style.getPropertyValue('--user-avatar');
+                if(bgImg && bgImg.includes('url') && bgImg.length > 10) {
+                    avatarDiv.innerHTML = ''; // Remove default icon
+                }
+
+                // Auto Type Password slowly
+                setTimeout(() => {
+                    const passInput = document.getElementById('pass-input');
+                    const pass = "********";
+                    let i = 0;
+                    const typePass = setInterval(() => {
+                        passInput.value += pass[i];
+                        i++;
+                        if(i >= pass.length) {
+                            clearInterval(typePass);
+                            setTimeout(() => {
+                                const btn = document.querySelector('.login-btn');
+                                btn.style.opacity = 1;
+                                btn.style.transform = "scale(0.95)";
+                                setTimeout(loadDesktop, 1500);
+                            }, 500);
+                        }
+                    }, 300); 
+                }, 1500);
+
+            }, 2500);
+        }
+
+        // ==========================================
+        // DESKTOP SCENE
+        // ==========================================
+        function loadDesktop() {
+            document.getElementById('scene-login').style.display = 'none';
+            document.getElementById('scene-desktop').style.display = 'block';
+
+            setTimeout(() => {
+                const notif = document.getElementById('win-notif');
+                notif.style.right = '20px';
+                setTimeout(() => {
+                    notif.style.right = '-400px';
+                }, 5000);
+            }, 1000);
+        }
+        
+        // New Windows-Style Error
+        function wrongIcon(name) {
+            const box = document.getElementById('win-error-box');
+            const msg = document.getElementById('win-error-msg-text');
+            msg.innerText = `O aplicativo '${name}' não pode ser iniciado. O acesso é restrito ao ambiente de desenvolvimento VS Code.`;
+            box.style.display = 'flex';
+        }
+
+        function closeWinError() {
+            document.getElementById('win-error-box').style.display = 'none';
+        }
+
+        document.getElementById('icon-vscode').addEventListener('dblclick', openVSCode);
+        document.getElementById('icon-vscode').addEventListener('click', openVSCode);
+
+        function openVSCode() {
+            const vs = document.getElementById('scene-vscode');
+            vs.style.display = 'flex';
+
+            gsap.to(vs, { 
+                scale: 1, 
+                opacity: 1, 
+                duration: 1.5, 
+                ease: "expo.out",
+                onComplete: () => {
+                    state.isCoding = true;
+                    initParticles(); 
+                }
+            });
+        }
+
+        // ==========================================
+        // HACKER TYPER LOGIC
+        // ==========================================
+        const state = { isCoding: false, index: 0, errorStage: false, fixed: false, accessGranted: false, previewVisible: false };
+        const container = document.getElementById('code-container');
+
+        const fullCode = `
+<span class="k-import">import</span> React, { <span class="k-func">useState</span>, <span class="k-func">useEffect</span>, <span class="k-func">useRef</span> } <span class="k-import">from</span> <span class="k-str">'react'</span>;
+<span class="k-import">import</span> <span class="k-var">styled</span>, { <span class="k-func">keyframes</span>, <span class="k-var">css</span> } <span class="k-import">from</span> <span class="k-str">'styled-components'</span>;
+<span class="k-import">import</span> { <span class="k-var">Alura</span>, <span class="k-var">GeminiAI</span> } <span class="k-import">from</span> <span class="k-str">'@imersao/dev'</span>;
+<span class="k-import">import</span> { <span class="k-var">OrbitControls</span>, <span class="k-var">Stars</span> } <span class="k-import">from</span> <span class="k-str">'three/drei'</span>;
+<span class="k-import">import</span> { <span class="k-var">Canvas</span>, <span class="k-var">useFrame</span> } <span class="k-import">from</span> <span class="k-str">'react-three-fiber'</span>;
+<span class="k-import">import</span> <span class="k-var">gsap</span> <span class="k-import">from</span> <span class="k-str">'gsap'</span>;
+<span class="k-import">import</span> { <span class="k-var">AudioContext</span> } <span class="k-import">from</span> <span class="k-str">'./utils/SoundManager'</span>;
+
+<span class="k-comment">/**
+ * PROJETO UBERABA CITY - IMERSÃO DEV alura + gemini
+ * Desenvolvido com React, Three.js e Inteligência Artificial.
+ * Autor: Pedro Henrique
+ */</span>
+
+<span class="k-comment">// --- Interfaces & Types ---</span>
+<span class="k-func">interface</span> <span class="k-var">ProjectProps</span> {
+  <span class="k-attr">theme</span>: <span class="k-str">'dark'</span> | <span class="k-str">'light'</span>;
+  <span class="k-attr">active</span>: <span class="k-var">boolean</span>;
+  <span class="k-attr">mode</span>: <span class="k-str">'immersive'</span> | <span class="k-str">'static'</span>;
+}
+
+<span class="k-comment">// --- Animation Definitions ---</span>
+<span class="k-var">const</span> <span class="k-func">fadeIn</span> = <span class="k-func">keyframes</span>\`
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+\`;
+
+<span class="k-var">const</span> <span class="k-func">glitchAnim</span> = <span class="k-func">keyframes</span>\`
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+\`;
+
+<span class="k-var">const</span> <span class="k-var">Container</span> = <span class="k-var">styled.main</span>\`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #000;
+  color: #fff;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  animation: \${<span class="k-func">fadeIn</span>} 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+\`;
+
+<span class="k-var">const</span> <span class="k-var">ContentWrapper</span> = <span class="k-var">styled.div</span>\`
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  backdrop-filter: blur(10px);
+  padding: 4rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+\`;
+
+<span class="k-var">const</span> <span class="k-var">Title</span> = <span class="k-var">styled.h1</span>\`
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: -2px;
+  background: linear-gradient(180deg, #fff, #aaa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  
+  \${<span class="k-var">props</span> => <span class="k-var">props</span>.<span class="k-attr">glitch</span> && <span class="k-func">css</span>\`
+    animation: \${<span class="k-func">glitchAnim</span>} 0.3s infinite;
+  \`}
+\`;
+
+<span class="k-comment">// --- Main Component Logic ---</span>
+<span class="k-func">export default function</span> <span class="k-func">ProjectUberaba</span>() {
+  <span class="k-var">const</span> [<span class="k-var">status</span>, <span class="k-func">setStatus</span>] = <span class="k-func">useState</span>(<span class="k-str">'initializing'</span>);
+  <span class="k-var">const</span> <span class="k-var">audioRef</span> = <span class="k-func">useRef</span>(<span class="k-var">null</span>);
+  <span class="k-var">const</span> <span class="k-var">modelRef</span> = <span class="k-func">useRef</span>(<span class="k-var">null</span>);
+  
+  <span class="k-comment">// Initializing Google Gemini AI Model V2</span>
+  <span class="k-var">const</span> <span class="k-var">gemini</span> = <span class="k-func">useGemini</span>({ 
+    <span class="k-attr">model</span>: <span class="k-str">'pro-1.5'</span>,
+    <span class="k-attr">temperature</span>: <span class="k-bracket">0.7</span>,
+    <span class="k-attr">context</span>: <span class="k-str">'coding-assistant'</span>
+  });
+
+  <span class="k-func">useEffect</span>(() => {
+    <span class="k-func">async function</span> <span class="k-func">bootSystem</span>() {
+        <span class="k-func">try</span> {
+            <span class="k-comment">// Connect to Alura Ecosystem</span>
+            <span class="k-func">await</span> <span class="k-var">Alura</span>.<span class="k-func">connect</span>();
+            
+            <span class="k-comment">// Start Audio Engine</span>
+            <span class="k-func">if</span> (<span class="k-var">audioRef</span>.<span class="k-attr">current</span>) {
+                <span class="k-var">audioRef</span>.<span class="k-attr">current</span>.<span class="k-func">play</span>();
+            }
+
+            <span class="k-func">console</span>.<span class="k-func">log</span>(<span class="k-str">"Environment Ready"</span>);
+            <span class="k-func">setStatus</span>(<span class="k-str">'ready'</span>);
+        } <span class="k-func">catch</span> (<span class="k-var">error</span>) {
+            <span class="k-func">console</span>.<span class="k-func">error</span>(<span class="k-str">"Boot Failure"</span>, <span class="k-var">error</span>);
+        }
+    }
+    <span class="k-func">bootSystem</span>();
+  }, []);
+
+  <span class="k-func">const</span> <span class="k-func">handleAccess</span> = () => {
+     <span class="k-func">gsap</span>.<span class="k-func">to</span>(<span class="k-str">"main"</span>, {
+        <span class="k-attr">opacity</span>: <span class="k-bracket">0</span>,
+        <span class="k-attr">duration</span>: <span class="k-bracket">1</span>,
+        <span class="k-attr">onComplete</span>: () => <span class="k-var">window</span>.<span class="k-attr">location</span>.<span class="k-attr">href</span> = <span class="k-str">'/home'</span>
+     });
+  };
+
+  <span class="k-comment">// Render Loop - 3D & UI</span>
+  <span class="k-import">return</span> (
+    <span class="k-tag">&lt;Container&gt;</span>
+       
+       <span class="k-comment">{/* 3D Background via Three.js */}</span>
+       <span class="k-tag">&lt;Canvas</span> <span class="k-attr">camera</span>=<span class="k-bracket">{{ position: [0, 0, 5] }}</span><span class="k-tag">&gt;</span>
+          <span class="k-tag">&lt;OrbitControls</span> <span class="k-attr">enableZoom</span>=<span class="k-bracket">{false}</span> <span class="k-tag">/&gt;</span>
+          <span class="k-tag">&lt;ambientLight</span> <span class="k-attr">intensity</span>=<span class="k-bracket">{0.5}</span> <span class="k-tag">/&gt;</span>
+          <span class="k-tag">&lt;pointLight</span> <span class="k-attr">position</span>=<span class="k-bracket">{[10, 10, 10]}</span> <span class="k-tag">/&gt;</span>
+          <span class="k-tag">&lt;StarField</span> <span class="k-attr">count</span>=<span class="k-bracket">{5000}</span> <span class="k-tag">/&gt;</span>
+       <span class="k-tag">&lt;/Canvas&gt;</span>
+
+       <span class="k-tag">&lt;ContentWrapper&gt;</span>
+          <span class="k-tag">&lt;Header&gt;</span>
+             <span class="k-tag">&lt;Title&gt;</span>IMERSÃO DEV<span class="k-tag">&lt;/Title&gt;</span>
+             <span class="k-tag">&lt;Subtitle&gt;</span>Da Alura + Gemini<span class="k-tag">&lt;/Subtitle&gt;</span>
+          <span class="k-tag">&lt;/Header&gt;</span>
+
+          <span class="k-tag">&lt;Badge</span> <span class="k-attr">type</span>=<span class="k-str">"gemini"</span><span class="k-tag">&gt;</span>
+             Powered by Google AI
+          <span class="k-tag">&lt;/Badge&gt;</span>
+          
+          <span class="k-tag">&lt;ButtonPrimary</span> 
+             <span class="k-attr">onClick</span>=<span class="k-bracket">{handleAccess}</span>
+             <span class="k-attr">disabled</span>=<span class="k-bracket">{status !== 'ready'}</span>
+          <span class="k-tag">&gt;</span>
+             ACESSAR SITE
+          <span class="k-tag">&lt;/ButtonPrimary&gt;</span>
+
+       <span class="k-tag">&lt;/ContentWrapper&gt;</span>
+    <span class="k-tag">&lt;/Container&gt;</span>
+  );
+}
+`;
+
+        const codeChunks = fullCode.split(/(?=<span)|(?<=<\/span>)/g);
+        
+        document.addEventListener('keydown', (e) => {
+            if(!state.isCoding || state.errorStage) return;
+
+            // REVEAL PREVIEW ON FIRST KEY STROKE
+            if(!state.previewVisible) {
+                state.previewVisible = true;
+                const prevPanel = document.getElementById('preview-container');
+                prevPanel.style.opacity = 1;
+            }
+
+            if(state.index >= codeChunks.length) return;
+            
+            const chunk = codeChunks[state.index];
+            const cursor = document.querySelector('.typing-cursor');
+            cursor.insertAdjacentHTML('beforebegin', chunk);
+            state.index++;
+            
+            container.scrollTop = container.scrollHeight;
+
+            checkCodeProgress(container.innerText);
+        });
+
+        let typeWriterStarted = false;
+        function checkCodeProgress(text) {
+            if(text.includes('export default') && !typeWriterStarted) {
+                typeWriterStarted = true;
+                typeWriter("IMERSÃO DEV", document.getElementById('typewriter-text'));
+            }
+
+            if(text.includes('Subtitle')) {
+                gsap.to('#sub-brand', { opacity: 1, duration: 0.5 });
+                gsap.to('#sub-proj', { opacity: 1, duration: 0.5, delay: 0.2 });
+            }
+
+            if(text.includes('ButtonPrimary')) {
+                gsap.to('#prev-btn', { opacity: 1, y: 0, duration: 0.5 });
+                document.getElementById('typing-hint').innerHTML = "CÓDIGO FINALIZADO. CLIQUE EM 'ACESSAR SITE'.";
+                document.getElementById('status-bar-text').innerText = "COMPILATION SUCCESS";
+            }
+        }
+
+        function typeWriter(text, element) {
+            let i = 0;
+            const interval = setInterval(() => {
+                element.innerHTML += text.charAt(i);
+                i++;
+                if(i >= text.length) clearInterval(interval);
+            }, 100);
+        }
+
+        // ==========================================
+        // ERROR & GEMINI FIX SEQUENCE
+        // ==========================================
+        const prevBtn = document.getElementById('prev-btn');
+        const modal = document.getElementById('error-modal');
+        const closeModal = document.getElementById('btn-close-modal');
+        const ackModal = document.getElementById('btn-ack-error');
+        const geminiTool = document.getElementById('gemini-tool');
+        const successModal = document.getElementById('gemini-success-modal');
+        const closeSuccess = document.getElementById('btn-close-success');
+
+        prevBtn.addEventListener('click', () => {
+            if(!state.accessGranted) {
+                triggerError();
+            } else {
+                window.location.href = 'main.html';
+            }
+        });
+
+        function triggerError() {
+            state.errorStage = true;
+            
+            document.getElementById('scene-vscode').classList.add('glitch-error');
+            document.getElementById('code-container').style.color = 'red';
+            document.getElementById('status-bar-text').innerText = "CRITICAL ERROR DETECTED";
+            document.getElementById('status-bar-text').style.background = "red";
+            
+            modal.style.display = 'flex';
+            gsap.to(modal, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out" });
+        }
+
+        function hideErrorModal() {
+            gsap.to(modal, { opacity: 0, scale: 0.8, duration: 0.2, onComplete: () => {
+                modal.style.display = 'none';
+                geminiTool.classList.add('pulse');
+                document.getElementById('typing-hint').innerText = "CLIQUE NO BOTÃO GEMINI (BARRA LATERAL) PARA CORRIGIR.";
+            }});
+        }
+        closeModal.addEventListener('click', hideErrorModal);
+        ackModal.addEventListener('click', hideErrorModal);
+
+        geminiTool.addEventListener('click', () => {
+            if(!state.errorStage || state.fixed) return;
+            
+            geminiTool.classList.remove('pulse');
+            
+            const container = document.getElementById('code-container');
+            container.innerHTML = '<span class="typing-cursor"></span>';
+            container.style.color = '#d4d4d4'; 
+            document.getElementById('scene-vscode').classList.remove('glitch-error');
+            document.getElementById('status-bar-text').innerText = "GEMINI AI REWRITING...";
+            document.getElementById('status-bar-text').style.background = "#8e24aa"; 
+
+            triggerGeminiRewrite();
+        });
+
+        function triggerGeminiRewrite() {
+            const chunks = fullCode.split(/(?=<span)|(?<=<\/span>)/g);
+            let i = 0;
+
+            const slowType = setInterval(() => {
+                if(i >= chunks.length) {
+                    clearInterval(slowType);
+                    state.fixed = true;
+                    state.errorStage = false;
+                    showSuccessModal();
+                    return;
+                }
+                
+                const cursor = document.querySelector('.typing-cursor');
+                let chunk = chunks[i];
+                if(chunk.includes('k-')) chunk = chunk.replace('class="', 'class="gemini-glow ');
+                
+                cursor.insertAdjacentHTML('beforebegin', chunk);
+                container.scrollTop = container.scrollHeight;
+                i++;
+            }, 20); 
+        }
+
+        function showSuccessModal() {
+            successModal.style.display = 'flex';
+            gsap.to(successModal, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out" });
+        }
+
+        closeSuccess.addEventListener('click', () => {
+            gsap.to(successModal, { opacity: 0, scale: 0.9, duration: 0.3, onComplete: () => {
+                successModal.style.display = 'none';
+                
+                state.accessGranted = true;
+                document.getElementById('typing-hint').innerText = "CORREÇÃO COMPLETA. ACESSO LIBERADO.";
+                document.getElementById('status-bar-text').innerText = "READY";
+                document.getElementById('status-bar-text').style.background = "#007acc";
+                document.getElementById('prev-btn').style.border = "1px solid #00ff00";
+                document.getElementById('prev-btn').style.color = "#00ff00";
+            }});
+        });
+
+        // ==========================================
+        // THREE.JS STARFIELD
+        // ==========================================
+        function initParticles() {
+            const canvas = document.getElementById('canvas-preview');
+            const parent = canvas.parentElement;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, parent.clientWidth / parent.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(parent.clientWidth, parent.clientHeight);
+
+            const geometry = new THREE.BufferGeometry();
+            const count = 3000;
+            const posArray = new Float32Array(count * 3);
+
+            for(let i=0; i<count*3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15; 
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const material = new THREE.PointsMaterial({ size: 0.02, color: 0x0078d7, transparent: true, opacity: 0.8 });
+            const mesh = new THREE.Points(geometry, material);
+            scene.add(mesh);
+            camera.position.z = 3;
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                mesh.rotation.y += 0.001;
+                mesh.rotation.x += 0.0005;
+                
+                if(state.errorStage && !state.fixed) {
+                    mesh.rotation.z += 0.05;
+                    material.color.setHex(0xff0000);
+                } else if(state.fixed) {
+                    material.color.setHex(0x00ff00);
+                } else {
+                    material.color.setHex(0x0078d7);
+                }
+
+                renderer.render(scene, camera);
+            };
+            animate();
+        }
+
+    </script>
+</body>
+</html>
