@@ -4,6 +4,8 @@ Uberaba Experience | Imersão Dev Alura + Google Gemini
 
 Este projeto foi desenvolvido como desafio final da Imersão Dev da Alura em parceria com o Google Gemini. O objetivo não foi apenas criar um guia turístico, mas sim uma experiência interativa que coloca o usuário no papel de um desenvolvedor, simulando um sistema operacional completo antes de revelar o conteúdo da cidade.
 
+---
+
 Sobre o Projeto
 
 O Uberaba Experience é uma homenagem à cidade de Uberaba-MG, conhecida mundialmente como a capital do Zebu e terra dos Dinossauros.
@@ -17,6 +19,8 @@ O Uberaba Experience é uma homenagem à cidade de Uberaba-MG, conhecida mundial
 - O Código: Abre o VS Code e usa uma simulação da IA Google Gemini para corrigir o código e "compilar" o site.
 
 - A Revelação: Só então o site principal é carregado, repleto de animações, história e utilidade pública.
+
+  ---
 
 Tecnologias Utilizadas
 O projeto foi construído utilizando tecnologias modernas de Front-end, focando em performance e animação: HTML5, CSS (Tailwind) e JavaScript Puro
@@ -33,6 +37,8 @@ O projeto foi construído utilizando tecnologias modernas de Front-end, focando 
 
 - Bibliotecas Adicionais: Lenis (Smooth Scroll), FontAwesome (Ícones).
 
+  ---
+
 Funcionalidades
 
 A Simulação (Intro)
@@ -46,6 +52,8 @@ A Simulação (Intro)
 - Área de Trabalho: Ícones interativos e janelas de erro estilo Windows.
 
 - VS Code + Gemini: Um editor de código simulado onde a IA "reescreve" o projeto em tempo real.
+
+  ---
 
 O Guia da Cidade (Site Principal)
 
@@ -65,6 +73,7 @@ O Guia da Cidade (Site Principal)
 
 - E muito mais...
 
+---
 
 📸 Previews
 
