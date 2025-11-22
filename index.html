@@ -8,7 +8,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600;700;800&family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600;700;800&family=Segoe+UI:wght@300;400;600;700&family=Special+Elite&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -211,6 +211,7 @@
             background: var(--wallpaper-desk) no-repeat center center/cover;
             display: none;
             z-index: 70;
+            overflow: hidden; /* Prevent scrollbars from falling icons */
         }
 
         .desktop-grid {
@@ -230,12 +231,20 @@
             text-shadow: 0 1px 3px black; cursor: pointer;
             padding: 10px; border: 1px solid transparent; border-radius: 4px;
             transition: background 0.2s;
+            position: relative; /* For gravity logic */
         }
         .desktop-icon:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
         .icon-img { font-size: 2.2rem; margin-bottom: 8px; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5)); }
-        .icon-label { font-size: 0.8rem; line-height: 1.2; }
+        
+        /* GTA CUSTOM IMAGE ICON */
+        .custom-icon-img {
+            width: 40px; height: 40px; object-fit: contain; margin-bottom: 8px;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
+        }
 
-        /* --- PHOTOS FOLDER WINDOW --- */
+        .icon-label { font-size: 0.8rem; line-height: 1.2; }
+        
+        /* --- WINDOWS (GENERIC & PRANK) --- */
         .os-window {
             position: absolute; top: 10%; left: 15%; width: 70%; height: 70%;
             background: #f0f0f0; color: #000;
@@ -254,12 +263,13 @@
         .os-btn.close:hover { background: #e81123; color: white; }
         
         .os-toolbar { padding: 8px 12px; background: #f9f9f9; border-bottom: 1px solid #ddd; display: flex; gap: 15px; font-size: 13px; color: #555; align-items: center; }
+        .os-address-bar { padding: 4px 10px; border: 1px solid #ccc; background: white; width: 100%; margin: 5px 10px; font-size: 12px; color: #555; display: flex; align-items: center; gap: 5px;}
         .os-toolbar span { cursor: pointer; }
         .os-toolbar span:hover { color: #000; }
 
-        .os-body { flex: 1; padding: 20px; overflow-y: auto; background: #fff; }
+        .os-body { flex: 1; padding: 20px; overflow-y: auto; background: #fff; position: relative; }
         
-        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; }
         .photo-item {
             display: flex; flex-direction: column; align-items: center;
             padding: 10px; cursor: pointer; border: 1px solid transparent;
@@ -267,13 +277,14 @@
         }
         .photo-item:hover { background: #e5f3ff; border-color: #cce8ff; }
         .photo-frame {
-            width: 100%; height: 110px; background: #eee;
+            width: 100%; height: 80px;
             margin-bottom: 8px; display: flex; justify-content: center; align-items: center;
-            overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid #ddd;
+            overflow: hidden; 
         }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
+        .photo-frame i { font-size: 3rem; } /* For Folder Icons */
         .photo-item:hover img { transform: scale(1.05); }
-        .photo-name { font-size: 12px; text-align: center; color: #333; word-break: break-all;}
+        .photo-name { font-size: 12px; text-align: center; color: #333; word-break: break-word;}
 
 
         /* Windows Generic Error Dialog (Fake) */
@@ -287,7 +298,7 @@
             box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
             display: none;
             flex-direction: column;
-            z-index: 800;
+            z-index: 6000; /* High Z-Index for Prank */
             font-family: 'Segoe UI', sans-serif;
         }
         .win-err-header {
@@ -334,6 +345,217 @@
         .notif-icon { font-size: 24px; color: var(--win-blue); }
         .notif-content h4 { font-size: 14px; margin-bottom: 5px; color: white; }
         .notif-content p { font-size: 12px; color: #ccc; }
+
+        /* Programmer Alert Modal (New) */
+        #programmer-alert-modal {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 400px;
+            background: rgba(30, 30, 30, 0.95);
+            border: 1px solid #00ff9d; /* Cyber Green */
+            border-radius: 12px;
+            padding: 0;
+            display: none; opacity: 0;
+            flex-direction: column;
+            z-index: 3000;
+            box-shadow: 0 20px 60px rgba(0,255,157,0.15);
+            backdrop-filter: blur(10px);
+        }
+        
+        #programmer-alert-modal .modal-header {
+            background: rgba(0, 255, 157, 0.1);
+            border-bottom: 1px solid rgba(0, 255, 157, 0.3);
+        }
+        
+        #programmer-alert-modal .modal-title {
+            color: #00ff9d;
+        }
+
+        #programmer-alert-modal .modal-btn {
+            background: transparent;
+            border: 1px solid #00ff9d;
+            color: #00ff9d;
+            transition: all 0.3s;
+        }
+        
+        #programmer-alert-modal .modal-btn:hover {
+            background: #00ff9d;
+            color: #000;
+            box-shadow: 0 0 15px #00ff9d;
+        }
+
+        /* --- DOCUMENT MODAL (OFFICIAL TERM) --- */
+        #prank-term-modal {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 5000;
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .document-paper {
+            background: #f4f1ea;
+            color: #333;
+            width: 90%; max-width: 550px;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 60px rgba(0,0,0,0.1);
+            font-family: 'Special Elite', 'Courier New', monospace;
+            position: relative;
+            transform: rotate(-1deg);
+            border: 1px solid #d3d3d3;
+        }
+        
+        .document-paper::before {
+            content: 'CONFIDENTIAL';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 4rem;
+            color: rgba(255, 0, 0, 0.1);
+            border: 5px solid rgba(255, 0, 0, 0.1);
+            padding: 10px 40px;
+            pointer-events: none;
+            font-weight: bold;
+        }
+
+        .doc-seal {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .doc-seal i { font-size: 40px; color: #444; }
+        
+        .doc-title {
+            text-align: center; font-size: 1.5rem; 
+            font-weight: bold; text-decoration: underline;
+            margin-bottom: 20px; letter-spacing: 1px;
+        }
+        
+        .doc-text {
+            font-size: 0.9rem; line-height: 1.6; text-align: justify;
+            margin-bottom: 20px;
+        }
+        
+        .doc-input-group {
+            margin-top: 30px;
+            border-top: 2px solid #333;
+            padding-top: 20px;
+        }
+        
+        .doc-input {
+            width: 100%; padding: 10px;
+            background: transparent; border: none; border-bottom: 2px dashed #333;
+            font-family: 'Special Elite', monospace; font-size: 1.2rem;
+            color: #000; outline: none;
+            text-align: center; text-transform: uppercase;
+        }
+        
+        .doc-label {
+            display: block; text-align: center; font-size: 0.8rem; margin-top: 5px; color: #666;
+        }
+        
+        .doc-actions {
+            display: flex; justify-content: space-between; margin-top: 30px; gap: 15px;
+        }
+        
+        .doc-btn {
+            flex: 1; padding: 12px;
+            border: 2px solid #333; background: transparent;
+            font-family: 'Special Elite', monospace; font-weight: bold;
+            cursor: pointer; transition: 0.3s;
+            text-transform: uppercase;
+        }
+        
+        .doc-btn.accept {
+            background: #333; color: #f4f1ea; opacity: 0.5; pointer-events: none;
+        }
+        .doc-btn.accept.active { opacity: 1; pointer-events: auto; }
+        .doc-btn.accept:hover { background: #000; }
+        
+        .doc-btn.deny { color: #333; }
+        .doc-btn.deny:hover { background: #e8e8e8; }
+
+        /* FAKE FILE VIEWER */
+        #fake-viewer-modal {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px; height: 400px;
+            background: #fff; border: 1px solid #000;
+            display: none; flex-direction: column;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
+            z-index: 5500;
+            font-family: 'Courier New', monospace;
+        }
+        .viewer-header {
+            background: #000080; color: white; padding: 5px 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: 'Segoe UI', sans-serif; font-size: 13px;
+        }
+        .viewer-content {
+            flex: 1; padding: 20px; overflow: auto;
+            background: #fff; color: #000; white-space: pre-wrap;
+        }
+        .viewer-image {
+            width: 100%; height: 100%; object-fit: contain; background: #000;
+        }
+
+        #palmeiras-overlay {
+            position: fixed; inset: 0;
+            background: #004400;
+            z-index: 9999;
+            display: none; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .palm-img { max-width: 80%; max-height: 60vh; border: 10px solid white; box-shadow: 0 0 50px #fff; }
+        .palm-text {
+            font-family: 'Impact', sans-serif;
+            font-size: 5rem; color: white; text-transform: uppercase;
+            margin-top: 20px; text-shadow: 5px 5px 0px black;
+            text-align: center;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        /* GTA 6 DOWNLOAD BAR */
+        .download-window-content {
+            display: flex; flex-direction: column; gap: 10px; justify-content: center; align-items: center; height: 100%;
+        }
+        .download-bar-container {
+            width: 100%; height: 20px; background: #ddd; border: 1px solid #999; position: relative;
+        }
+        .download-bar {
+            height: 100%; width: 0%; background: #00cc00; transition: width 0.1s linear;
+        }
+        .download-text { font-size: 12px; font-family: 'Segoe UI'; color: #333; }
+
+        /* RUNNING BUTTON */
+        .running-btn {
+            position: absolute; transition: all 0.1s ease; 
+        }
+
+        /* QUIZ STYLES */
+        .quiz-option {
+            display: block; width: 100%; padding: 8px; margin-bottom: 5px;
+            background: #e1e1e1; border: 1px solid #adadad; cursor: pointer; text-align: left;
+        }
+        .quiz-option:hover { background: #d1d1d1; }
+
+        /* BACKGROUND MESSAGE FOR FOLDERS */
+        .bg-message-overlay {
+            position: absolute; inset: 0; display: flex; justify-content: center; align-items: center;
+            font-size: 5rem; font-weight: bold; color: rgba(0,0,0,0.1); z-index: 0;
+            pointer-events: none; text-transform: uppercase; text-align: center;
+        }
 
         /* Alert Modal (Critical Error inside VS Code) */
         #error-modal {
@@ -675,6 +897,62 @@
             transform: translateY(20px) scale(0.95);
         }
 
+        /* DARKNESS OVERLAY & FLASHLIGHT */
+        #darkness-overlay {
+            position: absolute; inset: 0;
+            background-color: #000;
+            z-index: 200; /* Above everything on desktop */
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 3s ease;
+        }
+        #darkness-overlay.active {
+            pointer-events: auto;
+            cursor: none; /* Hide default cursor */
+            /* Flashlight Mask */
+            mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), transparent 0%, transparent 90%, black 100%);
+            -webkit-mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), transparent 0%, black 100%);
+            /* Invert mask logic: we want to SEE through the hole. 
+               Actually, simpler: make the overlay black, and mask allows seeing through.
+               Wait, standard mask reveals where it is opaque.
+               So we want the overlay to be opaque everywhere EXCEPT the circle.
+            */
+            -webkit-mask-image: radial-gradient(circle 100px at var(--x, 50%) var(--y, 50%), transparent 0%, black 100%);
+            mask-image: radial-gradient(circle 100px at var(--x, 50%) var(--y, 50%), transparent 0%, black 100%);
+        }
+
+        /* Gravity Fall Class */
+        .falling {
+            transition: transform 1s cubic-bezier(0.5, 0, 0.5, 1), rotate 1s ease;
+        }
+
+        /* ANTI-GRAVITY ANIMATION */
+        .anti-gravity-active {
+            transition: top 5s ease-in-out;
+            top: 20px !important;
+            animation: bounceTop 3s infinite ease-in-out;
+        }
+        @keyframes bounceTop {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(20px); }
+        }
+
+        /* MATRIX EFFECT IN CMD */
+        .matrix-text {
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            line-height: 1;
+        }
+
+        /* WHITE SCREEN OF DEATH */
+        #white-screen-overlay {
+            position: fixed; inset: 0; background: white; z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+            font-family: 'Segoe UI', sans-serif; color: #000;
+        }
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #1e1e1e; }
         ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
@@ -695,6 +973,7 @@
             
             .desktop-icon { width: 80px; }
             .icon-img { font-size: 1.8rem; }
+            .custom-icon-img { width: 32px; height: 32px; }
             .icon-label { font-size: 0.7rem; }
             .desktop-grid { flex-direction: row; align-content: flex-start; gap: 10px; padding: 15px; }
 
@@ -772,6 +1051,17 @@
 </head>
 <body>
 
+    <!-- AUDIO ELEMENTS -->
+    <audio id="siren-sound" src="sirene.mp3" preload="auto"></audio>
+
+    <!-- DARKNESS OVERLAY FOR "DESLIGAR O SOL" -->
+    <div id="darkness-overlay"></div>
+
+    <!-- WHITE SCREEN OF DEATH (FORMAT PRANK) -->
+    <div id="white-screen-overlay">
+        <div id="white-screen-msg" style="font-size: 12px; opacity: 0; transition: opacity 1s;">Era brincadeira, volta aqui.</div>
+    </div>
+
     <!-- NOTIFICATION SYSTEM -->
     <div class="win-notification" id="win-notif">
         <div class="notif-icon"><i class="fa-brands fa-windows"></i></div>
@@ -781,7 +1071,23 @@
         </div>
     </div>
 
-    <!-- DESKTOP WINDOWS ERROR DIALOG -->
+    <!-- PROGRAMMER ALERT MODAL -->
+    <div id="programmer-alert-modal">
+        <div class="modal-header">
+            <div class="modal-title"><i class="fa-solid fa-user-secret"></i> Nova Missão</div>
+        </div>
+        <div class="modal-body" style="text-align: center;">
+            <i class="fa-solid fa-code" style="font-size: 40px; color: #00ff9d; margin-bottom: 15px;"></i>
+            <p style="font-size: 16px; font-weight: bold; margin-bottom: 10px; color: #fff;">ACESSO RESTRITO</p>
+            <p>Você assumiu o papel de <strong>Dev FullStack</strong>.</p>
+            <p style="margin-top: 10px; color: #aaa;">Para liberar o acesso ao portal da Cidade de Uberaba, você deve programar a entrada do site manualmente.</p>
+        </div>
+        <div class="modal-footer" style="justify-content: center;">
+            <button class="modal-btn" id="btn-close-prog-alert">Aceitar Missão</button>
+        </div>
+    </div>
+
+    <!-- DESKTOP WINDOWS ERROR DIALOG (Generic) -->
     <div id="win-error-box">
         <div class="win-err-header">
             <span class="win-err-title">Erro do Sistema</span>
@@ -798,6 +1104,323 @@
         <div class="win-err-footer">
             <button class="win-err-btn" onclick="closeWinError()">OK</button>
         </div>
+    </div>
+
+    <!-- FAKE FILE VIEWER MODAL -->
+    <div id="fake-viewer-modal">
+        <div class="viewer-header">
+            <span id="viewer-title">notepad.exe</span>
+            <div class="win-err-close" onclick="closeViewer()">✕</div>
+        </div>
+        <div class="viewer-content" id="viewer-body">
+            <!-- Content inserted by JS -->
+        </div>
+    </div>
+
+    <!-- FAKE CHROME BROWSER MODAL (RESUME) -->
+    <div id="chrome-window" class="os-window" style="display: none;">
+        <div class="os-header">
+            <div class="os-titlebar" style="background: #3c3c3c; color: white;">
+                <div class="os-title">Currículo - Google Chrome</div>
+                <div class="os-controls">
+                    <button class="os-btn" onclick="closeChrome()"><i class="fa-solid fa-xmark" style="color: white;"></i></button>
+                </div>
+            </div>
+            <div class="os-address-bar" style="background: #202124; color: white; border: none; padding: 8px;">
+                <i class="fa-solid fa-lock" style="color: #8ab4f8; font-size: 12px;"></i>
+                <span style="margin-left: 10px; font-family: 'Segoe UI'; font-size: 13px;">https://curriculo-eta-blue.vercel.app/</span>
+            </div>
+        </div>
+        <div class="os-body" style="padding: 0; overflow: hidden;">
+            <iframe src="https://curriculo-eta-blue.vercel.app/" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
+    <!-- COACH QUANTICO WINDOW -->
+    <div id="coach-window" class="os-window" style="width: 350px; height: 250px;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Coach Quântico 3.0</div>
+                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('coach-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button></div>
+            </div>
+        </div>
+        <div class="os-body" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px;">
+            <p id="coach-text" style="font-style: italic; margin-bottom: 20px; font-size: 14px;">"O universo aguarda seu comando."</p>
+            <button class="win-err-btn" onclick="generateWisdom()">Gerar Nova Sabedoria</button>
+        </div>
+    </div>
+
+    <!-- MONEY GENERATOR WINDOW (CMD) -->
+    <div id="money-window" class="os-window" style="width: 500px; height: 300px; background: black; border-color: #444;">
+        <div class="os-header">
+            <div class="os-titlebar" style="background: white; color: black;">
+                <div class="os-title">C:\Windows\system32\cmd.exe - Gerar Dinheiro</div>
+                <div class="os-controls"><button class="os-btn close" onclick="closeMoney()"><i class="fa-solid fa-xmark"></i></button></div>
+            </div>
+        </div>
+        <div class="os-body" id="money-content" style="background: black; color: #0f0; font-family: 'Courier New', monospace; padding: 10px; overflow: hidden;">
+            <!-- Matrix text injected here -->
+        </div>
+    </div>
+
+    <!-- DOMINATION PLAN PASSWORD -->
+    <div id="domination-window" class="os-window" style="width: 300px; height: 180px; top: 40%; left: 40%;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Segurança Máxima</div>
+                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('domination-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button></div>
+            </div>
+        </div>
+        <div class="os-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+            <p>Digite a senha mestre:</p>
+            <input type="password" id="domination-pass" class="pass-input" style="pointer-events: auto; border: 1px solid #999; padding: 5px;">
+            <button class="win-err-btn" onclick="checkDominationPass()">Confirmar</button>
+        </div>
+    </div>
+
+    <!-- UNINSTALL WINDOW -->
+    <div id="uninstall-window" class="os-window" style="width: 400px; height: 150px; top: 45%; left: 40%;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Desinstalador do Windows</div>
+            </div>
+        </div>
+        <div class="os-body download-window-content">
+            <p>Formatando C: ...</p>
+            <div class="download-bar-container">
+                <div class="download-bar" id="uninstall-bar" style="background: red;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SALARY CALCULATOR -->
+    <div id="salary-window" class="os-window" style="width: 350px; height: 300px;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Calculadora de Salário Real</div>
+                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('salary-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button></div>
+            </div>
+        </div>
+        <div class="os-body" style="display: flex; flex-direction: column; gap: 10px; padding: 20px;">
+            <label>Salário Bruto (R$):</label>
+            <input type="number" class="pass-input" style="pointer-events: auto; border: 1px solid #999; padding: 5px;">
+            <button class="win-err-btn" onclick="calcSalary()">Calcular</button>
+            <div id="salary-result" style="margin-top: 10px; font-size: 13px; color: #333; display:none;">
+                <p>- Imposto pra políticos:</p>
+                <p>- Taxa do Café:</p>
+                <p>- Taxa por ser feio:</p>
+                <p>- Juros Cheque Especial:</p>
+                <p style="margin-top:10px; font-weight:bold; color:red;">LÍQUIDO: R$ 12,50 e um Vale-Transporte.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXCUSE GENERATOR -->
+    <div id="excuse-window" class="os-window" style="width: 400px; height: 200px;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Gerador de Desculpas 2000</div>
+                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('excuse-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button></div>
+            </div>
+        </div>
+        <div class="os-body" style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <p id="excuse-text" style="font-size: 14px; margin-bottom: 20px; font-weight: bold;">"Clique para gerar uma desculpa infalível."</p>
+            <button class="win-err-btn" onclick="generateExcuse()">Gerar Desculpa</button>
+        </div>
+    </div>
+
+    <!-- RETIREMENT PLANNER -->
+    <div id="retirement-window" class="os-window" style="width: 350px; height: 180px;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Planejamento INSS</div>
+                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('retirement-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button></div>
+            </div>
+        </div>
+        <div class="os-body download-window-content">
+            <p id="retire-status">Analisando tempo de contribuição...</p>
+            <div class="download-bar-container">
+                <div class="download-bar" id="retire-bar" style="background: blue;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WEATHER 2050 -->
+    <div id="weather-window" class="os-window" style="width: 400px; height: 400px;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Previsão do Tempo - 15/08/2050</div>
+                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('weather-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button></div>
+            </div>
+        </div>
+        <div class="os-body" style="text-align: center;">
+            <!-- PLACEHOLDER PARA GIF -->
+            <div style="width: 100%; height: 150px; background: #000; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <!-- INSIRA GIF AQUI -->
+                <img src="Terrapegandofogo.gif" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <h2 style="color: red; font-size: 30px;">400ºC</h2>
+            <p style="font-size: 14px; margin-bottom: 20px;">Sensação Térmica: Inferno</p>
+            <p style="background: #ffffcc; padding: 10px; border: 1px solid #eebb00; font-size: 12px;">
+                <strong>Dica do Dia:</strong> Use protetor solar fator 5000 e evite respirar fundo para não queimar os pulmões.
+            </p>
+        </div>
+    </div>
+
+    <!-- GTA DOWNLOAD MODAL -->
+    <div id="gta-window" class="os-window" style="width: 400px; height: 250px; top: 40%; left: 40%;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">GTA VI Launcher Beta</div>
+            </div>
+        </div>
+        <div class="os-body download-window-content">
+            <!-- GTA CUSTOM IMAGE PLACEHOLDER -->
+            <img src="gta6.png" style="width: 50px; margin-bottom: 10px;">
+            <p class="download-text">Baixando Grand Theft Auto VI...</p>
+            <div class="download-bar-container">
+                <div class="download-bar" id="gta-progress"></div>
+            </div>
+            <p id="gta-status" style="font-size: 11px; color: #666;">Calculando tempo restante...</p>
+            <button class="win-err-btn" onclick="closeGta()" style="margin-top: 10px;">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- INTERNET DOWNLOAD MODAL -->
+    <div id="internet-window" class="os-window" style="width: 400px; height: 250px; top: 45%; left: 45%;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Baixando Internet Inteira (Zip)</div>
+                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('internet-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button></div>
+            </div>
+        </div>
+        <div class="os-body download-window-content">
+            <i class="fa-solid fa-globe" style="font-size: 40px; color: #0078d7; margin-bottom: 10px;"></i>
+            <div class="download-bar-container">
+                <div class="download-bar" id="internet-progress" style="width: 0%; background: #0078d7; transition: width 5s linear;"></div>
+            </div>
+            <p style="font-size: 11px; color: #666; margin-top: 10px;">Tamanho estimado: 9999999 TB</p>
+            <p style="font-size: 11px; color: #666;">Tempo restante: 400 encarnações</p>
+        </div>
+    </div>
+
+    <!-- RESOLVE LIFE MODAL -->
+    <div id="life-window" class="os-window" style="width: 400px; height: 200px; top: 35%; left: 40%;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Resolver sua Vida.exe</div>
+                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('life-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button></div>
+            </div>
+        </div>
+        <div class="os-body download-window-content">
+            <p id="life-status">Resolvendo problemas...</p>
+            <div class="download-bar-container">
+                <div class="download-bar" id="life-progress" style="background: #00ff00;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ MODAL -->
+    <div id="quiz-window" class="os-window" style="width: 450px; height: 350px;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Teste de QI Oficial</div>
+                <div class="os-controls">
+                    <button class="os-btn close" onclick="closeQuiz()"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="os-body" id="quiz-body" style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <!-- Content via JS -->
+        </div>
+    </div>
+
+    <!-- LOADING MODAL (LOVE LIST) -->
+    <div id="love-window" class="os-window" style="width: 200px; height: 150px; top: 45%; left: 45%;">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Lista</div>
+                <div class="os-controls">
+                    <button class="os-btn close" onclick="document.getElementById('love-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="os-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size: 30px; margin-bottom: 10px;"></i>
+            <p>Carregando...</p>
+        </div>
+    </div>
+
+    <!-- PATIENCE TEST WINDOW -->
+    <div id="patience-window" class="os-window">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title">Teste de Paciência</div>
+                <div class="os-controls">
+                    <button class="os-btn close" onclick="document.getElementById('patience-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="os-body" style="position: relative;">
+            <p style="text-align: center; margin-bottom: 20px;">Clique no botão para ganhar R$ 1.000,00</p>
+            <button id="run-btn" class="win-err-btn running-btn" style="position: absolute; left: 45%; top: 40%;">CLIQUE AQUI</button>
+        </div>
+    </div>
+
+    <!-- GENERIC FOLDER WINDOW -->
+    <div id="generic-folder-window" class="os-window">
+        <div class="os-header">
+            <div class="os-titlebar">
+                <div class="os-title" id="generic-folder-title"><i class="fa-solid fa-folder"></i> Pasta</div>
+                <div class="os-controls">
+                    <button class="os-btn"><i class="fa-solid fa-minus"></i></button>
+                    <button class="os-btn"><i class="fa-regular fa-square"></i></button>
+                    <button class="os-btn close" onclick="document.getElementById('generic-folder-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="os-address-bar">
+                <i class="fa-solid fa-folder" style="color: #ffce44;"></i>
+                <span id="generic-folder-path">C:\Desktop\Pasta</span>
+            </div>
+        </div>
+        <div class="os-body">
+            <div class="bg-message-overlay" id="generic-bg-msg"></div>
+            <div class="photo-grid" id="generic-folder-content">
+                <!-- Content Injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- OFFICIAL DOCUMENT TERM MODAL -->
+    <div id="prank-term-modal">
+        <div class="document-paper">
+            <div class="doc-seal">
+                <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="doc-title">TERMO DE RESPONSABILIDADE</div>
+            
+            <div class="doc-text">
+                Declaro para os devidos fins que fui devidamente alertado sobre a natureza instável e potencialmente perigosa dos diretórios criptografados contidos neste sistema.
+                <br><br>
+                Reconheço que o acesso não autorizado pode resultar em instabilidade cognitiva, loops temporais, e exposição a verdades inconvenientes. Ao prosseguir, isento o sistema de qualquer dano irreversível à minha sanidade.
+            </div>
+            
+            <div class="doc-input-group">
+                <label class="doc-label">Assine seu nome para concordar:</label>
+                <input type="text" id="term-name" class="doc-input" placeholder="DIGITE SEU NOME" autocomplete="off">
+            </div>
+            
+            <div class="doc-actions">
+                <button class="doc-btn deny" onclick="closeTerm()">Voltar</button>
+                <button class="doc-btn accept" id="btn-accept-term" onclick="acceptTerm()">ACEITAR DESTINO</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PALMEIRAS PUNCHLINE OVERLAY -->
+    <div id="palmeiras-overlay">
+        <img src="semmundial.png" alt="Palmeiras Não Tem Mundial" class="palm-img">
+        <div class="palm-text">NÃO TEM MUNDIAL!</div>
     </div>
 
     <!-- ALERT MODAL (CRITICAL ERROR IN VSCODE) -->
@@ -879,29 +1502,147 @@
                 <i class="fa-solid fa-trash-can icon-img" style="color: #ddd"></i>
                 <div class="icon-label">Lixeira</div>
             </div>
-            <div class="desktop-icon" onclick="wrongIcon('Meu Computador')">
+            
+            <!-- PRANK FOLDER ICON - Modified Color -->
+            <div class="desktop-icon" onclick="openPrankFolder()">
+                <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
+                <div class="icon-label">NÃO ABRA</div>
+            </div>
+
+            <div class="desktop-icon" onclick="wrongMyComputer()">
                 <i class="fa-solid fa-desktop icon-img" style="color: #fff"></i>
                 <div class="icon-label">Meu Computador</div>
             </div>
-            <div class="desktop-icon" onclick="openPhotos()">
-                <i class="fa-solid fa-images icon-img" style="color: #00bcd4"></i>
-                <div class="icon-label">Fotos</div>
-            </div>
-            <div class="desktop-icon" onclick="wrongIcon('Spotify')">
-                <i class="fa-brands fa-spotify icon-img" style="color: #1db954"></i>
-                <div class="icon-label">Spotify</div>
-            </div>
+            
+            <!-- VS CODE ICON -->
             <div class="desktop-icon" id="icon-vscode">
                 <i class="fa-solid fa-code icon-img" style="color: #0078d7"></i>
                 <div class="icon-label">Visual Studio Code</div>
             </div>
-            <div class="desktop-icon" onclick="wrongIcon('Configurações')">
-                <i class="fa-solid fa-gear icon-img" style="color: #aaa"></i>
-                <div class="icon-label">Configurações</div>
+
+            <!-- NEW ICONS -->
+            <div class="desktop-icon" onclick="openMusicFolder()">
+                <i class="fa-solid fa-music icon-img" style="color: #e91e63;"></i>
+                <div class="icon-label">Músicas</div>
             </div>
-            <div class="desktop-icon" onclick="wrongIcon('Google Chrome')">
-                <i class="fa-brands fa-chrome icon-img" style="color: #ffce44"></i>
-                <div class="icon-label">Google Chrome</div>
+            <div class="desktop-icon" onclick="openImagesFolder()">
+                <i class="fa-solid fa-images icon-img" style="color: #00bcd4;"></i>
+                <div class="icon-label">Imagens</div>
+            </div>
+            <div class="desktop-icon" onclick="openBestTeam()">
+                <i class="fa-solid fa-trophy icon-img" style="color: #ffd700;"></i>
+                <div class="icon-label">Melhor time do mundo</div>
+            </div>
+            <!-- MODIFIED: RESUME IS NOW A FOLDER ICON -->
+            <div class="desktop-icon" onclick="openResume()">
+                <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
+                <div class="icon-label">Currículo do chefe</div>
+            </div>
+            <div class="desktop-icon" onclick="openCancerCure()">
+                <i class="fa-solid fa-heart-pulse icon-img" style="color: #f44336;"></i>
+                <div class="icon-label">Cura do câncer</div>
+            </div>
+            <div class="desktop-icon" onclick="openPrankFolderGeneric('Outros')">
+                <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
+                <div class="icon-label">Outros</div>
+            </div>
+            <div class="desktop-icon" onclick="openArea51()">
+                <i class="fa-brands fa-reddit-alien icon-img" style="color: #76ff03;"></i>
+                <div class="icon-label">Área 51</div>
+            </div>
+            <!-- MODIFIED: UGLY PERSON IS NOW A FOLDER ICON -->
+            <div class="desktop-icon" onclick="openUglyPerson()">
+                <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
+                <div class="icon-label">Pessoa mais feia do mundo</div>
+            </div>
+            <!-- Removed Pretty Person as requested -->
+            <div class="desktop-icon" onclick="openBrowserHistory()">
+                <i class="fa-solid fa-clock-rotate-left icon-img" style="color: #ff9800;"></i>
+                <div class="icon-label">Histórico do navegador</div>
+            </div>
+            <div class="desktop-icon" onclick="openVirus()">
+                <i class="fa-solid fa-bug icon-img" style="color: #d50000;"></i>
+                <div class="icon-label">Vírus Perigoso.exe</div>
+            </div>
+            <div class="desktop-icon" onclick="openIQTest()">
+                <i class="fa-solid fa-brain icon-img" style="color: #2979ff;"></i>
+                <div class="icon-label">Teste de QI</div>
+            </div>
+            <!-- MODIFIED: GTA CUSTOM ICON -->
+            <div class="desktop-icon" onclick="openGTA()">
+                <img src="gta6.png" class="custom-icon-img" alt="GTA">
+                <div class="icon-label">Baixar GTA 6 (Beta)</div>
+            </div>
+            <!-- MODIFIED: NASA IS NOW A FOLDER ICON -->
+            <div class="desktop-icon" onclick="openNASA()">
+                <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
+                <div class="icon-label">Senhas da NASA</div>
+            </div>
+            <div class="desktop-icon" onclick="openLoveList()">
+                <i class="fa-solid fa-heart icon-img" style="color: #ff4081;"></i>
+                <div class="icon-label">Lista de pessoas que te amam</div>
+            </div>
+            <div class="desktop-icon" onclick="openPatienceTest()">
+                <i class="fa-solid fa-stopwatch icon-img" style="color: #607d8b;"></i>
+                <div class="icon-label">Teste de Paciência</div>
+            </div>
+            <!-- NEW: GRAVITY CRASH FOLDER (RENAMED FUNCTION TO PREVENT CONFLICT) -->
+            <div class="desktop-icon" onclick="triggerGravityCrash()">
+                <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
+                <div class="icon-label">Não clique aqui</div>
+            </div>
+            <!-- NEW: DOWNLOAD INTERNET -->
+            <div class="desktop-icon" onclick="downloadInternet()">
+                <i class="fa-solid fa-globe icon-img" style="color: #0078d7;"></i>
+                <div class="icon-label">Baixar Internet Inteira.zip</div>
+            </div>
+            <!-- NEW: SUN TOGGLE -->
+            <div class="desktop-icon" id="sun-icon" onclick="toggleSun()">
+                <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
+                <div class="icon-label" id="sun-label">Desligar o sol</div>
+            </div>
+            <!-- NEW: RESOLVE LIFE -->
+            <div class="desktop-icon" onclick="resolveLife()">
+                <i class="fa-solid fa-wand-magic-sparkles icon-img" style="color: #9c27b0;"></i>
+                <div class="icon-label">Resolver sua Vida.exe</div>
+            </div>
+
+            <!-- NEW REQUESTED ICONS -->
+            <div class="desktop-icon" onclick="openCoach()">
+                <i class="fa-solid fa-lightbulb icon-img" style="color: #ffeb3b;"></i>
+                <div class="icon-label">Coach Quântico</div>
+            </div>
+            <div class="desktop-icon" onclick="openMoneyGen()">
+                <i class="fa-solid fa-money-bill-wave icon-img" style="color: #00e676;"></i>
+                <div class="icon-label">Gerar Dinheiro Infinito.bat</div>
+            </div>
+            <div class="desktop-icon" id="icon-domination" onclick="openDomination()">
+                <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
+                <div class="icon-label">Planos de Dominação Mundial</div>
+            </div>
+            <div class="desktop-icon" onclick="openUninstall()">
+                <i class="fa-solid fa-compact-disc icon-img" style="color: #ff1744;"></i>
+                <div class="icon-label">Desinstalar o Windows</div>
+            </div>
+            <div class="desktop-icon" onclick="toggleAntiGravity()">
+                <i class="fa-solid fa-feather icon-img" style="color: #80d8ff;"></i>
+                <div class="icon-label">Anti-Gravidade.exe</div>
+            </div>
+            <div class="desktop-icon" onclick="openSalary()">
+                <i class="fa-solid fa-calculator icon-img" style="color: #795548;"></i>
+                <div class="icon-label">Calculadora de Salário Líquido</div>
+            </div>
+            <div class="desktop-icon" onclick="openExcuse()">
+                <i class="fa-solid fa-face-rolling-eyes icon-img" style="color: #9c27b0;"></i>
+                <div class="icon-label">Gerador de Desculpa para Atraso</div>
+            </div>
+            <div class="desktop-icon" onclick="openRetirement()">
+                <i class="fa-solid fa-person-cane icon-img" style="color: #607d8b;"></i>
+                <div class="icon-label">Planejamento de Aposentadoria.exe</div>
+            </div>
+            <div class="desktop-icon" onclick="openWeather()">
+                <i class="fa-solid fa-fire icon-img" style="color: #ff5722;"></i>
+                <div class="icon-label">Previsão do Tempo 2050</div>
             </div>
         </div>
 
@@ -916,12 +1657,6 @@
                         <button class="os-btn close" onclick="closePhotos()"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                 </div>
-                <div class="os-toolbar">
-                    <span>Arquivo</span>
-                    <span>Início</span>
-                    <span>Compartilhar</span>
-                    <span>Exibir</span>
-                </div>
             </div>
             <div class="os-body">
                 <div class="photo-grid">
@@ -929,22 +1664,7 @@
                         <div class="photo-frame"><img src="Museu.png" alt="Print 1"></div>
                         <div class="photo-name">PrintSiteMuseu</div>
                     </div>
-                    <div class="photo-item">
-                        <div class="photo-frame"><img src="Time.png" alt="Print 2"></div>
-                        <div class="photo-name">PrintSiteTme</div>
-                    </div>
-                    <div class="photo-item">
-                        <div class="photo-frame"><img src="CIA.png" alt="Print 3"></div>
-                        <div class="photo-name">PrintSiteCia</div>
-                    </div>
-                    <div class="photo-item">
-                        <div class="photo-frame"><img src="Gnetica de ouro.png" alt="Print 4"></div>
-                        <div class="photo-name">PrintSiteGenetica</div>
-                    </div>
-                    <div class="photo-item">
-                        <div class="photo-frame"><img src="Inicio.png" alt="Print 5"></div>
-                        <div class="photo-name">PrintSiteInicio</div>
-                    </div>
+                    <!-- Add more if needed -->
                 </div>
             </div>
         </div>
@@ -960,24 +1680,34 @@
                         <button class="os-btn close" onclick="closeTrash()"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                 </div>
-                <div class="os-toolbar">
-                    <span>Arquivo</span>
-                    <span>Início</span>
-                    <span>Compartilhar</span>
-                    <span>Exibir</span>
-                    <span style="color: red; margin-left: auto; font-size: 11px; font-weight: 600;">Ferramentas de Lixeira</span>
+            </div>
+            <div class="os-body">
+                <div class="photo-grid" id="trash-content">
+                    <!-- JS Injected -->
+                </div>
+            </div>
+        </div>
+
+        <!-- PRANK WINDOW (Recursion) -->
+        <div id="window-prank" class="os-window">
+            <div class="os-header">
+                <div class="os-titlebar">
+                    <div class="os-title"><i class="fa-solid fa-folder-closed" style="color:#ff3333;"></i> NÃO ABRA</div>
+                    <div class="os-controls">
+                        <button class="os-btn"><i class="fa-solid fa-minus"></i></button>
+                        <button class="os-btn"><i class="fa-regular fa-square"></i></button>
+                        <button class="os-btn close" onclick="closePrank()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+                <div class="os-address-bar">
+                    <i class="fa-solid fa-folder" style="color: #ffce44;"></i>
+                    <span id="prank-path-text">C:\Desktop\NÃO ABRA</span>
                 </div>
             </div>
             <div class="os-body">
-                <div class="photo-grid">
-                    <div class="photo-item">
-                        <div class="photo-frame"><img src="Lixo1.webp" alt="Arquivo Deletado 1"></div>
-                        <div class="photo-name"></div>
-                    </div>
-                    <div class="photo-item">
-                        <div class="photo-frame"><img src="Lixo2.png" alt="Arquivo Deletado 2"></div>
-                        <div class="photo-name"></div>
-                    </div>
+                <div class="bg-message-overlay" id="prank-bg-msg"></div>
+                <div class="photo-grid" id="prank-content">
+                    <!-- Content Injected by JS -->
                 </div>
             </div>
         </div>
@@ -1186,48 +1916,752 @@
             document.getElementById('scene-login').style.display = 'none';
             document.getElementById('scene-desktop').style.display = 'block';
 
+            // SHOW PROGRAMMER ALERT MODAL FIRST
             setTimeout(() => {
+                const progModal = document.getElementById('programmer-alert-modal');
+                progModal.style.display = 'flex';
+                gsap.to(progModal, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out" });
+            }, 1000);
+        }
+
+        // EVENT LISTENER TO CLOSE ALERT AND SHOW SYSTEM NOTIFICATION
+        document.getElementById('btn-close-prog-alert').addEventListener('click', () => {
+            const progModal = document.getElementById('programmer-alert-modal');
+            
+            // Hide Modal
+            gsap.to(progModal, { opacity: 0, scale: 0.9, duration: 0.3, onComplete: () => {
+                progModal.style.display = 'none';
+                
+                // NOW show the "System Ready" notification
                 const notif = document.getElementById('win-notif');
                 notif.style.right = '20px';
                 setTimeout(() => {
                     notif.style.right = '-400px';
                 }, 5000);
-            }, 1000);
-        }
+            }});
+        });
         
-        function wrongIcon(name) {
+        // ==========================================
+        // ICON HANDLERS
+        // ==========================================
+        function showGenericError(msg) {
             const box = document.getElementById('win-error-box');
-            const msg = document.getElementById('win-error-msg-text');
-            msg.innerText = `O aplicativo '${name}' não pode ser iniciado. O acesso é restrito ao ambiente de desenvolvimento VS Code.`;
+            const txt = document.getElementById('win-error-msg-text');
+            txt.innerText = msg;
             box.style.display = 'flex';
         }
 
-        function closeWinError() {
-            document.getElementById('win-error-box').style.display = 'none';
+        function closeWinError() { document.getElementById('win-error-box').style.display = 'none'; }
+
+        function openMusicFolder() { showGenericError("As músicas desta pasta ainda não foram lançadas."); }
+        function openImagesFolder() { showGenericError("A NASA não liberou mostrar estas imagens ainda."); }
+        function openCancerCure() { showGenericError("Em breve..."); }
+        function wrongMyComputer() { showGenericError("É o MEU computador e não o SEU computador."); }
+        
+        function openBestTeam() {
+            // Placeholder for Corinthians Image
+            const imgUrl = "https://upload.wikimedia.org/wikipedia/pt/b/b4/Corinthians_simbolo.png";
+            openFakeViewer("Melhor time do mundo.jpg", null, imgUrl);
         }
 
-        function openPhotos() {
-            const win = document.getElementById('window-photos');
+        function openResume() {
+            const win = document.getElementById('chrome-window');
             win.style.display = 'flex';
-            gsap.fromTo(win, {scale: 0.9, opacity: 0}, {scale: 1, opacity: 1, duration: 0.2, ease: "power2.out"});
+            gsap.fromTo(win, {scale: 0.9, opacity: 0}, {scale: 1, opacity: 1, duration: 0.2});
+        }
+        function closeChrome() {
+            document.getElementById('chrome-window').style.display = 'none';
+        }
+
+        function openArea51() {
+            // Fake secret content
+            const text = "RELATÓRIO CONFIDENCIAL:\nAliens existem e gostam de pão de queijo.\nO Chupacabra é real.\nElvis não morreu.";
+            openFakeViewer("Segredos.txt", text, null);
+        }
+
+        function openBrowserHistory() {
+            const history = `HISTÓRICO DE NAVEGAÇÃO (HOJE):\n\n- como saber se sou adotado sem perguntar pros pais\n- cirurgia plástica transplante de rosto preço\n- por que ninguém curte minhas fotos no instagram\n- tutorial de como deixar de ser trouxa 2025\n- teste de QI online (resultado: negativo)\n- meus pais preferem o cachorro a mim o que fazer\n- loja de perucas realistas baratas\n- como disfarçar calvície aos 20 anos`;
+            openFakeViewer("History.log", history, null);
+        }
+
+        function openNASA() {
+            // Opens a folder with a txt file - FIXED BACKGROUND
+            const win = document.getElementById('generic-folder-window');
+            const content = document.getElementById('generic-folder-content');
+            const path = document.getElementById('generic-folder-path');
+            const bgMsg = document.getElementById('generic-bg-msg');
+            
+            win.style.display = 'flex';
+            path.innerText = "C:\\Desktop\\Senhas da NASA";
+            bgMsg.innerText = ""; // Clear generic background
+            content.innerHTML = `
+                <div class="photo-item" onclick="openFakeViewer('senhas.txt', '123456\\nadmin\\nsenha123', null)">
+                    <div class="photo-frame"><i class="fa-solid fa-file-lines" style="color: #aaa;"></i></div>
+                    <div class="photo-name">senhas.txt</div>
+                </div>
+            `;
+        }
+
+        function openVirus() {
+            // Visual Shake
+            document.body.style.animation = "shake 0.5s infinite";
+            // Simulate Alert
+            setTimeout(() => {
+                document.body.style.animation = "none";
+                alert("Brincadeira. O verdadeiro vírus é você.");
+            }, 2000);
+        }
+
+        // --- GTA 6 LOGIC ---
+        function openGTA() {
+            const win = document.getElementById('gta-window');
+            const bar = document.getElementById('gta-progress');
+            const status = document.getElementById('gta-status');
+            win.style.display = 'flex';
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += 0.5; // Slow
+                bar.style.width = progress + '%';
+                if(progress > 99) {
+                    clearInterval(interval);
+                    status.innerText = "Erro fatal.";
+                    alert("Erro: Seu PC é muito fraco para tanta potência e você não está aqui para jogar.");
+                    win.style.display = 'none';
+                }
+            }, 100);
+            
+            // Store interval ID to clear on close
+            win.dataset.intervalId = interval;
+        }
+        function closeGta() {
+            const win = document.getElementById('gta-window');
+            clearInterval(win.dataset.intervalId);
+            win.style.display = 'none';
+        }
+
+        // --- IQ TEST LOGIC ---
+        let quizStep = 0;
+        let score = 0;
+        const quizQuestions = [
+            { q: "Quanto é 1 + 1?", opts: ["11", "2", "3", "Janela"], a: "2" },
+            { q: "Como chama o criador desse site?", opts: ["Elon Musk", "Bill Gates", "Pedro Henrique", "Ninguém sabe"], a: "Pedro Henrique" },
+            { q: "Qual o melhor time do mundo?", opts: ["Real Madrid", "Barcelona", "Corinthians", "Flamengo"], a: "Corinthians" }
+        ];
+
+        function openIQTest() {
+            const win = document.getElementById('quiz-window');
+            win.style.display = 'flex';
+            quizStep = 0;
+            score = 0;
+            renderQuizStart();
+        }
+        function closeQuiz() { document.getElementById('quiz-window').style.display = 'none'; }
+
+        function renderQuizStart() {
+            const body = document.getElementById('quiz-body');
+            body.innerHTML = `
+                <h3>Teste de QI Oficial</h3>
+                <p style="margin: 15px 0;">Responda 3 perguntas para saber sua inteligência.</p>
+                <p style="font-size: 11px; color: #666; margin-bottom: 20px;">
+                    1 acerto: QI 10<br>2 acertos: QI 50<br>3 acertos: QI 180
+                </p>
+                <button class="win-err-btn" onclick="renderQuizQuestion()">COMEÇAR</button>
+            `;
+        }
+
+        function renderQuizQuestion() {
+            if(quizStep >= quizQuestions.length) {
+                finishQuiz();
+                return;
+            }
+            const q = quizQuestions[quizStep];
+            const body = document.getElementById('quiz-body');
+            let optsHTML = '';
+            q.opts.forEach(opt => {
+                optsHTML += `<button class="quiz-option" onclick="answerQuiz('${opt}')">${opt}</button>`;
+            });
+            body.innerHTML = `
+                <h4>Pergunta ${quizStep + 1}</h4>
+                <p style="margin: 10px 0;">${q.q}</p>
+                <div style="width: 80%;">
+                    ${optsHTML}
+                </div>
+            `;
+        }
+
+        function answerQuiz(ans) {
+            if(ans === quizQuestions[quizStep].a) score++;
+            quizStep++;
+            renderQuizQuestion();
+        }
+
+        function finishQuiz() {
+            let qi = 0;
+            if(score === 1) qi = 10;
+            if(score === 2) qi = 50;
+            if(score === 3) qi = 180;
+            
+            const body = document.getElementById('quiz-body');
+            body.innerHTML = `
+                <h3>Resultado</h3>
+                <p style="font-size: 40px; color: blue; margin: 20px 0;">QI: ${qi}</p>
+                <p>Você acertou ${score} de 3.</p>
+                <button class="win-err-btn" onclick="closeQuiz()">Fechar</button>
+            `;
+        }
+
+        // --- PRANK FOLDER LOGIC (Ugly/Outros) ---
+        function openUglyPerson() {
+            openPrankFolderGeneric("Você");
+            document.getElementById('generic-bg-msg').innerText = "VOCÊ";
+        }
+        function openPrankFolderGeneric(title) {
+            const win = document.getElementById('generic-folder-window');
+            const content = document.getElementById('generic-folder-content');
+            const path = document.getElementById('generic-folder-path');
+            const bgMsg = document.getElementById('generic-bg-msg');
+            const titleBar = document.getElementById('generic-folder-title');
+            
+            win.style.display = 'flex';
+            path.innerText = `C:\\Desktop\\${title}`;
+            titleBar.innerHTML = `<i class="fa-solid fa-folder"></i> ${title}`;
+            content.innerHTML = ''; // Empty folder by default
+            bgMsg.innerText = "";
+            
+            if(title === "Outros") {
+                generateGenericFiles(content);
+            } else if (title === "Você") {
+                bgMsg.innerText = "VOCÊ";
+            }
+        }
+
+        function generateGenericFiles(container) {
+            const numFiles = 5;
+            const items = [
+                'projeto_secreto.doc', 'plano_dominação.pdf', 'foto_comprometedora.jpg', 
+                'ideia_milionaria.txt', 'backup_sistema.iso'
+            ];
+            
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'photo-item';
+                div.innerHTML = `<div class="photo-frame"><i class="fa-solid fa-file" style="color: #aaa;"></i></div><div class="photo-name">${item}</div>`;
+                div.onclick = () => alert("Arquivo corrompido ou inexistente.");
+                container.appendChild(div);
+            });
+        }
+
+        // --- RECYCLE BIN ---
+        function openTrash() {
+            const win = document.getElementById('window-trash');
+            const content = document.getElementById('trash-content');
+            win.style.display = 'flex';
+            content.innerHTML = '';
+            
+            const items = [
+                'humanidade_backup.exe', 'alma_do_usuario.zip', 'minha_paciencia.txt',
+                'vontade_de_viver.exe', 'amigos_de_verdade.list', 'plano_para_ficar_rico_v99.pdf',
+                'minha_dieta_segunda_feira.lnk', 'dignidade.rar', 'Lixo1.webp', 'Lixo2.png'
+            ];
+            
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'photo-item';
+                // Check if image extension for icon logic, else generic file
+                let icon = 'fa-file';
+                let color = '#aaa';
+                if(item.endsWith('.exe')) { icon = 'fa-gears'; color = '#0078d7'; }
+                if(item.endsWith('.zip') || item.endsWith('.rar')) { icon = 'fa-file-zipper'; color = '#e65100'; }
+                
+                div.innerHTML = `<div class="photo-frame"><i class="fa-solid ${icon}" style="color:${color};"></i></div><div class="photo-name">${item}</div>`;
+                content.appendChild(div);
+            });
+        }
+        function closeTrash() { document.getElementById('window-trash').style.display = 'none'; }
+
+        // --- LOVE LIST ---
+        function openLoveList() {
+            const win = document.getElementById('love-window');
+            win.style.display = 'flex';
+        }
+
+        // --- PATIENCE TEST ---
+        function openPatienceTest() {
+            const win = document.getElementById('patience-window');
+            win.style.display = 'flex';
+            
+            const btn = document.getElementById('run-btn');
+            btn.addEventListener('mouseover', () => {
+                const x = Math.random() * 80;
+                const y = Math.random() * 80;
+                btn.style.top = y + '%';
+                btn.style.left = x + '%';
+            });
+        }
+
+        // --- GRAVITY CRASH (FALLING) ---
+        function triggerGravityCrash() {
+            const icons = document.querySelectorAll('.desktop-icon');
+            icons.forEach(icon => {
+                const rect = icon.getBoundingClientRect();
+                const dist = window.innerHeight - rect.bottom;
+                
+                icon.classList.add('falling');
+                // Random rotation and falling to bottom
+                const rotate = Math.random() * 60 - 30;
+                icon.style.transform = `translateY(${dist}px) rotate(${rotate}deg)`;
+            });
+        }
+
+        // --- INTERNET DOWNLOAD ---
+        function downloadInternet() {
+            document.getElementById('internet-window').style.display = 'flex';
+            // Progress bar barely moves
+            const bar = document.getElementById('internet-progress');
+            setTimeout(() => { bar.style.width = "1%"; }, 100);
+        }
+
+        // --- TOGGLE SUN (FLASHLIGHT) ---
+        let sunOn = true;
+        function toggleSun() {
+            const overlay = document.getElementById('darkness-overlay');
+            const label = document.getElementById('sun-label');
+            
+            sunOn = !sunOn;
+            
+            if(!sunOn) {
+                // Turn OFF (Dark)
+                overlay.style.opacity = 1;
+                overlay.classList.add('active');
+                label.innerText = "Ligar o sol";
+                document.addEventListener('mousemove', updateFlashlight);
+            } else {
+                // Turn ON (Normal)
+                overlay.style.opacity = 0;
+                overlay.classList.remove('active');
+                label.innerText = "Desligar o sol";
+                document.removeEventListener('mousemove', updateFlashlight);
+            }
+        }
+
+        function updateFlashlight(e) {
+            const overlay = document.getElementById('darkness-overlay');
+            if(overlay.classList.contains('active')) {
+                overlay.style.setProperty('--x', e.clientX + 'px');
+                overlay.style.setProperty('--y', e.clientY + 'px');
+            }
+        }
+
+        // --- RESOLVE LIFE ---
+        function resolveLife() {
+            document.getElementById('life-window').style.display = 'flex';
+            const bar = document.getElementById('life-progress');
+            const status = document.getElementById('life-status');
+            
+            bar.style.transition = "width 2s ease-out";
+            
+            // Reset
+            bar.style.width = "0%";
+            status.innerText = "Resolvendo problemas...";
+            
+            setTimeout(() => {
+                bar.style.width = "99%";
+                setTimeout(() => {
+                    status.innerText = "Aguardando milagre...";
+                }, 2000);
+            }, 100);
+        }
+
+        // --- COACH QUANTICO ---
+        const coachPhrases = [
+            "Para subir a escada do sucesso, você precisa descer a rampa da gratidão.",
+            "O universo não conspira contra você, ele apenas ignora sua existência.",
+            "Seja o CEO da sua própria confusão mental.",
+            "Vibre na frequência do boleto pago.",
+            "O mindset de crescimento começa quando você para de reclamar do Wi-Fi.",
+            "Ressignifique o seu fracasso como um 'sucesso não linear'.",
+            "A abundância vem quando você aceita que o pouco é muito.",
+            "Destrave seu potencial quântico bebendo água com limão.",
+            "O óbvio só é óbvio para o olho que vê o invisível.",
+            "Sua aura está desalinhada com o algoritmo da vida.",
+            "A meritocracia do universo é baseada em hashtags.",
+            "Não busque a luz no fim do túnel, seja o próprio trem.",
+            "Gratidão gera dívida emocional positiva.",
+            "Se você não sabe para onde ir, qualquer caminho é um erro.",
+            "Abraça a sua sombra, mas não esqueça o protetor solar."
+        ];
+        function openCoach() {
+            document.getElementById('coach-window').style.display = 'flex';
+        }
+        function generateWisdom() {
+            const phrase = coachPhrases[Math.floor(Math.random() * coachPhrases.length)];
+            document.getElementById('coach-text').innerText = `"${phrase}"`;
+        }
+
+        // --- MONEY GENERATOR ---
+        function openMoneyGen() {
+            const win = document.getElementById('money-window');
+            const content = document.getElementById('money-content');
+            win.style.display = 'flex';
+            content.innerHTML = "";
+            
+            // Start Matrix Effect
+            const interval = setInterval(() => {
+                const hex = Math.random().toString(16).substr(2, 8).toUpperCase();
+                content.innerHTML += `<span class="matrix-text">${hex} ${hex} ${hex} ${hex}</span><br>`;
+                content.scrollTop = content.scrollHeight;
+            }, 50);
+
+            win.dataset.matrixId = interval;
+
+            // Trigger Police after 3 seconds
+            setTimeout(() => {
+                clearInterval(interval);
+                content.innerHTML += "<br><span style='color:red; font-weight:bold;'>ALERTA: POLÍCIA FEDERAL RASTREANDO SEU IP...</span><br>";
+                content.innerHTML += "<span style='color:red; font-weight:bold;'>VIATURAS A CAMINHO.</span>";
+                // Play Sound
+                const audio = document.getElementById('siren-sound');
+                if(audio) audio.play();
+            }, 3000);
+        }
+        function closeMoney() {
+            const win = document.getElementById('money-window');
+            clearInterval(win.dataset.matrixId);
+            win.style.display = 'none';
+            const audio = document.getElementById('siren-sound');
+            if(audio) { audio.pause(); audio.currentTime = 0; }
+        }
+
+        // --- DOMINATION PLAN ---
+        let dominationAttempts = 0;
+        function openDomination() {
+            const icon = document.getElementById('icon-domination');
+            if(icon.style.display === 'none') return; // Already exploded
+            document.getElementById('domination-window').style.display = 'flex';
+            document.getElementById('domination-pass').value = '';
+        }
+        function checkDominationPass() {
+            dominationAttempts++;
+            const input = document.getElementById('domination-pass');
+            
+            if(dominationAttempts === 1) {
+                alert("ACESSO NEGADO!");
+                input.value = '';
+            } else {
+                // EXPLODE
+                document.getElementById('domination-window').style.display = 'none';
+                const icon = document.getElementById('icon-domination');
+                icon.innerHTML = '<img src="https://media.giphy.com/media/OE6C7m78p9M64/giphy.gif" style="width:100px;">'; // Placeholder explosion
+                setTimeout(() => {
+                    icon.style.display = 'none';
+                }, 1500);
+            }
+        }
+
+        // --- UNINSTALL WINDOW ---
+        function openUninstall() {
+            document.getElementById('uninstall-window').style.display = 'flex';
+            const bar = document.getElementById('uninstall-bar');
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 2;
+                bar.style.width = width + '%';
+                if(width >= 100) {
+                    clearInterval(interval);
+                    // White Screen
+                    const overlay = document.getElementById('white-screen-overlay');
+                    const msg = document.getElementById('white-screen-msg');
+                    overlay.style.display = 'flex';
+                    setTimeout(() => {
+                        msg.style.opacity = 1;
+                        setTimeout(() => {
+                            overlay.style.display = 'none';
+                            document.getElementById('uninstall-window').style.display = 'none';
+                            msg.style.opacity = 0;
+                        }, 2000);
+                    }, 3000);
+                }
+            }, 50);
+        }
+
+        // --- ANTI GRAVITY ---
+        let antiGravityOn = false;
+        function toggleAntiGravity() {
+            antiGravityOn = !antiGravityOn;
+            const icons = document.querySelectorAll('.desktop-icon');
+            icons.forEach(icon => {
+                if(antiGravityOn) {
+                    icon.classList.add('anti-gravity-active');
+                } else {
+                    icon.classList.remove('anti-gravity-active');
+                }
+            });
+        }
+
+        // --- SALARY CALCULATOR ---
+        function openSalary() {
+            document.getElementById('salary-window').style.display = 'flex';
+            document.getElementById('salary-result').style.display = 'none';
+        }
+        function calcSalary() {
+            document.getElementById('salary-result').style.display = 'block';
+        }
+
+        // --- EXCUSE GENERATOR ---
+        const excuses = [
+            "Meu cachorro comeu a chave do carro.",
+            "Fui abduzido, mas me devolveram porque sou chato.",
+            "O pneu do trem furou.",
+            "Esqueci como se anda.",
+            "Meu horóscopo disse para eu não sair de casa hoje.",
+            "Fiquei preso no looping temporal de 2020.",
+            "A gravidade estava muito forte na minha cama hoje.",
+            "Confundi AM com PM.",
+            "Meu peixe dourado estava se afogando.",
+            "Estava esperando o download do meu ânimo terminar."
+        ];
+        function openExcuse() {
+            document.getElementById('excuse-window').style.display = 'flex';
+        }
+        function generateExcuse() {
+            const ex = excuses[Math.floor(Math.random() * excuses.length)];
+            document.getElementById('excuse-text').innerText = `"${ex}"`;
+        }
+
+        // --- RETIREMENT ---
+        function openRetirement() {
+            document.getElementById('retirement-window').style.display = 'flex';
+            const bar = document.getElementById('retire-bar');
+            const status = document.getElementById('retire-status');
+            bar.style.width = '0%';
+            status.innerText = "Calculando...";
+            
+            setTimeout(() => {
+                bar.style.width = '100%';
+                setTimeout(() => {
+                    alert("Erro: Aposentadoria não disponível na sua geração. Trabalhe até morrer.");
+                    document.getElementById('retirement-window').style.display = 'none';
+                }, 500);
+            }, 1500);
+        }
+
+        // --- WEATHER 2050 ---
+        function openWeather() {
+            document.getElementById('weather-window').style.display = 'flex';
+        }
+
+        // ==========================================
+        // PRANK LOGIC ("NÃO ABRA") - MODIFIED
+        // ==========================================
+        let prankLevel = 0;
+        const prankWindow = document.getElementById('window-prank');
+        const prankContent = document.getElementById('prank-content');
+        const prankPath = document.getElementById('prank-path-text');
+        const termModal = document.getElementById('prank-term-modal');
+        const palmeirasOverlay = document.getElementById('palmeiras-overlay');
+        const fakeViewer = document.getElementById('fake-viewer-modal');
+
+        // Level Names Array
+        const prankFolderNames = [
+            "NÃO ABRA", "Eu te avisei", "Não insista", "Pare agora", "Volte enquanto pode", 
+            "Sistema Instável", "Arquivos Corrompidos", "PERIGO REAL", "Vírus Detectado", 
+            "Segredos de Estado", "Área 51", "Dados Proibidos", "A Curiosidade Mata", 
+            "Sem Volta", "O Abismo", "Não olhe para trás", "Risco Biológico", 
+            "Erro Crítico", "Falha na Matrix", "A Verdade", "Última Chance", "O Fim"
+        ];
+
+        function openPrankFolder() {
+            prankLevel = 0;
+            document.getElementById('prank-bg-msg').innerText = ""; // Clear any BG msg
+            prankWindow.style.display = 'flex';
+            gsap.fromTo(prankWindow, {scale: 0.9, opacity: 0}, {scale: 1, opacity: 1, duration: 0.2, ease: "power2.out"});
+            renderPrankLevel(0);
+        }
+
+        function closePrank() {
+            gsap.to(prankWindow, {scale: 0.9, opacity: 0, duration: 0.15, onComplete: () => {
+                prankWindow.style.display = 'none';
+                prankLevel = 0;
+            }});
+        }
+
+        // Document Term Logic
+        const termNameInput = document.getElementById('term-name');
+        const acceptBtn = document.getElementById('btn-accept-term');
+
+        termNameInput.addEventListener('input', () => {
+            if (termNameInput.value.length > 2) {
+                acceptBtn.classList.add('active');
+            } else {
+                acceptBtn.classList.remove('active');
+            }
+        });
+
+        function closeTerm() {
+            termModal.style.display = 'none';
+            termNameInput.value = '';
+            acceptBtn.classList.remove('active');
+            closePrank(); // Go back closes folder
+        }
+
+        function acceptTerm() {
+            termModal.style.display = 'none';
+            prankLevel++; // Advance past warning
+            renderPrankLevel(prankLevel);
+        }
+
+        function renderPrankLevel(level) {
+            prankContent.innerHTML = '';
+            
+            // Path Logic
+            let pathString = 'C:\\Desktop';
+            for(let i=0; i<=level; i++) {
+                if (i < prankFolderNames.length) pathString += `\\${prankFolderNames[i]}`;
+            }
+            if(pathString.length > 60) pathString = '...' + pathString.slice(-50);
+            prankPath.innerText = pathString;
+
+            // --- LEVEL SPECIFIC LOGIC ---
+
+            // Level 0: Initial Open -> Trigger Term
+            if (level === 0) {
+                termModal.style.display = 'flex';
+                return;
+            }
+
+            // Level 21: The End (Palmeiras) - The ONLY place with an image
+            if (level >= 21) {
+                const file = document.createElement('div');
+                file.className = 'photo-item';
+                file.innerHTML = `<div class="photo-frame"><i class="fa-solid fa-file-image" style="color: #00ff00;"></i></div><div class="photo-name">A_VERDADE.jpg</div>`;
+                file.onclick = triggerFinalPrank;
+                prankContent.appendChild(file);
+                return;
+            }
+
+            // --- CONTENT GENERATION FOR LEVELS 1-20 (NO IMAGES) ---
+            
+            // 1. The Next Folder
+            const nextFolderName = prankFolderNames[level + 1] || "FIM";
+            const folder = document.createElement('div');
+            folder.className = 'photo-item';
+            // Make folder look redder as levels go up
+            const folderColor = level > 10 ? '#ff0000' : '#ffce44';
+            folder.innerHTML = `<div class="photo-frame"><i class="fa-solid fa-folder" style="color: ${folderColor};"></i></div><div class="photo-name">${nextFolderName}</div>`;
+            folder.onclick = () => {
+                prankLevel++;
+                renderPrankLevel(prankLevel);
+            };
+            prankContent.appendChild(folder);
+
+            // 2. Generate Random "Easter Egg" Files (Filtered to NO IMAGES)
+            generateLevelContent(level);
+        }
+
+        function generateLevelContent(level) {
+            // Number of random files increases with level
+            const numFiles = Math.min(Math.floor(Math.random() * 3) + 2 + Math.floor(level/3), 8);
+            
+            // Removed Image Type
+            const fileTypes = [
+                { icon: 'fa-file-lines', color: '#aaa', ext: '.txt', type: 'text' },
+                { icon: 'fa-gear', color: '#888', ext: '.sys', type: 'sys' },
+                { icon: 'fa-triangle-exclamation', color: '#ff3333', ext: '.log', type: 'error' }
+            ];
+
+            const weirdNames = ['não_leia', 'segredo', 'corrompido', 'quem_é_vc', 'olhe_trás', 'ajuda', 'senha_banco', 'projeto_x', 'evidencia', 'void'];
+
+            for(let i=0; i<numFiles; i++) {
+                const fType = fileTypes[Math.floor(Math.random() * fileTypes.length)];
+                const fName = weirdNames[Math.floor(Math.random() * weirdNames.length)] + `_${Math.floor(Math.random()*99)}` + fType.ext;
+                
+                const fileItem = document.createElement('div');
+                fileItem.className = 'photo-item';
+                fileItem.innerHTML = `<div class="photo-frame"><i class="fa-solid ${fType.icon}" style="color: ${fType.color};"></i></div><div class="photo-name">${fName}</div>`;
+                
+                fileItem.onclick = () => handlePrankFileClick(fType.type, fName);
+                prankContent.appendChild(fileItem);
+            }
+        }
+
+        function handlePrankFileClick(type, name) {
+            if (type === 'text') {
+                const texts = [
+                    "POR QUE VOCÊ CONTINUA ABRINDO?",
+                    "Eles estão observando...",
+                    "Não existe saída.",
+                    "Você assinou o termo. Não há volta.",
+                    "01001000 01000101 01001100 01010000",
+                    "Olhe para trás."
+                ];
+                openFakeViewer("Bloco de Notas", texts[Math.floor(Math.random() * texts.length)], null);
+            } 
+            else if (type === 'sys' || type === 'error') {
+                // Fake error popup
+                const box = document.getElementById('win-error-box');
+                const msg = document.getElementById('win-error-msg-text');
+                const msgs = [
+                    "Erro Fatal: Curiosidade excessiva detectada.",
+                    "System32 corrompido. Iniciando autodestruição em 3...",
+                    "Acesso negado pela Agência Nacional de Segurança.",
+                    "Vírus 'TROJAN_HORSE' instalado com sucesso.",
+                    "Sua webcam foi ativada remotamente."
+                ];
+                msg.innerText = msgs[Math.floor(Math.random() * msgs.length)];
+                box.style.display = 'flex';
+                
+                // Shake screen effect
+                document.body.style.animation = "shake 0.5s";
+                setTimeout(() => document.body.style.animation = "none", 500);
+            }
+        }
+
+        function openFakeViewer(title, text, img) {
+            fakeViewer.style.display = 'flex';
+            document.getElementById('viewer-title').innerText = title;
+            const body = document.getElementById('viewer-body');
+            body.innerHTML = '';
+            
+            if (text) {
+                body.innerText = text;
+                body.style.background = "#fff";
+                body.style.color = "#000";
+                body.style.display = "block";
+            }
+            if (img) {
+                body.style.background = "#000";
+                body.style.display = "flex";
+                body.style.justifyContent = "center";
+                body.innerHTML = `<img src="${img}" class="viewer-image">`;
+            }
+        }
+
+        function closeViewer() {
+            fakeViewer.style.display = 'none';
         }
 
         function closePhotos() {
-            const win = document.getElementById('window-photos');
-            gsap.to(win, {scale: 0.9, opacity: 0, duration: 0.15, onComplete: () => win.style.display = 'none'});
+            document.getElementById('window-photos').style.display = 'none';
         }
 
-        function openTrash() {
-            const win = document.getElementById('window-trash');
-            win.style.display = 'flex';
-            gsap.fromTo(win, {scale: 0.9, opacity: 0}, {scale: 1, opacity: 1, duration: 0.2, ease: "power2.out"});
+        function triggerFinalPrank() {
+            palmeirasOverlay.style.display = 'flex';
+            palmeirasOverlay.style.animation = "shake 0.5s infinite";
+            
+            setTimeout(() => {
+                palmeirasOverlay.style.animation = "none";
+                palmeirasOverlay.onclick = () => {
+                    palmeirasOverlay.style.display = 'none';
+                    closePrank();
+                }
+            }, 5000);
         }
 
-        function closeTrash() {
-            const win = document.getElementById('window-trash');
-            gsap.to(win, {scale: 0.9, opacity: 0, duration: 0.15, onComplete: () => win.style.display = 'none'});
-        }
 
+        // ==========================================
+        // VS CODE LAUNCH
+        // ==========================================
         document.getElementById('icon-vscode').addEventListener('dblclick', openVSCode);
         document.getElementById('icon-vscode').addEventListener('click', openVSCode);
 
