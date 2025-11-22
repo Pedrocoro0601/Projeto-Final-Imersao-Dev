@@ -8,7 +8,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600;700;800&family=Segoe+UI:wght@300;400;600;700&family=Special+Elite&family=Times+New+Roman&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;600;700;800&family=Segoe+UI:wght@300;400;600;700&family=Special+Elite&family=Times+New+Roman&family=Creepster&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -55,6 +55,7 @@
             inset: 0;
             user-select: none;
             -webkit-user-select: none;
+            transition: filter 0.5s ease; /* For rain darkness effect */
         }
 
         /* =========================================
@@ -345,6 +346,13 @@
         .notif-icon { font-size: 24px; color: var(--win-blue); }
         .notif-content h4 { font-size: 14px; margin-bottom: 5px; color: white; }
         .notif-content p { font-size: 12px; color: #ccc; }
+
+        /* IDLE NOTIFICATION STYLE */
+        .notif-urgent {
+            border-color: #e81123 !important;
+            background: #2d0b0b !important;
+        }
+        .notif-urgent .notif-icon { color: #e81123; animation: pulse 1s infinite; }
 
         /* Programmer Alert Modal */
         #programmer-alert-modal {
@@ -1036,18 +1044,28 @@
         .news-item p { font-size: 16px; line-height: 1.4; }
 
         /* --- RAIN EFFECT --- */
+        #rain-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9000;
+            overflow: hidden;
+        }
+
         .rain-drop {
             position: fixed;
-            top: -20px;
-            width: 2px;
-            height: 10px;
-            background: rgba(174, 194, 224, 0.8);
-            z-index: 9000;
+            top: -50px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.8));
             pointer-events: none;
-            animation: fall linear infinite;
+            animation: fall linear forwards;
         }
+
         @keyframes fall {
-            to { transform: translateY(100vh); }
+            to { transform: translateY(120vh); }
+        }
+
+        #lightning-overlay {
+            position: fixed; inset: 0; background: white; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 0.1s;
         }
 
         /* --- JUMPSCARE OVERLAY --- */
@@ -1078,6 +1096,19 @@
         .setting-group-title { position: absolute; top: -8px; left: 10px; background: #fff; padding: 0 5px; color: #003399; }
         .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .setting-slider { width: 150px; }
+
+        /* --- POSSESSED NOTEPAD --- */
+        #possessed-window .os-body {
+            background: black;
+            color: red;
+            font-family: 'Creepster', 'Courier New', monospace;
+            font-size: 1.5rem;
+            padding: 20px;
+            text-shadow: 2px 0 black, -1px -1px #fff;
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
 
 
         ::-webkit-scrollbar { width: 8px; }
@@ -1183,11 +1214,14 @@
 
     <!-- RAIN CONTAINER -->
     <div id="rain-container"></div>
+    
+    <!-- LIGHTNING OVERLAY -->
+    <div id="lightning-overlay"></div>
 
     <!-- JUMPSCARE OVERLAY -->
     <div id="jumpscare-overlay">
         <!-- INSERT YOUR SCARY IMAGE HERE LOCALLY -->
-        <img id="jumpscare-img" src="susto.avif" alt="SCARY">
+        <img id="jumpscare-img" src="susto2.avif" alt="SCARY">
     </div>
 
     <!-- SCARE MESSAGE WINDOW -->
@@ -1240,6 +1274,19 @@
                 <div class="setting-row"><label>Memória Virtual:</label><span>32GB</span></div>
                 <div class="setting-row" style="justify-content:flex-end;"><button class="win-err-btn">Restaurar Padrões</button></div>
             </div>
+        </div>
+    </div>
+
+    <!-- POSSESSED NOTEPAD WINDOW -->
+    <div id="possessed-window" class="os-window" style="width: 600px; height: 400px; background: black; border: 2px solid red;">
+        <div class="os-header">
+            <div class="os-titlebar" style="background: red; color: black;">
+                <div class="os-title">NÃO HÁ SAÍDA - Bloco de Notas</div>
+                <div class="os-controls"><button class="os-btn close" onclick="closePossessed()">X</button></div>
+            </div>
+        </div>
+        <div class="os-body" id="possessed-content">
+            <!-- Text injected here -->
         </div>
     </div>
 
@@ -1316,6 +1363,15 @@
         <div class="notif-content" id="notif-text">
             <h4>Sistema Pronto</h4>
             <p>Clique no ícone VS Code para iniciar.</p>
+        </div>
+    </div>
+
+    <!-- IDLE NOTIFICATION -->
+    <div class="win-notification notif-urgent" id="idle-notif" style="right: -400px;">
+        <div class="notif-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="notif-content">
+            <h4>ATENÇÃO!</h4>
+            <p>Acesse o VS Code e programe logo para entrar no site.</p>
         </div>
     </div>
 
@@ -1921,6 +1977,11 @@
                 <i class="fa-solid fa-gear icon-img" style="color: #aaa;"></i>
                 <div class="icon-label">Configurações</div>
             </div>
+            <!-- POSSESSED NOTEPAD -->
+            <div class="desktop-icon" onclick="openPossessed()">
+                <i class="fa-solid fa-file-lines icon-img" style="color: #ff3333;"></i>
+                <div class="icon-label">Bloco de Notas Possuído</div>
+            </div>
         </div>
 
         <!-- PHOTOS FOLDER WINDOW -->
@@ -2199,6 +2260,8 @@
                 progModal.style.display = 'flex';
                 gsap.to(progModal, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out" });
             }, 1000);
+            
+            startIdleMonitor(); // Start monitoring for idle time
         }
 
         // EVENT LISTENER TO CLOSE ALERT AND SHOW SYSTEM NOTIFICATION
@@ -2218,6 +2281,48 @@
             }});
         });
         
+        // ==========================================
+        // IDLE MONITOR LOGIC
+        // ==========================================
+        let idleTime = 0;
+        const idleLimit = 10; // seconds
+        let idleInterval;
+
+        function startIdleMonitor() {
+            if (idleInterval) clearInterval(idleInterval);
+            idleInterval = setInterval(timerIncrement, 1000); 
+
+            document.onmousemove = resetIdleTimer;
+            document.onkeypress = resetIdleTimer;
+            document.onclick = resetIdleTimer;
+        }
+
+        function resetIdleTimer() {
+            idleTime = 0;
+            // If notification was shown, hide it
+            const notif = document.getElementById('idle-notif');
+            if (notif.style.right === '20px') {
+                notif.style.right = '-400px';
+            }
+        }
+
+        function timerIncrement() {
+            // Only check if Desktop is visible AND VS Code is NOT open
+            const desktop = document.getElementById('scene-desktop');
+            const vscode = document.getElementById('scene-vscode');
+            
+            if (desktop.style.display !== 'block' || vscode.style.display === 'flex') {
+                idleTime = 0;
+                return;
+            }
+
+            idleTime++;
+            if (idleTime >= idleLimit) {
+                const notif = document.getElementById('idle-notif');
+                notif.style.right = '20px';
+            }
+        }
+
         // ==========================================
         // ICON HANDLERS
         // ==========================================
@@ -2828,36 +2933,95 @@
             }, 3000);
         }
 
-        // --- NEW FEATURE 5: RAIN (FIRE IN BUTT) ---
+        // --- NEW FEATURE 5: INTENSE RAIN (FIRE IN BUTT) - REFACTORED ---
         let isRaining = false;
         let rainInterval;
+        let lightningInterval;
 
         function startRain() {
-            if(isRaining) {
+            const container = document.getElementById('rain-container');
+            const flash = document.getElementById('lightning-overlay');
+
+            if (isRaining) {
                 // Stop Rain
                 clearInterval(rainInterval);
-                document.getElementById('rain-container').innerHTML = '';
+                clearInterval(lightningInterval);
                 isRaining = false;
+                container.innerHTML = '';
+                document.body.style.filter = "none"; // Reset brightness
+                // Reset Icon Text
+                const iconLabel = document.querySelector('.desktop-icon[onclick="startRain()"] .icon-label');
+                if(iconLabel) iconLabel.innerText = "Aperte aqui quando estiver com fogo no rabo";
                 return;
             }
 
             isRaining = true;
-            const container = document.getElementById('rain-container');
             
+            // Update Icon Text
+            const iconLabel = document.querySelector('.desktop-icon[onclick="startRain()"] .icon-label');
+            if(iconLabel) iconLabel.innerText = "Parar Chuva";
+
+            // Darken Screen
+            document.body.style.filter = "brightness(0.7) grayscale(0.3)";
+
+            // Heavy Rain Loop
             rainInterval = setInterval(() => {
-                const drop = document.createElement('div');
-                drop.classList.add('rain-drop');
-                drop.style.left = Math.random() * 100 + 'vw';
-                drop.style.animationDuration = Math.random() * 0.5 + 0.5 + 's';
-                drop.style.opacity = Math.random();
-                
-                container.appendChild(drop);
-                
-                // Cleanup drops
-                setTimeout(() => {
-                    drop.remove();
-                }, 1000);
-            }, 20); // Rate of drops
+                // Create multiple drops per tick for density
+                for (let i = 0; i < 15; i++) {
+                    const drop = document.createElement('div');
+                    drop.classList.add('rain-drop');
+                    
+                    // Randomize Physics
+                    const startLeft = Math.random() * window.innerWidth;
+                    const duration = Math.random() * 0.5 + 0.4; // 0.4s to 0.9s (Fast)
+                    const size = Math.random(); // To determine layer
+                    
+                    drop.style.left = startLeft + 'px';
+                    drop.style.animationDuration = duration + 's';
+                    
+                    // Parallax / Depth logic applied via inline styles
+                    if (size > 0.8) {
+                        drop.style.width = '2px';
+                        drop.style.height = '40px';
+                        drop.style.opacity = '0.8';
+                        drop.style.zIndex = '9000'; // Front
+                    } else if (size > 0.4) {
+                        drop.style.width = '1px';
+                        drop.style.height = '25px';
+                        drop.style.opacity = '0.5';
+                        drop.style.zIndex = '8000'; // Mid
+                    } else {
+                        drop.style.width = '1px';
+                        drop.style.height = '15px';
+                        drop.style.opacity = '0.3';
+                        drop.style.zIndex = '1'; // Back
+                    }
+
+                    container.appendChild(drop);
+
+                    // Cleanup
+                    setTimeout(() => {
+                        drop.remove();
+                    }, duration * 1000);
+                }
+            }, 30);
+
+            // Random Lightning
+            lightningInterval = setInterval(() => {
+                if(Math.random() > 0.9) { // 10% chance every 2 seconds
+                    if(flash) {
+                        flash.style.opacity = 0.8;
+                        setTimeout(() => flash.style.opacity = 0, 100);
+                        setTimeout(() => {
+                            // Double flash sometimes
+                            if(Math.random() > 0.5) {
+                                flash.style.opacity = 0.5;
+                                setTimeout(() => flash.style.opacity = 0, 50);
+                            }
+                        }, 150);
+                    }
+                }
+            }, 2000);
         }
 
         // --- NEW FEATURE 6: SETTINGS ---
@@ -2872,6 +3036,35 @@
                 tab.classList.add('active');
             });
         });
+
+        // --- NEW FEATURE 7: POSSESSED NOTEPAD ---
+        let possessedInterval;
+        const possessedPhrases = [
+            "01001000 01000101 01001100 01010000", "ERROR 404", "NÃO HÁ SAÍDA", 
+            "H̴e̴l̴p̴ ̴m̴e̴", "SYSTEM FAILURE", "CRITICAL ERROR", 
+            "Я вижу тебя", "あなたは監視されています", "NON DUCOR DUCO",
+            "RUN", "ELES ESTÃO VINDO", "666", "NO SIGNAL",
+            "A CULPA É SUA", "VOCÊ NÃO DEVERIA TER ABERTO"
+        ];
+
+        function openPossessed() {
+            const win = document.getElementById('possessed-window');
+            const content = document.getElementById('possessed-content');
+            win.style.display = 'flex';
+            content.innerHTML = ""; // Reset content
+
+            // Chaos Typing
+            possessedInterval = setInterval(() => {
+                const phrase = possessedPhrases[Math.floor(Math.random() * possessedPhrases.length)];
+                content.innerHTML += phrase + " ";
+                content.scrollTop = content.scrollHeight; // Auto scroll
+            }, 50); // Very fast typing
+        }
+
+        function closePossessed() {
+            document.getElementById('possessed-window').style.display = 'none';
+            clearInterval(possessedInterval);
+        }
 
 
         // ==========================================
