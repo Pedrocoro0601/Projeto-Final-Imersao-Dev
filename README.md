@@ -1,4 +1,4 @@
-# 🏛️ Uberaba Experience | Imersão
+# 🏛️ Conhecendo a cidade de Uberaba | Imersão
 
 > "Não é apenas um site. É uma simulação de sistema operacional que abre as portas para a história da terra dos Dinossauros e do Zebu."
 
