@@ -230,7 +230,7 @@
             text-align: center; color: white;
             text-shadow: 0 1px 3px black; cursor: pointer;
             padding: 10px; border: 1px solid transparent; border-radius: 4px;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 1s cubic-bezier(0.5, 0, 0.5, 1);
             position: relative; /* For gravity logic */
         }
         .desktop-icon:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
@@ -902,12 +902,12 @@
             position: absolute; inset: 0;
             background-color: #000;
             z-index: 200; /* Above everything on desktop */
-            pointer-events: none;
+            pointer-events: none !important; /* IMPORTANT: Allow clicks to pass through for toggle */
             opacity: 0;
             transition: opacity 3s ease;
         }
         #darkness-overlay.active {
-            pointer-events: auto;
+            /* pointer-events: auto; REMOVED to fix click issue */
             cursor: none; /* Hide default cursor */
             /* Flashlight Mask */
             mask-image: radial-gradient(circle 150px at var(--x, 50%) var(--y, 50%), transparent 0%, transparent 90%, black 100%);
@@ -1421,6 +1421,7 @@
     <div id="palmeiras-overlay">
         <img src="semmundial.png" alt="Palmeiras Não Tem Mundial" class="palm-img">
         <div class="palm-text">NÃO TEM MUNDIAL!</div>
+        <button class="win-err-btn" style="margin-top:20px; font-size: 1.5rem; padding: 10px 30px;" onclick="closePalmeiras()">VOLTAR AO WINDOWS</button>
     </div>
 
     <!-- ALERT MODAL (CRITICAL ERROR IN VSCODE) -->
@@ -1587,7 +1588,7 @@
                 <div class="icon-label">Teste de Paciência</div>
             </div>
             <!-- NEW: GRAVITY CRASH FOLDER (RENAMED FUNCTION TO PREVENT CONFLICT) -->
-            <div class="desktop-icon" onclick="triggerGravityCrash()">
+            <div class="desktop-icon" id="icon-gravity" onclick="triggerGravityCrash()">
                 <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
                 <div class="icon-label">Não clique aqui</div>
             </div>
@@ -2201,17 +2202,33 @@
         }
 
         // --- GRAVITY CRASH (FALLING) ---
+        let isGravityBroken = false;
         function triggerGravityCrash() {
             const icons = document.querySelectorAll('.desktop-icon');
+            const triggerIcon = document.getElementById('icon-gravity');
+
+            isGravityBroken = !isGravityBroken;
+
             icons.forEach(icon => {
-                const rect = icon.getBoundingClientRect();
-                const dist = window.innerHeight - rect.bottom;
-                
-                icon.classList.add('falling');
-                // Random rotation and falling to bottom
-                const rotate = Math.random() * 60 - 30;
-                icon.style.transform = `translateY(${dist}px) rotate(${rotate}deg)`;
+                if (icon === triggerIcon) return; // Don't drop the trigger
+
+                if (isGravityBroken) {
+                    // Calculate fall
+                    const rect = icon.getBoundingClientRect();
+                    const dist = window.innerHeight - rect.bottom - 50; // -50 for bottom margin
+                    const rotate = Math.random() * 60 - 30;
+                    icon.classList.add('falling');
+                    icon.style.transform = `translateY(${dist}px) rotate(${rotate}deg)`;
+                } else {
+                    // Restore
+                    icon.classList.remove('falling');
+                    icon.style.transform = 'translateY(0) rotate(0deg)';
+                }
             });
+            
+            // Update label
+            const label = triggerIcon.querySelector('.icon-label');
+            label.innerText = isGravityBroken ? "Restaurar Gravidade" : "Não clique aqui";
         }
 
         // --- INTERNET DOWNLOAD ---
@@ -2651,11 +2668,12 @@
             
             setTimeout(() => {
                 palmeirasOverlay.style.animation = "none";
-                palmeirasOverlay.onclick = () => {
-                    palmeirasOverlay.style.display = 'none';
-                    closePrank();
-                }
-            }, 5000);
+            }, 500);
+        }
+
+        function closePalmeiras() {
+            palmeirasOverlay.style.display = 'none';
+            closePrank();
         }
 
 
