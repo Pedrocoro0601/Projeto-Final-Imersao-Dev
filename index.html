@@ -43,19 +43,18 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: default; }
 
-        /* FIX: Lock body to viewport to prevent page scrolling on mobile */
         body {
             background: var(--bg-black);
             color: white;
             font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
             width: 100vw;
-            height: 100dvh; /* Use dynamic viewport height */
-            position: fixed; /* Force fixed to prevent scroll bounce */
+            height: 100dvh; 
+            position: fixed; 
             inset: 0;
             user-select: none;
             -webkit-user-select: none;
-            transition: filter 0.5s ease; /* For rain darkness effect */
+            transition: filter 0.5s ease; 
         }
 
         /* =========================================
@@ -125,7 +124,7 @@
             color: #ccc;
             display: none;
             z-index: 90;
-            overflow-y: auto; /* Allow internal scroll if bios text is long */
+            overflow-y: auto;
         }
         .bios-line { margin-bottom: 5px; }
         .bios-highlight { color: yellow; }
@@ -155,15 +154,12 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            
-            /* CENTERING FIX */
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%; /* Mobile friendly */
-            max-width: 400px; /* Desktop limit */
-            
+            width: 90%;
+            max-width: 400px;
             background: rgba(0,0,0,0.4);
             padding: 40px;
             border-radius: 10px;
@@ -212,39 +208,83 @@
             background: var(--wallpaper-desk) no-repeat center center/cover;
             display: none;
             z-index: 70;
-            overflow: hidden; /* Prevent scrollbars from falling icons */
+            overflow: hidden; 
         }
 
         .desktop-grid {
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             flex-wrap: wrap;
-            height: 90%;
-            align-content: flex-start;
-            gap: 15px;
+            height: calc(100% - 40px); /* Minus Taskbar */
+            align-content: flex-start; /* Align strictly left */
+            gap: 10px;
+            max-width: 100%;
         }
 
         .desktop-icon {
-            width: 100px; margin: 5px;
+            width: 90px; 
+            margin: 2px;
             display: flex; flex-direction: column; align-items: center;
             text-align: center; color: white;
             text-shadow: 0 1px 3px black; cursor: pointer;
-            padding: 10px; border: 1px solid transparent; border-radius: 4px;
+            padding: 5px; border: 1px solid transparent; border-radius: 4px;
             transition: background 0.2s, transform 1s cubic-bezier(0.5, 0, 0.5, 1);
-            position: relative; /* For gravity logic */
+            position: relative; 
         }
         .desktop-icon:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
-        .icon-img { font-size: 2.2rem; margin-bottom: 8px; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5)); }
+        .icon-img { font-size: 2rem; margin-bottom: 5px; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5)); }
         
-        /* CUSTOM ICON IMAGES (GTA / IE) */
+        /* CUSTOM ICON IMAGES (GTA / IE / VSCODE) */
         .custom-icon-img {
-            width: 40px; height: 40px; object-fit: contain; margin-bottom: 8px;
+            width: 40px; height: 40px; object-fit: contain; margin-bottom: 5px;
             filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
         }
 
-        .icon-label { font-size: 0.8rem; line-height: 1.2; }
+        .icon-label { font-size: 0.75rem; line-height: 1.2; word-break: break-word; }
         
+        /* --- TASKBAR STYLES --- */
+        #taskbar {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 40px;
+            background: rgba(20, 20, 20, 0.95); border-top: 1px solid #333;
+            display: flex; align-items: center; z-index: 1000;
+            padding: 0 10px; gap: 10px; backdrop-filter: blur(10px);
+        }
+        .start-btn {
+            width: 36px; height: 36px; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; font-size: 1.4rem; color: #00adef;
+            transition: background 0.2s;
+        }
+        .start-btn:hover { color: white; text-shadow: 0 0 10px #00adef; }
+        
+        .task-divider { width: 1px; height: 20px; background: #444; margin: 0 5px; }
+        
+        .task-item {
+            padding: 5px 15px; background: rgba(255,255,255,0.05);
+            border-bottom: 2px solid transparent; color: #ccc;
+            font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.2s; border-radius: 2px;
+        }
+        .task-item:hover { background: rgba(255,255,255,0.1); color: white; }
+        .task-item.active-tab { border-bottom: 2px solid #0078d7; background: rgba(255,255,255,0.1); color: white; }
+        .task-item img { width: 16px; height: 16px; }
+        
+        /* --- START MENU --- */
+        #start-menu {
+            position: absolute; bottom: 40px; left: 0; width: 200px;
+            background: #1f1f1f; border: 1px solid #333;
+            display: none; flex-direction: column; padding: 5px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+            z-index: 1001; border-radius: 0 5px 0 0;
+        }
+        .start-menu-item {
+            padding: 10px 15px; color: white; cursor: pointer; display: flex; align-items: center; gap: 10px;
+            font-size: 13px; transition: 0.2s;
+        }
+        .start-menu-item:hover { background: #333; }
+        .start-menu-item.power { border-top: 1px solid #333; margin-top: 5px; }
+        .start-menu-item.power:hover { background: #c00; }
+
         /* --- WINDOWS (GENERIC & PRANK) --- */
         .os-window {
             position: absolute; top: 10%; left: 15%; width: 70%; height: 70%;
@@ -255,6 +295,15 @@
             z-index: 150; font-family: 'Segoe UI', sans-serif;
             border-radius: 6px; overflow: hidden;
         }
+        
+        /* BROWSER WINDOW SIZE FIX */
+        #site-browser-window, #universal-browser {
+            width: 98% !important; height: 92% !important;
+            top: 50% !important; left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            border-radius: 0 !important;
+        }
+
         .os-header { background: #fff; padding: 0; border-bottom: 1px solid #ddd; display: flex; flex-direction: column; }
         .os-titlebar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; }
         .os-title { font-size: 12px; display: flex; align-items: center; gap: 10px; color: #333; }
@@ -270,7 +319,7 @@
 
         .os-body { flex: 1; padding: 20px; overflow-y: auto; background: #fff; position: relative; }
         
-        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; }
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; }
         .photo-item {
             display: flex; flex-direction: column; align-items: center;
             padding: 10px; cursor: pointer; border: 1px solid transparent;
@@ -278,14 +327,14 @@
         }
         .photo-item:hover { background: #e5f3ff; border-color: #cce8ff; }
         .photo-frame {
-            width: 100%; height: 80px;
-            margin-bottom: 8px; display: flex; justify-content: center; align-items: center;
+            width: 100%; height: 60px;
+            margin-bottom: 5px; display: flex; justify-content: center; align-items: center;
             overflow: hidden; 
         }
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
-        .photo-frame i { font-size: 3rem; } /* For Folder Icons */
+        .photo-frame i { font-size: 2.5rem; } /* For Folder Icons */
         .photo-item:hover img { transform: scale(1.05); }
-        .photo-name { font-size: 12px; text-align: center; color: #333; word-break: break-word;}
+        .photo-name { font-size: 11px; text-align: center; color: #333; word-break: break-word;}
 
 
         /* Windows Generic Error Dialog (Fake) */
@@ -336,7 +385,7 @@
 
         /* Windows Notification */
         .win-notification {
-            position: fixed; bottom: 20px; right: -400px;
+            position: fixed; bottom: 60px; right: -400px;
             width: 350px; background: #1f1f1f;
             border: 1px solid #333; border-radius: 8px;
             padding: 15px; display: flex; gap: 15px;
@@ -346,13 +395,6 @@
         .notif-icon { font-size: 24px; color: var(--win-blue); }
         .notif-content h4 { font-size: 14px; margin-bottom: 5px; color: white; }
         .notif-content p { font-size: 12px; color: #ccc; }
-
-        /* IDLE NOTIFICATION STYLE */
-        .notif-urgent {
-            border-color: #e81123 !important;
-            background: #2d0b0b !important;
-        }
-        .notif-urgent .notif-icon { color: #e81123; animation: pulse 1s infinite; }
 
         /* Programmer Alert Modal */
         #programmer-alert-modal {
@@ -1084,19 +1126,6 @@
         }
         .scare-body { padding: 20px; text-align: center; font-size: 14px; color: #333; }
 
-        /* --- COMPLEX SETTINGS WINDOW --- */
-        #settings-window {
-            width: 600px; height: 450px;
-        }
-        .settings-tabs { display: flex; background: #f0f0f0; border-bottom: 1px solid #ccc; }
-        .settings-tab { padding: 8px 15px; cursor: pointer; border: 1px solid transparent; font-size: 12px; margin-top: 2px; margin-left: 2px; border-radius: 3px 3px 0 0; }
-        .settings-tab.active { background: #fff; border-color: #ccc; border-bottom-color: #fff; }
-        .settings-content { padding: 20px; background: #fff; flex: 1; overflow-y: auto; font-size: 12px; }
-        .setting-group { margin-bottom: 15px; border: 1px solid #ddd; padding: 10px; position: relative; margin-top: 10px; }
-        .setting-group-title { position: absolute; top: -8px; left: 10px; background: #fff; padding: 0 5px; color: #003399; }
-        .setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .setting-slider { width: 150px; }
-
         /* --- POSSESSED NOTEPAD --- */
         #possessed-window .os-body {
             background: black;
@@ -1117,6 +1146,50 @@
         
         @keyframes pulse { 0%,100% {opacity: 0.5} 50% {opacity: 1} }
         @keyframes blink { 50% {opacity: 0} }
+
+        /* Taskbar Styles */
+        #taskbar {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 40px;
+            background: #1e1e1e; border-top: 1px solid #333;
+            display: flex; align-items: center; z-index: 1000;
+            padding: 0 10px; gap: 10px;
+        }
+        .start-btn {
+            width: 36px; height: 36px; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; font-size: 1.2rem; color: #00adef;
+            transition: background 0.2s;
+        }
+        .start-btn:hover { background: rgba(255,255,255,0.1); }
+        .task-divider { width: 1px; height: 20px; background: #444; margin: 0 5px; }
+        .task-item {
+            padding: 5px 15px; background: rgba(255,255,255,0.05);
+            border-bottom: 2px solid #0078d7; color: white;
+            font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: background 0.2s;
+        }
+        .task-item:hover { background: rgba(255,255,255,0.1); }
+        .task-item img { width: 16px; height: 16px; }
+
+        /* Start Menu */
+        #start-menu {
+            position: absolute; bottom: 40px; left: 0; width: 200px;
+            background: #2d2d30; border: 1px solid #444;
+            display: none; flex-direction: column; padding: 5px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            z-index: 1001;
+        }
+        .start-item {
+            padding: 10px; color: white; cursor: pointer; display: flex; align-items: center; gap: 10px;
+            font-size: 13px;
+        }
+        .start-item:hover { background: #3e3e42; }
+
+        /* Browser Size update */
+        #site-browser-window, #universal-browser {
+            width: 98% !important; height: 92% !important; /* Almost full screen */
+            top: 50% !important; left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+        }
 
         /* =========================================
            MOBILE RESPONSIVENESS (Advanced)
@@ -1203,6 +1276,16 @@
                 bottom: 5px; right: 5px;
                 padding: 4px 8px; font-size: 10px;
             }
+            
+            /* Mobile Project Browser */
+            #site-browser-window {
+                width: 100% !important;
+                height: 100% !important;
+                top: 0 !important;
+                left: 0 !important;
+                transform: none !important;
+                border-radius: 0 !important;
+            }
         }
 
     </style>
@@ -1239,44 +1322,6 @@
         </div>
     </div>
 
-    <!-- SETTINGS WINDOW -->
-    <div id="settings-window" class="os-window">
-        <div class="os-header">
-            <div class="os-titlebar">
-                <div class="os-title">Configurações do Sistema</div>
-                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('settings-window').style.display='none'">X</button></div>
-            </div>
-        </div>
-        <div class="settings-tabs">
-            <div class="settings-tab active">Geral</div>
-            <div class="settings-tab">Vídeo</div>
-            <div class="settings-tab">Áudio</div>
-            <div class="settings-tab">Rede</div>
-            <div class="settings-tab">Segurança</div>
-        </div>
-        <div class="settings-content">
-            <div class="setting-group">
-                <span class="setting-group-title">Performance</span>
-                <div class="setting-row"><label>Otimizar Memória RAM</label><input type="checkbox" checked></div>
-                <div class="setting-row"><label>Aceleração de Hardware</label><input type="checkbox" checked></div>
-                <div class="setting-row"><label>Desfragmentar ao iniciar</label><input type="checkbox"></div>
-            </div>
-            <div class="setting-group">
-                <span class="setting-group-title">Aparência</span>
-                <div class="setting-row"><label>Transparência de Janelas</label><input type="range" class="setting-slider"></div>
-                <div class="setting-row"><label>Tamanho dos Ícones</label>
-                    <select><option>Pequeno</option><option>Médio</option><option>Grande</option></select>
-                </div>
-            </div>
-            <div class="setting-group">
-                <span class="setting-group-title">Sistema</span>
-                <div class="setting-row"><label>Versão do Kernel:</label><span>v10.0.25</span></div>
-                <div class="setting-row"><label>Memória Virtual:</label><span>32GB</span></div>
-                <div class="setting-row" style="justify-content:flex-end;"><button class="win-err-btn">Restaurar Padrões</button></div>
-            </div>
-        </div>
-    </div>
-
     <!-- POSSESSED NOTEPAD WINDOW -->
     <div id="possessed-window" class="os-window" style="width: 600px; height: 400px; background: black; border: 2px solid red;">
         <div class="os-header">
@@ -1303,7 +1348,7 @@
         <button class="trouxa-close" onclick="closeTrouxa()">X</button>
         <div class="trouxa-header">CERTIFICADO OFICIAL</div>
         <div class="trouxa-body">
-            <p>Parabéns!<br>Esta é a <span id="trouxa-count" class="trouxa-counter">1475ª</span> vez que você imprime este papel de trouxa.<br><br>Continue tentando.</p>
+            <p>Parabéns!<br>Esta é a <span id="trouxa-count" class="trouxa-counter">1475ª</span> vez que você imprime este papel de trouxa.<br><br></p>
         </div>
         <div style="font-size: 10px; margin-top: 20px;">Impresso em: <span id="print-date"></span></div>
     </div>
@@ -1363,15 +1408,6 @@
         <div class="notif-content" id="notif-text">
             <h4>Sistema Pronto</h4>
             <p>Clique no ícone VS Code para iniciar.</p>
-        </div>
-    </div>
-
-    <!-- IDLE NOTIFICATION -->
-    <div class="win-notification notif-urgent" id="idle-notif" style="right: -400px;">
-        <div class="notif-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-        <div class="notif-content">
-            <h4>ATENÇÃO!</h4>
-            <p>Acesse o VS Code e programe logo para entrar no site.</p>
         </div>
     </div>
 
@@ -1440,6 +1476,66 @@
         </div>
     </div>
 
+    <!-- UNIVERSAL BROWSER WINDOW -->
+    <div id="universal-browser" class="os-window" style="display: none; flex-direction: column; z-index: 200; box-shadow: 0 0 100px rgba(0,0,0,0.8);">
+        <div class="os-header">
+            <div class="os-titlebar" style="background: #202124; color: #ccc; border-bottom: none;">
+                <div class="os-title" style="color: #fff;" id="universal-browser-title"><i class="fa-brands fa-chrome"></i> Navegador</div>
+                <div class="os-controls">
+                     <button class="os-btn" onclick="closeUniversalBrowser()"><i class="fa-solid fa-minus" style="color: #fff;"></i></button>
+                     <button class="os-btn" onclick="closeUniversalBrowser()"><i class="fa-regular fa-square" style="color: #fff;"></i></button>
+                    <button class="os-btn close" onclick="closeUniversalBrowser()"><i class="fa-solid fa-xmark" style="color: #fff;"></i></button>
+                </div>
+            </div>
+            <!-- Address Bar Area -->
+            <div class="os-toolbar" style="background: #35363a; border-bottom: 1px solid #444; display: flex; gap: 10px; align-items: center; padding: 8px;">
+                 <div style="display: flex; gap: 10px; color: #aaa; font-size: 14px;">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <i class="fa-solid fa-rotate-right"></i>
+                 </div>
+                 <div class="os-address-bar" style="background: #202124; color: #fff; border: none; padding: 8px 15px; border-radius: 20px; flex: 1; display: flex; align-items: center; font-size: 13px;">
+                    <i class="fa-solid fa-lock" style="color: #8ab4f8; font-size: 12px; margin-right: 10px;"></i>
+                    <span id="universal-browser-url"></span>
+                </div>
+                <div style="color: #aaa; font-size: 14px;"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+            </div>
+        </div>
+        <div class="os-body" style="padding: 0; overflow: hidden; background: #fff;">
+            <iframe id="universal-browser-frame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
+    <!-- PROJECT SITE BROWSER WINDOW (NEW FEATURE) -->
+    <div id="site-browser-window" class="os-window" style="width: 80%; height: 80%; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; flex-direction: column; z-index: 200; box-shadow: 0 0 100px rgba(0,0,0,0.8);">
+        <div class="os-header">
+            <div class="os-titlebar" style="background: #202124; color: #ccc; border-bottom: none;">
+                <div class="os-title" style="color: #fff;"><i class="fa-brands fa-chrome"></i> Projeto Final - Uberaba Experience</div>
+                <div class="os-controls">
+                     <button class="os-btn" onclick="closeSiteBrowser()"><i class="fa-solid fa-minus" style="color: #fff;"></i></button>
+                     <button class="os-btn" onclick="closeSiteBrowser()"><i class="fa-regular fa-square" style="color: #fff;"></i></button>
+                    <button class="os-btn close" onclick="closeSiteBrowser()"><i class="fa-solid fa-xmark" style="color: #fff;"></i></button>
+                </div>
+            </div>
+            <!-- Address Bar Area -->
+            <div class="os-toolbar" style="background: #35363a; border-bottom: 1px solid #444; display: flex; gap: 10px; align-items: center; padding: 8px;">
+                 <div style="display: flex; gap: 10px; color: #aaa; font-size: 14px;">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <i class="fa-solid fa-rotate-right"></i>
+                 </div>
+                 <div class="os-address-bar" style="background: #202124; color: #fff; border: none; padding: 8px 15px; border-radius: 20px; flex: 1; display: flex; align-items: center; font-size: 13px;">
+                    <i class="fa-solid fa-lock" style="color: #8ab4f8; font-size: 12px; margin-right: 10px;"></i>
+                    https://pedrocoro0601.github.io/Projeto-Final-Imersao-Dev/main.html
+                </div>
+                <div style="color: #aaa; font-size: 14px;"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+            </div>
+        </div>
+        <div class="os-body" style="padding: 0; overflow: hidden; background: #fff;">
+            <iframe src="https://pedrocoro0601.github.io/Projeto-Final-Imersao-Dev/main.html" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+
     <!-- COACH QUANTICO WINDOW -->
     <div id="coach-window" class="os-window" style="width: 350px; height: 250px;">
         <div class="os-header">
@@ -1464,21 +1560,6 @@
         </div>
         <div class="os-body" id="money-content" style="background: black; color: #0f0; font-family: 'Courier New', monospace; padding: 10px; overflow: hidden;">
             <!-- Matrix text injected here -->
-        </div>
-    </div>
-
-    <!-- DOMINATION PLAN PASSWORD -->
-    <div id="domination-window" class="os-window" style="width: 300px; height: 180px; top: 40%; left: 40%;">
-        <div class="os-header">
-            <div class="os-titlebar">
-                <div class="os-title">Segurança Máxima</div>
-                <div class="os-controls"><button class="os-btn close" onclick="document.getElementById('domination-window').style.display='none'"><i class="fa-solid fa-xmark"></i></button></div>
-            </div>
-        </div>
-        <div class="os-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
-            <p>Digite a senha mestre:</p>
-            <input type="password" id="domination-pass" class="pass-input" style="pointer-events: auto; border: 1px solid #999; padding: 5px;">
-            <button class="win-err-btn" onclick="checkDominationPass()">Confirmar</button>
         </div>
     </div>
 
@@ -1819,9 +1900,9 @@
                 <div class="icon-label">Meu Computador</div>
             </div>
             
-            <!-- VS CODE ICON -->
+            <!-- VS CODE ICON UPDATED -->
             <div class="desktop-icon" id="icon-vscode">
-                <i class="fa-solid fa-code icon-img" style="color: #0078d7"></i>
+                <img src="vscode.png" class="custom-icon-img" alt="VSCode">
                 <div class="icon-label">Visual Studio Code</div>
             </div>
 
@@ -1917,14 +1998,9 @@
                 <i class="fa-solid fa-lightbulb icon-img" style="color: #ffeb3b;"></i>
                 <div class="icon-label">Coach Quântico</div>
             </div>
-            <div class="desktop-icon" onclick="openMoneyGen()">
-                <i class="fa-solid fa-money-bill-wave icon-img" style="color: #00e676;"></i>
-                <div class="icon-label">Gerar Dinheiro Infinito.bat</div>
-            </div>
-            <div class="desktop-icon" id="icon-domination" onclick="openDomination()">
-                <i class="fa-solid fa-folder icon-img" style="color: #ffce44;"></i>
-                <div class="icon-label">Planos de Dominação Mundial</div>
-            </div>
+            
+            <!-- REMOVED: MONEY GEN, DOMINATION, SETTINGS -->
+            
             <div class="desktop-icon" onclick="openUninstall()">
                 <i class="fa-solid fa-compact-disc icon-img" style="color: #ff1744;"></i>
                 <div class="icon-label">Desinstalar o Windows</div>
@@ -1973,14 +2049,39 @@
                 <i class="fa-solid fa-fire-extinguisher icon-img" style="color: #ff4500;"></i>
                 <div class="icon-label">Aperte aqui em caso de incêndio</div>
             </div>
-            <div class="desktop-icon" onclick="openSettings()">
-                <i class="fa-solid fa-gear icon-img" style="color: #aaa;"></i>
-                <div class="icon-label">Configurações</div>
-            </div>
+            
             <!-- POSSESSED NOTEPAD -->
             <div class="desktop-icon" onclick="openPossessed()">
                 <i class="fa-solid fa-file-lines icon-img" style="color: #ff3333;"></i>
                 <div class="icon-label">Bloco de Notas Possuído</div>
+            </div>
+        </div>
+
+        <!-- TASKBAR -->
+        <div id="taskbar">
+            <div class="start-btn" onclick="toggleStartMenu()">
+                <i class="fa-brands fa-windows"></i>
+            </div>
+            <div class="task-divider"></div>
+            <!-- Simulated Open Tabs -->
+            <div class="task-item" onclick="openUniversalBrowser('https://www.alura.com.br/', 'Alura - Cursos Online')">
+                <i class="fa-brands fa-chrome" style="color: #4285F4;"></i>
+                <span>Alura</span>
+            </div>
+            <div class="task-item" onclick="openUniversalBrowser('https://www.fiap.com.br/', 'FIAP')">
+                <i class="fa-brands fa-chrome" style="color: #DB4437;"></i>
+                <span>Fiap</span>
+            </div>
+            <div class="task-item" onclick="openUniversalBrowser('https://workspace.google.com/intl/pt-BR/solutions/ai/', 'Google Gemini')">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color: #8e24aa;"></i>
+                <span>Gemini</span>
+            </div>
+        </div>
+
+        <!-- START MENU -->
+        <div id="start-menu">
+            <div class="start-menu-item power" onclick="shutDownPC()">
+                <i class="fa-solid fa-power-off"></i> Desligar
             </div>
         </div>
 
@@ -2261,7 +2362,7 @@
                 gsap.to(progModal, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out" });
             }, 1000);
             
-            startIdleMonitor(); // Start monitoring for idle time
+            // REMOVED IDLE MONITOR AS REQUESTED
         }
 
         // EVENT LISTENER TO CLOSE ALERT AND SHOW SYSTEM NOTIFICATION
@@ -2272,7 +2373,7 @@
             gsap.to(progModal, { opacity: 0, scale: 0.9, duration: 0.3, onComplete: () => {
                 progModal.style.display = 'none';
                 
-                // NOW show the "System Ready" notification
+                // SHOW SYSTEM READY NOTIFICATION
                 const notif = document.getElementById('win-notif');
                 notif.style.right = '20px';
                 setTimeout(() => {
@@ -2282,46 +2383,63 @@
         });
         
         // ==========================================
-        // IDLE MONITOR LOGIC
+        // TASKBAR LOGIC
         // ==========================================
-        let idleTime = 0;
-        const idleLimit = 10; // seconds
-        let idleInterval;
-
-        function startIdleMonitor() {
-            if (idleInterval) clearInterval(idleInterval);
-            idleInterval = setInterval(timerIncrement, 1000); 
-
-            document.onmousemove = resetIdleTimer;
-            document.onkeypress = resetIdleTimer;
-            document.onclick = resetIdleTimer;
-        }
-
-        function resetIdleTimer() {
-            idleTime = 0;
-            // If notification was shown, hide it
-            const notif = document.getElementById('idle-notif');
-            if (notif.style.right === '20px') {
-                notif.style.right = '-400px';
+        function toggleStartMenu() {
+            const menu = document.getElementById('start-menu');
+            if (menu.style.display === 'flex') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'flex';
             }
         }
 
-        function timerIncrement() {
-            // Only check if Desktop is visible AND VS Code is NOT open
-            const desktop = document.getElementById('scene-desktop');
-            const vscode = document.getElementById('scene-vscode');
+        function shutDownPC() {
+            toggleStartMenu();
+            document.getElementById('scene-desktop').style.display = 'none';
             
-            if (desktop.style.display !== 'block' || vscode.style.display === 'flex') {
-                idleTime = 0;
-                return;
-            }
-
-            idleTime++;
-            if (idleTime >= idleLimit) {
-                const notif = document.getElementById('idle-notif');
-                notif.style.right = '20px';
-            }
+            // Reset state for restart
+            document.getElementById('pass-input').value = '';
+            document.querySelector('.login-btn').style.opacity = 0.5;
+            document.querySelector('.login-btn').style.transform = "scale(1)";
+            
+            // Show Power Screen
+            document.getElementById('scene-power').style.display = 'flex';
+            document.querySelector('.power-msg').innerText = "LIGAR COMPUTADOR";
+            document.getElementById('btn-power').style.color = '#555';
+            document.getElementById('btn-power').style.boxShadow = 'none';
         }
+
+        function openUniversalBrowser(url, title) {
+            const win = document.getElementById('universal-browser');
+            const frame = document.getElementById('universal-browser-frame');
+            const address = document.getElementById('universal-browser-url');
+            const winTitle = document.getElementById('universal-browser-title');
+
+            win.style.display = 'flex';
+            frame.src = url;
+            address.innerText = url;
+            winTitle.innerHTML = `<i class="fa-brands fa-chrome"></i> ${title}`;
+            
+            // Animation
+            gsap.fromTo(win, { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3 });
+        }
+
+        function closeUniversalBrowser() {
+            const win = document.getElementById('universal-browser');
+            const frame = document.getElementById('universal-browser-frame');
+            win.style.display = 'none';
+            frame.src = ''; // Stop loading
+        }
+
+        // Close start menu when clicking outside
+        document.getElementById('scene-desktop').addEventListener('click', (e) => {
+            const menu = document.getElementById('start-menu');
+            const btn = document.querySelector('.start-btn');
+            if (menu.style.display === 'flex' && !menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
 
         // ==========================================
         // ICON HANDLERS
@@ -2353,6 +2471,14 @@
         }
         function closeChrome() {
             document.getElementById('chrome-window').style.display = 'none';
+        }
+        
+        // NEW FUNCTION FOR SITE BROWSER
+        function closeSiteBrowser() {
+            const win = document.getElementById('site-browser-window');
+            gsap.to(win, {scale: 0.9, opacity: 0, duration: 0.2, onComplete: () => {
+                 win.style.display = 'none';
+            }});
         }
 
         function openArea51() {
@@ -2697,65 +2823,7 @@
             document.getElementById('coach-text').innerText = `"${phrase}"`;
         }
 
-        // --- MONEY GENERATOR ---
-        function openMoneyGen() {
-            const win = document.getElementById('money-window');
-            const content = document.getElementById('money-content');
-            win.style.display = 'flex';
-            content.innerHTML = "";
-            
-            // Start Matrix Effect
-            const interval = setInterval(() => {
-                const hex = Math.random().toString(16).substr(2, 8).toUpperCase();
-                content.innerHTML += `<span class="matrix-text">${hex} ${hex} ${hex} ${hex}</span><br>`;
-                content.scrollTop = content.scrollHeight;
-            }, 50);
-
-            win.dataset.matrixId = interval;
-
-            // Trigger Police after 3 seconds
-            setTimeout(() => {
-                clearInterval(interval);
-                content.innerHTML += "<br><span style='color:red; font-weight:bold;'>ALERTA: POLÍCIA FEDERAL RASTREANDO SEU IP...</span><br>";
-                content.innerHTML += "<span style='color:red; font-weight:bold;'>VIATURAS A CAMINHO.</span>";
-                // Play Sound
-                const audio = document.getElementById('siren-sound');
-                if(audio) audio.play();
-            }, 3000);
-        }
-        function closeMoney() {
-            const win = document.getElementById('money-window');
-            clearInterval(win.dataset.matrixId);
-            win.style.display = 'none';
-            const audio = document.getElementById('siren-sound');
-            if(audio) { audio.pause(); audio.currentTime = 0; }
-        }
-
-        // --- DOMINATION PLAN ---
-        let dominationAttempts = 0;
-        function openDomination() {
-            const icon = document.getElementById('icon-domination');
-            if(icon.style.display === 'none') return; // Already exploded
-            document.getElementById('domination-window').style.display = 'flex';
-            document.getElementById('domination-pass').value = '';
-        }
-        function checkDominationPass() {
-            dominationAttempts++;
-            const input = document.getElementById('domination-pass');
-            
-            if(dominationAttempts === 1) {
-                alert("ACESSO NEGADO!");
-                input.value = '';
-            } else {
-                // EXPLODE
-                document.getElementById('domination-window').style.display = 'none';
-                const icon = document.getElementById('icon-domination');
-                icon.innerHTML = '<img src="https://media.giphy.com/media/OE6C7m78p9M64/giphy.gif" style="width:100px;">'; // Placeholder explosion
-                setTimeout(() => {
-                    icon.style.display = 'none';
-                }, 1500);
-            }
-        }
+        // REMOVED: MONEY GEN, DOMINATION, SETTINGS Logic as requested
 
         // --- UNINSTALL WINDOW ---
         function openUninstall() {
@@ -2838,7 +2906,7 @@
             setTimeout(() => {
                 bar.style.width = '100%';
                 setTimeout(() => {
-                    alert("Erro: Aposentadoria não disponível na sua geração. Trabalhe até morrer.");
+                    alert("Erro: Aposentadoria não disponível na sua geração.");
                     document.getElementById('retirement-window').style.display = 'none';
                 }, 500);
             }, 1500);
@@ -2925,9 +2993,6 @@
             const overlay = document.getElementById('jumpscare-overlay');
             overlay.style.display = 'flex';
             
-            // Opcional: Tocar um som curto
-            // const audio = new Audio('scream.mp3'); audio.play();
-
             setTimeout(() => {
                 overlay.style.display = 'none';
             }, 3000);
@@ -3023,19 +3088,6 @@
                 }
             }, 2000);
         }
-
-        // --- NEW FEATURE 6: SETTINGS ---
-        function openSettings() {
-            document.getElementById('settings-window').style.display = 'flex';
-        }
-
-        // Tab Switching Logic for Settings
-        document.querySelectorAll('.settings-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-            });
-        });
 
         // --- NEW FEATURE 7: POSSESSED NOTEPAD ---
         let possessedInterval;
@@ -3943,9 +3995,10 @@
                     }
 
                     const btn = e.target;
-                    btn.innerHTML = "CARREGANDO...";
+                    btn.innerHTML = "ABRINDO NAVEGADOR...";
                     material.color.setHex(0x00ff00);
                     
+                    // Z-Zoom Effect
                     gsap.to(particlesMesh.rotation, {
                         z: 5, duration: 2, ease: "expo.in"
                     });
@@ -3953,7 +4006,18 @@
                     gsap.to(camera.position, {
                         z: 0.5, duration: 2, ease: "expo.in",
                         onComplete: () => {
-                            window.location.href = "main.html"; 
+                            // Close VS Code
+                            document.getElementById('scene-vscode').style.display = 'none';
+                            
+                            // Open the Site Browser Window
+                            const browser = document.getElementById('site-browser-window');
+                            browser.style.display = 'flex';
+                            
+                            // Animate Browser Open
+                            gsap.fromTo(browser, 
+                                { scale: 0.8, opacity: 0 },
+                                { scale: 1, opacity: 1, duration: 0.5, ease: "back.out" }
+                            );
                         }
                     });
                 });
